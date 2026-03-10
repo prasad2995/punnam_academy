@@ -3,243 +3,308 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Punnam Academy – Financial & Educational Calculators</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Punnam Academy – Financial & Educational Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
 <style>
 :root{
-  --ink:#0d1117;--cream:#f4efe6;--gold:#c9933a;--gold-light:#e8b96a;--amber:#d4900e;
-  --slate:#2d3748;--muted:#6b7280;--border:#ddd6cb;--card:#ffffff;--shadow:rgba(13,17,23,.07);
-  --green-h:#5a8a30;--orange-h:#d4720e;--red-h:#b83232;
+  --ink:#0d1117;--ink2:#162032;--cream:#f4efe6;--gold:#c9933a;--gl:#e8b96a;--amber:#d4900e;
+  --slate:#2d3748;--muted:#6b7280;--border:#ddd6cb;--card:#fff;--shadow:rgba(13,17,23,.07);
+  --gh:#5a8a30;--oh:#d4720e;--rh:#b83232;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
 
-/* HEADER */
-header{background:var(--ink);padding:0 2rem;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--gold)}
-.header-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px}
-.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-.logo-icon{width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--amber));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;font-weight:800;box-shadow:0 3px 10px rgba(201,147,58,.4)}
-.logo-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:#fff;line-height:1}
-.logo-sub{font-size:.6rem;color:var(--gold-light);letter-spacing:.18em;text-transform:uppercase;margin-top:2px}
-nav{display:flex;gap:4px}
-nav a{color:rgba(255,255,255,.65);text-decoration:none;font-size:.82rem;font-weight:500;padding:6px 13px;border-radius:6px;transition:all .2s}
-nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
+/* ── HEADER ── */
+header{background:var(--ink);padding:0 1.5rem;position:sticky;top:0;z-index:200;border-bottom:3px solid var(--gold)}
+.hdr{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer}
+.logo-icon{width:38px;height:38px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--amber));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;font-weight:800;box-shadow:0 3px 10px rgba(201,147,58,.4);flex-shrink:0}
+.logo-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:#fff;line-height:1}
+.logo-sub{font-size:.55rem;color:var(--gl);letter-spacing:.18em;text-transform:uppercase;margin-top:2px}
+.hdr-nav{display:flex;gap:3px;align-items:center}
+.hdr-nav a{color:rgba(255,255,255,.65);text-decoration:none;font-size:.8rem;font-weight:500;padding:5px 11px;border-radius:6px;transition:all .2s;white-space:nowrap}
+.hdr-nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
+.hdr-nav .ak-btn{background:linear-gradient(135deg,var(--gold),var(--amber));color:#fff!important;font-weight:600;border-radius:7px;padding:5px 13px}
 
-/* HERO */
-.hero{background:var(--ink);padding:4rem 2rem 5rem;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 100%,rgba(201,147,58,.13) 0%,transparent 70%)}
-.hero-grid{position:absolute;inset:0;opacity:.035;background-image:linear-gradient(var(--gold) 1px,transparent 1px),linear-gradient(90deg,var(--gold) 1px,transparent 1px);background-size:40px 40px}
-.hero-inner{max-width:1240px;margin:0 auto;position:relative;text-align:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,147,58,.12);border:1px solid rgba(201,147,58,.28);color:var(--gold-light);font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:5px 15px;border-radius:100px;margin-bottom:1.4rem;animation:fadeUp .6s ease both}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.6rem,6vw,4.6rem);color:#fff;line-height:1.08;font-weight:800;margin-bottom:1.1rem;animation:fadeUp .6s .1s ease both}
+/* ── PAGE SECTIONS ── */
+.page-section{display:none}
+.page-section.active{display:block}
+
+/* ── HERO (Home) ── */
+.hero{background:var(--ink);padding:4rem 1.5rem 3rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 100%,rgba(201,147,58,.14) 0%,transparent 70%)}
+.hero-grid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(var(--gold) 1px,transparent 1px),linear-gradient(90deg,var(--gold) 1px,transparent 1px);background-size:40px 40px}
+.hero-inner{max-width:1300px;margin:0 auto;position:relative;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,147,58,.12);border:1px solid rgba(201,147,58,.28);color:var(--gl);font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:1.3rem;animation:fadeUp .6s ease both}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5.5vw,4.2rem);color:#fff;line-height:1.1;font-weight:800;margin-bottom:1rem;animation:fadeUp .6s .1s ease both}
 .hero h1 span{color:var(--gold)}
-.hero p{color:rgba(255,255,255,.55);font-size:1rem;max-width:520px;margin:0 auto 2.5rem;line-height:1.75;animation:fadeUp .6s .2s ease both}
-.hero-stats{display:flex;justify-content:center;gap:3rem;animation:fadeUp .6s .3s ease both}
-.stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);font-weight:700}
-.stat-label{font-size:.68rem;color:rgba(255,255,255,.45);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.hero p{color:rgba(255,255,255,.52);font-size:.97rem;max-width:500px;margin:0 auto 2.5rem;line-height:1.75;animation:fadeUp .6s .2s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-/* SECTION */
-.section{padding:3.5rem 2rem}
-.section-inner{max-width:1240px;margin:0 auto}
-.section-label{font-size:.67rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
-.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;color:var(--ink);margin-bottom:.4rem}
-.section-desc{color:var(--muted);font-size:.91rem;max-width:450px;line-height:1.72}
+/* ── CATEGORY CARDS (Home) ── */
+.home-cats{max-width:1300px;margin:0 auto;padding:3rem 1.5rem 4rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.4rem}
+.cat-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:2rem;cursor:pointer;transition:all .25s;box-shadow:0 4px 18px var(--shadow);position:relative;overflow:hidden}
+.cat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--accent,var(--gold))}
+.cat-card:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(13,17,23,.13);border-color:var(--accent,var(--gold))}
+.cat-icon{width:52px;height:52px;border-radius:13px;background:linear-gradient(135deg,var(--accent,var(--gold)),var(--accent2,var(--amber)));display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.1rem;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.cat-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;color:var(--ink);margin-bottom:.4rem}
+.cat-desc{font-size:.82rem;color:var(--muted);line-height:1.65}
+.cat-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:1rem}
+.cat-pill{font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(0,0,0,.05);color:var(--slate)}
 
-/* TABS */
-.calc-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:2.2rem 0 1.6rem}
-.tab-btn{display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:100px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-size:.81rem;font-weight:500;color:var(--muted);transition:all .2s}
+/* ── INNER PAGE HEADER ── */
+.pg-header{background:var(--ink);padding:2rem 1.5rem;border-bottom:3px solid var(--gold)}
+.pg-header-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.pg-back{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:.8rem;padding:6px 14px;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:all .2s;white-space:nowrap}
+.pg-back:hover{background:rgba(255,255,255,.18)}
+.pg-htitle{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;color:#fff}
+.pg-hsub{font-size:.76rem;color:rgba(255,255,255,.45);margin-top:2px}
+
+/* ── SECTION WRAPPER ── */
+.sec-wrap{max-width:1300px;margin:0 auto;padding:2.5rem 1.5rem}
+
+/* ── TABS ── */
+.tab-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.6rem}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:100px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;font-weight:500;color:var(--muted);transition:all .2s}
 .tab-btn:hover{border-color:var(--gold);color:var(--ink)}
-.tab-btn.active{background:var(--ink);border-color:var(--ink);color:#fff;box-shadow:0 4px 12px rgba(13,17,23,.22)}
+.tab-btn.active{background:var(--ink);border-color:var(--ink);color:#fff;box-shadow:0 4px 12px rgba(13,17,23,.2)}
 
-/* CARD */
-.calc-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;box-shadow:0 8px 30px var(--shadow);padding:2.2rem;display:none;animation:slideIn .3s ease both}
+/* ── CALC CARD ── */
+.calc-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;box-shadow:0 8px 28px var(--shadow);padding:2.2rem;display:none;animation:slideIn .3s ease}
 .calc-card.active{display:block}
 @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.card-header{margin-bottom:1.7rem}
-.card-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:10px}
-.card-title .icon{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--amber));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-.card-desc{color:var(--muted);font-size:.86rem;margin-top:.35rem;margin-left:48px}
+.card-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:10px;margin-bottom:.3rem}
+.card-title .icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--amber));display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+.card-desc{color:var(--muted);font-size:.84rem;margin-bottom:1.6rem;margin-left:46px}
 
-/* FORM */
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-group label{font-size:.72rem;font-weight:600;color:var(--slate);letter-spacing:.06em;text-transform:uppercase}
-.form-group input,.form-group select{padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);background:#fafafa;font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--ink);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,147,58,.13);background:#fff}
-.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px;background-color:#fafafa}
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.1rem}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:.7rem;font-weight:600;color:var(--slate);letter-spacing:.06em;text-transform:uppercase}
+.fg input,.fg select{padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);background:#fafafa;font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--ink);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,147,58,.13);background:#fff}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;background-color:#fafafa}
 
-/* BUTTON */
-.calc-btn{margin-top:1.3rem;padding:12px 28px;background:var(--ink);color:#fff;border:none;border-radius:9px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:600;letter-spacing:.02em;transition:all .2s;box-shadow:0 4px 14px rgba(13,17,23,.18)}
-.calc-btn:hover{background:var(--gold);transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,147,58,.32)}
+/* ── BUTTONS ── */
+.calc-btn{margin-top:1.2rem;padding:11px 26px;background:var(--ink);color:#fff;border:none;border-radius:9px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.86rem;font-weight:600;transition:all .2s;box-shadow:0 4px 14px rgba(13,17,23,.18)}
+.calc-btn:hover{background:var(--gold);transform:translateY(-1px)}
 
-/* ══ RESULT BOX ══ */
-.result-box{margin-top:1.8rem;background:linear-gradient(140deg,#0d1520 0%,#162032 100%);border-radius:16px;padding:1.8rem 2rem;display:none;border:1px solid rgba(255,255,255,.08);box-shadow:0 16px 48px rgba(0,0,0,.35);animation:slideIn .3s ease both}
+/* ── RESULT BOX ── */
+.result-box{margin-top:1.6rem;background:linear-gradient(140deg,#0d1520,#162032);border-radius:16px;padding:1.7rem 2rem;display:none;border:1px solid rgba(255,255,255,.08);box-shadow:0 14px 44px rgba(0,0,0,.32);animation:slideIn .3s ease}
 .result-box.show{display:block}
-.result-title{font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:1.6rem}
-.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.result-item{text-align:center;padding:0.6rem 0.8rem;border-right:1px solid rgba(255,255,255,.06)}
+.result-title{font-family:'Inter',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1.4rem}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.result-item{text-align:center;padding:.6rem .7rem;border-right:1px solid rgba(255,255,255,.06)}
 .result-item:last-child{border-right:none}
+.result-value{font-family:Aptos ;font-size:1.85rem;font-weight:700;color:var(--gl);line-height:1;letter-spacing:-.02em}
+.result-label{font-family:'Inter',sans-serif;font-size:.65rem;font-weight:500;color:rgba(255,255,255,.36);margin-top:7px;letter-spacing:.05em;text-transform:uppercase}
 
-/* ═══ RESULT VALUE — user specified ═══ */
-.result-value{
-  font-family: Aptos;
-  font-size:2rem;font-weight:700;
-  color:#e8b96a;
-  line-height:1;letter-spacing:-.02em;
-}
-.result-label{font-family:'Inter',sans-serif;font-size:.68rem;font-weight:500;color:rgba(255,255,255,.38);margin-top:8px;letter-spacing:.05em;text-transform:uppercase}
-
-/* ACTION BAR */
-.action-bar{display:none;margin-top:1.2rem;gap:8px;flex-wrap:wrap;align-items:center}
+/* ── ACTION BAR ── */
+.action-bar{display:none;margin-top:1.1rem;gap:7px;flex-wrap:wrap;align-items:center}
 .action-bar.show{display:flex}
-.act-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:var(--slate);transition:all .2s;text-decoration:none}
-.act-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.act-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:7px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-size:.76rem;font-weight:600;color:var(--slate);transition:all .2s}
+.act-btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(0,0,0,.1)}
 .act-btn.wa{background:#25d366;border-color:#25d366;color:#fff}
-.act-btn.wa:hover{background:#1ebe5d}
 .act-btn.xl{background:#1d6f42;border-color:#1d6f42;color:#fff}
-.act-btn.xl:hover{background:#175c36}
 .act-btn.pdf{background:#e74c3c;border-color:#e74c3c;color:#fff}
-.act-btn.pdf:hover{background:#c0392b}
-.act-lbl{font-size:.68rem;color:var(--muted);font-weight:500;align-self:center}
+.act-lbl{font-size:.67rem;color:var(--muted);font-weight:500;align-self:center}
 
-/* PIE CHART */
-.chart-wrap{margin-top:1.4rem;display:none;background:#fff;border-radius:14px;border:1.5px solid var(--border);padding:1.4rem}
-.chart-wrap.show{display:flex;flex-wrap:wrap;gap:1.4rem;align-items:center;justify-content:center}
-.chart-canvas-wrap{width:190px;height:190px;flex-shrink:0}
-.chart-legend{display:flex;flex-direction:column;gap:10px}
-.legend-item{display:flex;align-items:center;gap:10px}
-.legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
-.legend-val{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink);font-size:.86rem}
-.legend-lbl{color:var(--muted);font-size:.74rem;margin-top:1px}
+/* ── CHART ── */
+.chart-wrap{margin-top:1.3rem;display:none;background:#fff;border-radius:14px;border:1.5px solid var(--border);padding:1.3rem}
+.chart-wrap.show{display:flex;flex-wrap:wrap;gap:1.3rem;align-items:center;justify-content:center}
+.chart-canvas-wrap{width:180px;height:180px;flex-shrink:0}
+.chart-legend{display:flex;flex-direction:column;gap:9px}
+.legend-item{display:flex;align-items:center;gap:9px}
+.legend-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.legend-val{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink);font-size:.84rem}
+.legend-lbl{color:var(--muted);font-size:.72rem;margin-top:1px}
 
-/* ══ EMI / SIP TABLE ══ */
-.data-table-wrap{margin-top:1.6rem;display:none;border-radius:12px;border:1.5px solid var(--border);overflow:hidden}
+/* ── DATA TABLE ── */
+.data-table-wrap{margin-top:1.5rem;display:none;border-radius:12px;border:1.5px solid var(--border);overflow:hidden}
 .data-table-wrap.show{display:block}
-.data-scroll{overflow-x:auto;max-height:520px;overflow-y:auto}
-table{width:100%;border-collapse:collapse;min-width:600px}
+.data-scroll{overflow-x:auto;max-height:500px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;min-width:580px}
 thead{position:sticky;top:0;z-index:5}
-
-/* ── Column header colours — dark/gold theme ── */
-.th-yr{background:#1a1a2e;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-light);text-align:left;border-bottom:2px solid #2d2d4a}
-.th-pr{background:#1a3320;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7ecc6e;text-align:right}
-.th-pr span{display:block;font-size:.6rem;font-weight:400;opacity:.75;margin-top:1px}
-.th-in{background:#2d1a00;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#f4a94e;text-align:right}
-.th-in span{display:block;font-size:.6rem;font-weight:400;opacity:.75;margin-top:1px}
-.th-tp{background:#0d1520;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-light);text-align:right}
-.th-tp span{display:block;font-size:.6rem;font-weight:400;opacity:.75;margin-top:1px}
-.th-bl{background:#2d0a0a;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#f07070;text-align:right}
-.th-pct{background:#1a1a2e;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-light);text-align:right}
-.th-pct span{display:block;font-size:.6rem;font-weight:400;opacity:.75;margin-top:1px}
-/* SIP table extras */
-.th-val{background:#0d1520;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-light);text-align:right}
-.th-gain{background:#1a3320;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7ecc6e;text-align:right}
-
-/* Year row */
+.th-yr{background:#1a1a2e;padding:10px 13px;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gl);text-align:left}
+.th-pr{background:#1a3320;padding:10px 13px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7ecc6e;text-align:right}
+.th-pr span,.th-in span,.th-tp span,.th-bl span,.th-pct span,.th-val span,.th-gain span{display:block;font-size:.59rem;font-weight:400;opacity:.72;margin-top:1px}
+.th-in{background:#2d1a00;padding:10px 13px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#f4a94e;text-align:right}
+.th-tp{background:#0d1520;padding:10px 13px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gl);text-align:right}
+.th-bl{background:#2d0a0a;padding:10px 13px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#f07070;text-align:right}
+.th-pct{background:#1a1a2e;padding:10px 13px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gl);text-align:right}
+.th-val{background:#0d1520;padding:10px 13px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gl);text-align:right}
+.th-gain{background:#1a3320;padding:10px 13px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7ecc6e;text-align:right}
 tr.year-row td{background:#f7f3ee;border-bottom:1.5px solid #e0d5c8;cursor:pointer;user-select:none;vertical-align:middle}
-.yr-label{padding:10px 14px;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
-.yr-toggle{font-size:.85rem;color:var(--gold);width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;background:rgba(201,147,58,.12);border-radius:4px;flex-shrink:0}
-.yr-pr{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--green-h);text-align:right;padding:10px 14px;font-weight:600}
-.yr-in{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--orange-h);text-align:right;padding:10px 14px;font-weight:600}
-.yr-tp{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:#444;text-align:right;padding:10px 14px;font-weight:600}
-.yr-bl{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--red-h);text-align:right;padding:10px 14px;font-weight:600}
-.yr-pct{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--slate);text-align:right;padding:10px 14px;font-weight:600}
-
-/* Month row */
+.yr-label{padding:9px 13px;font-family:'Inter',sans-serif;font-size:.86rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
+.yr-toggle{font-size:.82rem;color:var(--gold);width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;background:rgba(201,147,58,.12);border-radius:4px;flex-shrink:0}
+.yr-pr,.yr-in,.yr-tp,.yr-bl,.yr-pct{font-family:'JetBrains Mono',monospace;font-size:.82rem;text-align:right;padding:9px 13px;font-weight:600}
+.yr-pr{color:var(--gh)}.yr-in{color:var(--oh)}.yr-tp{color:#444}.yr-bl{color:var(--rh)}.yr-pct{color:var(--slate)}
 tr.month-row td{border-bottom:1px solid #f0ebe3;vertical-align:middle}
 tr.month-row:hover td{background:#faf6f0}
 tr.month-row.hidden{display:none}
-.mo-lbl{padding:7px 14px 7px 34px;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--muted)}
-.mo-pr{font-family:'JetBrains Mono',monospace;font-size:.79rem;color:var(--green-h);text-align:right;padding:7px 14px}
-.mo-in{font-family:'JetBrains Mono',monospace;font-size:.79rem;color:var(--orange-h);text-align:right;padding:7px 14px}
-.mo-tp{font-family:'JetBrains Mono',monospace;font-size:.79rem;color:#555;text-align:right;padding:7px 14px}
-.mo-bl{font-family:'JetBrains Mono',monospace;font-size:.79rem;color:var(--ink);text-align:right;padding:7px 14px}
-.mo-pct{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);text-align:right;padding:7px 14px}
+.mo-lbl{padding:6px 13px 6px 32px;font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted)}
+.mo-pr,.mo-in,.mo-tp,.mo-bl,.mo-pct{font-family:'JetBrains Mono',monospace;font-size:.77rem;text-align:right;padding:6px 13px}
+.mo-pr{color:var(--gh)}.mo-in{color:var(--oh)}.mo-tp{color:#555}.mo-bl{color:var(--ink)}.mo-pct{color:var(--muted)}
 
-/* CURRENCY */
-.rate-badge{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;padding:5px 11px;border-radius:6px;margin-top:.6rem}
+/* ── RATE BADGE ── */
+.rate-badge{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:600;padding:5px 11px;border-radius:6px;margin-top:.5rem}
 .rate-badge.loading{background:#fdf6e8;border:1px solid #f0d080;color:#8a6000}
 .rate-badge.ok{background:#f0faf3;border:1px solid #b8dfca;color:#2d6a4f}
 .rate-badge.err{background:#fdf0ef;border:1px solid #f0b8b0;color:#8b1a10}
 
-/* FOOTER */
-footer{background:var(--ink);color:rgba(255,255,255,.42);padding:2rem;text-align:center;border-top:3px solid var(--gold);font-size:.81rem}
+/* ── GOLD/SILVER LIVE RATES ── */
+.metal-rates-bar{background:linear-gradient(135deg,#0d1520,#1a2535);border-radius:14px;padding:1.6rem 2rem;margin-bottom:2rem;display:flex;flex-wrap:wrap;gap:1.2rem;align-items:center;border:1px solid rgba(255,255,255,.08)}
+.metal-rate-item{flex:1;min-width:140px;text-align:center}
+.metal-name{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:.4rem}
+.metal-price{font-family:Aptos;font-size:1.6rem;font-weight:700;color:var(--gl);letter-spacing:-.01em}
+.metal-unit{font-size:.68rem;color:rgba(255,255,255,.38);margin-top:3px}
+.metal-badge{font-size:.63rem;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:4px;display:inline-block}
+.metal-badge.up{background:rgba(90,138,48,.22);color:#7ecc6e}
+.metal-badge.dn{background:rgba(184,50,50,.22);color:#f07070}
+.metal-refresh{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);font-size:.72rem;padding:6px 14px;border-radius:7px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.metal-refresh:hover{background:rgba(255,255,255,.15);color:#fff}
+.metal-asof{font-size:.64rem;color:rgba(255,255,255,.3);align-self:flex-end;flex-basis:100%}
+
+/* ── GOLD CALCULATOR ── */
+.gold-karat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.4rem}
+.karat-card{background:linear-gradient(135deg,#0d1520,#1a2535);border-radius:14px;padding:1.4rem;border:1px solid rgba(255,255,255,.07);text-align:center}
+.karat-label{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:.5rem}
+.karat-rate{font-family:Aptos;font-size:.88rem;color:rgba(255,255,255,.55);margin-bottom:.8rem}
+.karat-value{font-family:Aptos;font-size:1.7rem;font-weight:700;color:var(--gl);letter-spacing:-.01em}
+.karat-total{font-size:.7rem;color:rgba(255,255,255,.38);margin-top:.3rem}
+
+/* ── CONVERTER ── */
+.conv-result{margin-top:1.2rem;background:linear-gradient(140deg,#0d1520,#162032);border-radius:12px;padding:1.4rem 1.6rem;display:none;border:1px solid rgba(255,255,255,.08)}
+.conv-result.show{display:block}
+.conv-value{font-family:Aptos;font-size:2.2rem;font-weight:700;color:var(--gl);letter-spacing:-.02em}
+.conv-label{font-size:.7rem;color:rgba(255,255,255,.38);margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);color:rgba(255,255,255,.4);padding:2rem 1.5rem;text-align:center;border-top:3px solid var(--gold);font-size:.8rem}
 footer strong{color:var(--gold)}
+footer .dev{margin-top:.5rem;font-size:.72rem;color:rgba(255,255,255,.28)}
 
 @media(max-width:640px){
-  nav{display:none}
-  .hero-stats{gap:1.4rem}
+  .hdr-nav a:not(.ak-btn){display:none}
+  .home-cats{grid-template-columns:1fr}
+  .gold-karat-grid{grid-template-columns:1fr}
+  .result-value{font-size:1.45rem}
   .calc-card{padding:1.3rem}
-  .result-value{font-size:1.5rem}
-  .chart-canvas-wrap{width:150px;height:150px}
 }
 </style>
 </head>
 <body>
 
+<!-- ═══════════ HEADER ═══════════ -->
 <header>
-  <div class="header-inner">
-    <a href="#" class="logo">
+  <div class="hdr">
+    <a class="logo" onclick="goHome()">
       <div class="logo-icon">P</div>
-      <div class="logo-text">
-        <span class="logo-name">Punnam Academy</span>
-        <span class="logo-sub">Financial &amp; Educational Hub</span>
+      <div>
+        <div class="logo-name">Punnam Academy</div>
+        <div class="logo-sub">Financial &amp; Educational Hub</div>
       </div>
     </a>
-    <nav>
-      <a href="#calculators">Calculators</a>
-      <a href="#about">About</a>
-      <a href="AlphaKids.html" style="background:linear-gradient(135deg,#c9933a,#d4900e);color:#fff;border-radius:7px;padding:6px 14px;font-weight:600;letter-spacing:.02em;display:inline-flex;align-items:center;gap:6px;">🧒 AlphaKids</a>
+    <nav class="hdr-nav">
+      <a href="#" onclick="showPage('pg-finance');return false">💰 Finance</a>
+      <a href="#" onclick="showPage('pg-gold');return false">🥇 Gold &amp; Silver</a>
+      <a href="#" onclick="showPage('pg-converters');return false">🔄 Converters</a>
+      <a href="AlphaKids.html" class="ak-btn">🧒 AlphaKids</a>
     </nav>
   </div>
 </header>
 
-<section class="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-inner">
-    <div class="hero-badge">✦ Smart Financial Tools</div>
-    <h1>Master Your Finances<br>with <span>Punnam Academy</span></h1>
-    <p>Free, powerful calculators for every life stage — from planning your first loan to understanding compound interest.</p>
-    <div class="hero-stats">
-      <div class="stat"><div class="stat-num">8+</div><div class="stat-label">Calculators</div></div>
-      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free</div></div>
-      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Calculations</div></div>
+<!-- ═══════════════════════════════
+     HOME PAGE
+═══════════════════════════════ -->
+<div class="page-section active" id="pg-home">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-badge">✦ Smart Tools for Smarter Decisions</div>
+      <h1>Welcome to<br><span>Punnam Academy</span></h1>
+      <p>Your complete hub for financial calculators, unit converters, live gold &amp; silver rates — all in one place.</p>
     </div>
   </div>
-</section>
 
-<section class="section" id="calculators">
-  <div class="section-inner">
-    <div class="section-label">Tools</div>
-    <div class="section-title">Financial &amp; Life Calculators</div>
-    <p class="section-desc">Everything you need to make smart decisions — built with precision and simplicity.</p>
-    <div class="calc-tabs">
-      <button class="tab-btn active" onclick="showCalc('emi',this)"><span>🏦</span> EMI</button>
-      <button class="tab-btn" onclick="showCalc('interest',this)"><span>📈</span> Interest</button>
-      <button class="tab-btn" onclick="showCalc('sip',this)"><span>💰</span> SIP</button>
-      <button class="tab-btn" onclick="showCalc('fd',this)"><span>🏛️</span> FD</button>
-      <button class="tab-btn" onclick="showCalc('gst',this)"><span>🧾</span> GST</button>
-      <button class="tab-btn" onclick="showCalc('currency',this)"><span>💱</span> Currency</button>
-      <button class="tab-btn" onclick="showCalc('discount',this)"><span>🏷️</span> Discount</button>
-      <button class="tab-btn" onclick="showCalc('age',this)"><span>🎂</span> Age</button>
+  <!-- Category Cards -->
+  <div class="home-cats">
+
+    <div class="cat-card" style="--accent:#c9933a;--accent2:#d4900e" onclick="showPage('pg-finance')">
+      <div class="cat-icon">💰</div>
+      <div class="cat-title">Financial Calculators</div>
+      <div class="cat-desc">EMI, SIP, FD, GST, Interest, Discount and Age — plan every financial decision with confidence.</div>
+      <div class="cat-pills">
+        <span class="cat-pill">EMI</span><span class="cat-pill">SIP</span><span class="cat-pill">FD</span>
+        <span class="cat-pill">GST</span><span class="cat-pill">Interest</span><span class="cat-pill">Discount</span>
+      </div>
     </div>
 
-    <!-- ══════ EMI ══════ -->
-    <div class="calc-card active" id="calc-emi">
-      <div class="card-header">
-        <div class="card-title"><div class="icon">🏦</div> EMI Calculator</div>
-        <div class="card-desc">Monthly EMI with complete year-wise amortisation. Click any year row to expand months.</div>
+    <div class="cat-card" style="--accent:#b8860b;--accent2:#c9933a" onclick="showPage('pg-gold')">
+      <div class="cat-icon">🥇</div>
+      <div class="cat-title">Gold &amp; Silver Rates</div>
+      <div class="cat-desc">Live gold and silver prices per gram. Calculate exact value for 18K, 22K and 24K gold for any weight.</div>
+      <div class="cat-pills">
+        <span class="cat-pill">Live Rates</span><span class="cat-pill">18K / 22K / 24K</span><span class="cat-pill">Silver</span>
       </div>
+    </div>
+
+    <div class="cat-card" style="--accent:#3a7d44;--accent2:#2d6a4f" onclick="showPage('pg-converters')">
+      <div class="cat-icon">🔄</div>
+      <div class="cat-title">Unit Converters</div>
+      <div class="cat-desc">Instantly convert Length, Temperature, Area, Volume, Weight and Time between all common units.</div>
+      <div class="cat-pills">
+        <span class="cat-pill">Length</span><span class="cat-pill">Temperature</span><span class="cat-pill">Area</span>
+        <span class="cat-pill">Volume</span><span class="cat-pill">Weight</span><span class="cat-pill">Time</span><span class="cat-pill">Currency</span>
+      </div>
+    </div>
+
+    <div class="cat-card" style="--accent:#5a6fd6;--accent2:#4a5bc4" onclick="window.location='AlphaKids.html'">
+      <div class="cat-icon">🧒</div>
+      <div class="cat-title">AlphaKids</div>
+      <div class="cat-desc">Fun, interactive learning tools designed for children — making education engaging and enjoyable.</div>
+      <div class="cat-pills"><span class="cat-pill">Kids Learning</span><span class="cat-pill">Interactive</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     FINANCIAL CALCULATORS
+═══════════════════════════════ -->
+<div class="page-section" id="pg-finance">
+  <div class="pg-header">
+    <div class="pg-header-inner">
+      <button class="pg-back" onclick="goHome()">← Home</button>
+      <div><div class="pg-htitle">💰 Financial Calculators</div><div class="pg-hsub">EMI · Interest · SIP · FD · GST · Discount · Age</div></div>
+    </div>
+  </div>
+  <div class="sec-wrap">
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="showCalc('fin','emi',this)">🏦 EMI</button>
+      <button class="tab-btn" onclick="showCalc('fin','interest',this)">📈 Interest</button>
+      <button class="tab-btn" onclick="showCalc('fin','sip',this)">💰 SIP</button>
+      <button class="tab-btn" onclick="showCalc('fin','fd',this)">🏛️ FD</button>
+      <button class="tab-btn" onclick="showCalc('fin','gst',this)">🧾 GST</button>
+      <button class="tab-btn" onclick="showCalc('fin','discount',this)">🏷️ Discount</button>
+      <button class="tab-btn" onclick="showCalc('fin','age',this)">🎂 Age</button>
+    </div>
+
+    <!-- EMI -->
+    <div class="calc-card active" id="fin-emi">
+      <div class="card-title"><div class="icon">🏦</div> EMI Calculator</div>
+      <div class="card-desc">Monthly EMI with complete year-wise amortisation. Click any year row to expand months.</div>
       <div class="form-grid">
-        <div class="form-group"><label>Loan Amount (₹)</label><input type="number" id="emi-principal" placeholder="e.g. 7500000"></div>
-        <div class="form-group"><label>Annual Interest Rate (%)</label><input type="number" id="emi-rate" placeholder="e.g. 9" step="0.01"></div>
-        <div class="form-group"><label>Tenure (Months)</label><input type="number" id="emi-tenure" placeholder="e.g. 120"></div>
-        <div class="form-group"><label>EMI Start Date</label><input type="date" id="emi-start"></div>
+        <div class="fg"><label>Loan Amount (₹)</label><input type="number" id="emi-principal" placeholder="e.g. 7500000"></div>
+        <div class="fg"><label>Annual Interest Rate (%)</label><input type="number" id="emi-rate" placeholder="e.g. 9" step="0.01"></div>
+        <div class="fg"><label>Tenure (Months)</label><input type="number" id="emi-tenure" placeholder="e.g. 120"></div>
+        <div class="fg"><label>EMI Start Date</label><input type="date" id="emi-start"></div>
       </div>
       <button class="calc-btn" onclick="calcEMI()">Calculate EMI</button>
       <div class="result-box" id="emi-result">
@@ -259,39 +324,28 @@ footer strong{color:var(--gold)}
         <button class="act-btn pdf" onclick="downloadPDF('emi')">📄 PDF</button>
       </div>
       <div class="data-table-wrap" id="emi-table-wrap">
-        <div class="data-scroll">
-          <table id="emi-table">
-            <thead><tr>
-              <th class="th-yr">Year</th>
-              <th class="th-pr">Principal<span>(A)</span></th>
-              <th class="th-in">Interest<span>(B)</span></th>
-              <th class="th-tp">Total Payment<span>(A + B)</span></th>
-              <th class="th-bl">Balance</th>
-              <th class="th-pct">Loan Paid<span>To Date</span></th>
-            </tr></thead>
-            <tbody id="emi-table-body"></tbody>
-          </table>
-        </div>
+        <div class="data-scroll"><table>
+          <thead><tr>
+            <th class="th-yr">Year</th><th class="th-pr">Principal<span>(A)</span></th>
+            <th class="th-in">Interest<span>(B)</span></th><th class="th-tp">Total Payment<span>(A+B)</span></th>
+            <th class="th-bl">Balance</th><th class="th-pct">Loan Paid<span>To Date</span></th>
+          </tr></thead>
+          <tbody id="emi-table-body"></tbody>
+        </table></div>
       </div>
     </div>
 
-    <!-- ══════ INTEREST ══════ -->
-    <div class="calc-card" id="calc-interest">
-      <div class="card-header">
-        <div class="card-title"><div class="icon">📈</div> Interest Calculator</div>
-        <div class="card-desc">Calculate simple or compound interest between two dates.</div>
-      </div>
+    <!-- INTEREST -->
+    <div class="calc-card" id="fin-interest">
+      <div class="card-title"><div class="icon">📈</div> Interest Calculator</div>
+      <div class="card-desc">Simple or compound interest between two dates, with year/month breakdown.</div>
       <div class="form-grid">
-        <div class="form-group"><label>Principal Amount (₹)</label><input type="number" id="int-principal" placeholder="e.g. 100000"></div>
-        <div class="form-group"><label>Annual Interest Rate (%)</label><input type="number" id="int-rate" placeholder="e.g. 8.5" step="0.01"></div>
-        <div class="form-group"><label>From Date</label><input type="date" id="int-from"></div>
-        <div class="form-group"><label>To Date</label><input type="date" id="int-to"></div>
-        <div class="form-group"><label>Interest Type</label>
-          <select id="int-type"><option value="simple">Simple Interest</option><option value="compound">Compound Interest</option></select>
-        </div>
-        <div class="form-group"><label>Compounding</label>
-          <select id="int-compound"><option value="1">Annually</option><option value="2">Semi-Annually</option><option value="4">Quarterly</option><option value="12" selected>Monthly</option><option value="365">Daily</option></select>
-        </div>
+        <div class="fg"><label>Principal (₹)</label><input type="number" id="int-principal" placeholder="e.g. 100000"></div>
+        <div class="fg"><label>Annual Rate (%)</label><input type="number" id="int-rate" placeholder="e.g. 8.5" step="0.01"></div>
+        <div class="fg"><label>From Date</label><input type="date" id="int-from"></div>
+        <div class="fg"><label>To Date</label><input type="date" id="int-to"></div>
+        <div class="fg"><label>Type</label><select id="int-type"><option value="simple">Simple Interest</option><option value="compound">Compound Interest</option></select></div>
+        <div class="fg"><label>Compounding</label><select id="int-compound"><option value="1">Annually</option><option value="2">Semi-Annually</option><option value="4">Quarterly</option><option value="12" selected>Monthly</option><option value="365">Daily</option></select></div>
       </div>
       <button class="calc-btn" onclick="calcInterest()">Calculate Interest</button>
       <div class="result-box" id="int-result">
@@ -310,37 +364,27 @@ footer strong{color:var(--gold)}
         <button class="act-btn xl" onclick="downloadXL('int')">📊 Excel</button>
         <button class="act-btn pdf" onclick="downloadPDF('int')">📄 PDF</button>
       </div>
-      <div class="chart-wrap" id="int-chart-wrap">
-        <div class="chart-canvas-wrap"><canvas id="int-chart"></canvas></div>
-        <div class="chart-legend" id="int-legend"></div>
-      </div>
+      <div class="chart-wrap" id="int-chart-wrap"><div class="chart-canvas-wrap"><canvas id="int-chart"></canvas></div><div class="chart-legend" id="int-legend"></div></div>
       <div class="data-table-wrap" id="int-table-wrap">
-        <div class="data-scroll">
-          <table id="int-table">
-            <thead><tr>
-              <th class="th-yr">Year</th>
-              <th class="th-pr">Opening Balance<span>Start of Year</span></th>
-              <th class="th-in">Interest Earned<span>This Year</span></th>
-              <th class="th-tp">Cumulative Interest<span>Total so far</span></th>
-              <th class="th-bl">Closing Balance<span>End of Year</span></th>
-              <th class="th-pct">Growth<span>% of Principal</span></th>
-            </tr></thead>
-            <tbody id="int-table-body"></tbody>
-          </table>
-        </div>
+        <div class="data-scroll"><table>
+          <thead><tr>
+            <th class="th-yr">Year</th><th class="th-pr">Opening Balance<span>Start of Year</span></th>
+            <th class="th-in">Interest Earned<span>This Year</span></th><th class="th-tp">Cumulative Interest<span>Total so far</span></th>
+            <th class="th-bl">Closing Balance<span>End of Year</span></th><th class="th-pct">Growth<span>% of Principal</span></th>
+          </tr></thead>
+          <tbody id="int-table-body"></tbody>
+        </table></div>
       </div>
     </div>
 
-    <!-- ══════ SIP ══════ -->
-    <div class="calc-card" id="calc-sip">
-      <div class="card-header">
-        <div class="card-title"><div class="icon">💰</div> SIP Calculator</div>
-        <div class="card-desc">Project wealth from Systematic Investment Plans with a full month-wise growth table.</div>
-      </div>
+    <!-- SIP -->
+    <div class="calc-card" id="fin-sip">
+      <div class="card-title"><div class="icon">💰</div> SIP Calculator</div>
+      <div class="card-desc">Project wealth from Systematic Investment Plans with month-wise growth table.</div>
       <div class="form-grid">
-        <div class="form-group"><label>Monthly Investment (₹)</label><input type="number" id="sip-monthly" placeholder="e.g. 5000"></div>
-        <div class="form-group"><label>Expected Annual Return (%)</label><input type="number" id="sip-rate" placeholder="e.g. 12" step="0.1"></div>
-        <div class="form-group"><label>Investment Period (Years)</label><input type="number" id="sip-years" placeholder="e.g. 10"></div>
+        <div class="fg"><label>Monthly Investment (₹)</label><input type="number" id="sip-monthly" placeholder="e.g. 5000"></div>
+        <div class="fg"><label>Expected Annual Return (%)</label><input type="number" id="sip-rate" placeholder="e.g. 12" step="0.1"></div>
+        <div class="fg"><label>Investment Period (Years)</label><input type="number" id="sip-years" placeholder="e.g. 10"></div>
       </div>
       <button class="calc-btn" onclick="calcSIP()">Calculate SIP Returns</button>
       <div class="result-box" id="sip-result">
@@ -359,47 +403,33 @@ footer strong{color:var(--gold)}
         <button class="act-btn xl" onclick="downloadXL('sip')">📊 Excel</button>
         <button class="act-btn pdf" onclick="downloadPDF('sip')">📄 PDF</button>
       </div>
-      <div class="chart-wrap" id="sip-chart-wrap">
-        <div class="chart-canvas-wrap"><canvas id="sip-chart"></canvas></div>
-        <div class="chart-legend" id="sip-legend"></div>
-      </div>
+      <div class="chart-wrap" id="sip-chart-wrap"><div class="chart-canvas-wrap"><canvas id="sip-chart"></canvas></div><div class="chart-legend" id="sip-legend"></div></div>
       <div class="data-table-wrap" id="sip-table-wrap">
-        <div class="data-scroll">
-          <table id="sip-table">
-            <thead><tr>
-              <th class="th-yr">Year</th>
-              <th class="th-pr">Monthly SIP<span>Invested</span></th>
-              <th class="th-in">Interest Earned<span>This Month</span></th>
-              <th class="th-tp">Total Invested<span>Cumulative</span></th>
-              <th class="th-val">Portfolio Value<span>End of Month</span></th>
-              <th class="th-gain">Total Gain<span>Returns %</span></th>
-            </tr></thead>
-            <tbody id="sip-table-body"></tbody>
-          </table>
-        </div>
+        <div class="data-scroll"><table>
+          <thead><tr>
+            <th class="th-yr">Year</th><th class="th-pr">Monthly SIP<span>Invested</span></th>
+            <th class="th-in">Interest Earned<span>This Month</span></th><th class="th-tp">Total Invested<span>Cumulative</span></th>
+            <th class="th-val">Portfolio Value<span>End of Month</span></th><th class="th-gain">Total Gain<span>Returns %</span></th>
+          </tr></thead>
+          <tbody id="sip-table-body"></tbody>
+        </table></div>
       </div>
     </div>
 
-    <!-- ══════ FD ══════ -->
-    <div class="calc-card" id="calc-fd">
-      <div class="card-header">
-        <div class="card-title"><div class="icon">🏛️</div> FD Calculator</div>
-        <div class="card-desc">Calculate maturity amount for Fixed Deposits.</div>
-      </div>
+    <!-- FD -->
+    <div class="calc-card" id="fin-fd">
+      <div class="card-title"><div class="icon">🏛️</div> FD Calculator</div>
+      <div class="card-desc">Calculate maturity amount for Fixed Deposits.</div>
       <div class="form-grid">
-        <div class="form-group"><label>Principal Amount (₹)</label><input type="number" id="fd-principal" placeholder="e.g. 100000"></div>
-        <div class="form-group"><label>Annual Interest Rate (%)</label><input type="number" id="fd-rate" placeholder="e.g. 7.5" step="0.1"></div>
-        <div class="form-group"><label>Tenure</label><input type="number" id="fd-tenure" placeholder="e.g. 2"></div>
-        <div class="form-group"><label>Tenure Unit</label>
-          <select id="fd-unit"><option value="years">Years</option><option value="months">Months</option><option value="days">Days</option></select>
-        </div>
-        <div class="form-group"><label>Compounding Frequency</label>
-          <select id="fd-compound"><option value="1">Annually</option><option value="2">Semi-Annually</option><option value="4" selected>Quarterly</option><option value="12">Monthly</option></select>
-        </div>
+        <div class="fg"><label>Principal (₹)</label><input type="number" id="fd-principal" placeholder="e.g. 100000"></div>
+        <div class="fg"><label>Annual Rate (%)</label><input type="number" id="fd-rate" placeholder="e.g. 7.5" step="0.1"></div>
+        <div class="fg"><label>Tenure</label><input type="number" id="fd-tenure" placeholder="e.g. 2"></div>
+        <div class="fg"><label>Unit</label><select id="fd-unit"><option value="years">Years</option><option value="months">Months</option><option value="days">Days</option></select></div>
+        <div class="fg"><label>Compounding</label><select id="fd-compound"><option value="1">Annually</option><option value="2">Semi-Annually</option><option value="4" selected>Quarterly</option><option value="12">Monthly</option></select></div>
       </div>
       <button class="calc-btn" onclick="calcFD()">Calculate FD Maturity</button>
       <div class="result-box" id="fd-result">
-        <div class="result-title">FD Maturity Details</div>
+        <div class="result-title">FD Maturity</div>
         <div class="result-grid">
           <div class="result-item"><div class="result-value" id="fd-maturity">–</div><div class="result-label">Maturity Amount</div></div>
           <div class="result-item"><div class="result-value" id="fd-interest">–</div><div class="result-label">Interest Earned</div></div>
@@ -412,27 +442,18 @@ footer strong{color:var(--gold)}
         <button class="act-btn" onclick="shareMore('fd')">↗ Share</button>
         <button class="act-btn pdf" onclick="downloadPDF('fd')">📄 PDF</button>
       </div>
-      <div class="chart-wrap" id="fd-chart-wrap">
-        <div class="chart-canvas-wrap"><canvas id="fd-chart"></canvas></div>
-        <div class="chart-legend" id="fd-legend"></div>
-      </div>
+      <div class="chart-wrap" id="fd-chart-wrap"><div class="chart-canvas-wrap"><canvas id="fd-chart"></canvas></div><div class="chart-legend" id="fd-legend"></div></div>
     </div>
 
-    <!-- ══════ GST ══════ -->
-    <div class="calc-card" id="calc-gst">
-      <div class="card-header">
-        <div class="card-title"><div class="icon">🧾</div> GST Calculator</div>
-        <div class="card-desc">Compute GST amounts and determine pre/post-tax prices.</div>
-      </div>
+    <!-- GST -->
+    <div class="calc-card" id="fin-gst">
+      <div class="card-title"><div class="icon">🧾</div> GST Calculator</div>
+      <div class="card-desc">Add or extract GST — with CGST/SGST split.</div>
       <div class="form-grid">
-        <div class="form-group"><label>Amount (₹)</label><input type="number" id="gst-amount" placeholder="e.g. 10000"></div>
-        <div class="form-group"><label>GST Rate (%)</label>
-          <select id="gst-rate"><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option><option value="custom">Custom</option></select>
-        </div>
-        <div class="form-group"><label>Custom Rate (%)</label><input type="number" id="gst-custom" placeholder="Enter custom %" step="0.1"></div>
-        <div class="form-group"><label>Calculation Type</label>
-          <select id="gst-type"><option value="exclusive">Add GST to Amount</option><option value="inclusive">Extract GST from Amount</option></select>
-        </div>
+        <div class="fg"><label>Amount (₹)</label><input type="number" id="gst-amount" placeholder="e.g. 10000"></div>
+        <div class="fg"><label>GST Rate</label><select id="gst-rate"><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option><option value="custom">Custom</option></select></div>
+        <div class="fg"><label>Custom Rate (%)</label><input type="number" id="gst-custom" placeholder="Enter custom %" step="0.1"></div>
+        <div class="fg"><label>Type</label><select id="gst-type"><option value="exclusive">Add GST to Amount</option><option value="inclusive">Extract GST from Amount</option></select></div>
       </div>
       <button class="calc-btn" onclick="calcGST()">Calculate GST</button>
       <div class="result-box" id="gst-result">
@@ -452,37 +473,341 @@ footer strong{color:var(--gold)}
       </div>
     </div>
 
-    <!-- ══════ CURRENCY ══════ -->
-    <div class="calc-card" id="calc-currency">
-      <div class="card-header">
-        <div class="card-title"><div class="icon">💱</div> Currency Converter</div>
-        <div class="card-desc">Live exchange rates fetched every time you convert — always accurate.</div>
-      </div>
+    <!-- DISCOUNT -->
+    <div class="calc-card" id="fin-discount">
+      <div class="card-title"><div class="icon">🏷️</div> Discount Calculator</div>
+      <div class="card-desc">Final price, savings and total percentage off with coupon stacking.</div>
       <div class="form-grid">
-        <div class="form-group"><label>Amount</label><input type="number" id="curr-amount" placeholder="e.g. 1000"></div>
-        <div class="form-group"><label>From Currency</label>
-          <select id="curr-from">
-            <option value="INR" selected>INR – Indian Rupee</option><option value="USD">USD – US Dollar</option>
-            <option value="EUR">EUR – Euro</option><option value="GBP">GBP – British Pound</option>
-            <option value="AED">AED – UAE Dirham</option><option value="SGD">SGD – Singapore Dollar</option>
-            <option value="AUD">AUD – Australian Dollar</option><option value="CAD">CAD – Canadian Dollar</option>
-            <option value="JPY">JPY – Japanese Yen</option><option value="CHF">CHF – Swiss Franc</option>
-          </select>
-        </div>
-        <div class="form-group"><label>To Currency</label>
-          <select id="curr-to">
-            <option value="USD" selected>USD – US Dollar</option><option value="INR">INR – Indian Rupee</option>
-            <option value="EUR">EUR – Euro</option><option value="GBP">GBP – British Pound</option>
-            <option value="AED">AED – UAE Dirham</option><option value="SGD">SGD – Singapore Dollar</option>
-            <option value="AUD">AUD – Australian Dollar</option><option value="CAD">CAD – Canadian Dollar</option>
-            <option value="JPY">JPY – Japanese Yen</option><option value="CHF">CHF – Swiss Franc</option>
-          </select>
+        <div class="fg"><label>Original Price (₹)</label><input type="number" id="disc-original" placeholder="e.g. 2500"></div>
+        <div class="fg"><label>Discount (%)</label><input type="number" id="disc-percent" placeholder="e.g. 20" step="0.1"></div>
+        <div class="fg"><label>Additional Coupon (%)</label><input type="number" id="disc-coupon" placeholder="e.g. 5 (optional)" step="0.1"></div>
+      </div>
+      <button class="calc-btn" onclick="calcDiscount()">Calculate Savings</button>
+      <div class="result-box" id="disc-result">
+        <div class="result-title">Savings Breakdown</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="disc-final">–</div><div class="result-label">Final Price</div></div>
+          <div class="result-item"><div class="result-value" id="disc-saved">–</div><div class="result-label">You Save</div></div>
+          <div class="result-item"><div class="result-value" id="disc-total-off">–</div><div class="result-label">Total Discount</div></div>
         </div>
       </div>
-      <div id="curr-rate-badge" style="display:none" class="rate-badge loading">⏳ Fetching live rate…</div>
+    </div>
+
+    <!-- AGE -->
+    <div class="calc-card" id="fin-age">
+      <div class="card-title"><div class="icon">🎂</div> Age Calculator</div>
+      <div class="card-desc">Exact age in years, months, days and hours.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Date of Birth</label><input type="date" id="age-dob"></div>
+        <div class="fg"><label>As of Date</label><input type="date" id="age-today"></div>
+      </div>
+      <button class="calc-btn" onclick="calcAge()">Calculate Age</button>
+      <div class="result-box" id="age-result">
+        <div class="result-title">Age Breakdown</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="age-years">–</div><div class="result-label">Years</div></div>
+          <div class="result-item"><div class="result-value" id="age-months">–</div><div class="result-label">Months</div></div>
+          <div class="result-item"><div class="result-value" id="age-days">–</div><div class="result-label">Days</div></div>
+          <div class="result-item"><div class="result-value" id="age-hours">–</div><div class="result-label">Total Hours</div></div>
+          <div class="result-item"><div class="result-value" id="age-next">–</div><div class="result-label">Next Birthday</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sec-wrap -->
+</div><!-- /pg-finance -->
+
+<!-- ═══════════════════════════════
+     GOLD & SILVER
+═══════════════════════════════ -->
+<div class="page-section" id="pg-gold">
+  <div class="pg-header">
+    <div class="pg-header-inner">
+      <button class="pg-back" onclick="goHome()">← Home</button>
+      <div><div class="pg-htitle">🥇 Gold &amp; Silver Rates</div><div class="pg-hsub">Live rates · Karat calculator · WhatsApp share</div></div>
+    </div>
+  </div>
+  <div class="sec-wrap">
+
+    <!-- Live rates bar -->
+    <div class="metal-rates-bar" id="metal-rates-bar">
+      <div class="metal-rate-item">
+        <div class="metal-name">🥇 Gold — 24K (per gram)</div>
+        <div class="metal-price" id="gold24-price">–</div>
+        <div class="metal-unit">Indian Rupees (₹)</div>
+        <div id="gold24-chg"></div>
+      </div>
+      <div class="metal-rate-item">
+        <div class="metal-name">🥇 Gold — 22K (per gram)</div>
+        <div class="metal-price" id="gold22-price">–</div>
+        <div class="metal-unit">Indian Rupees (₹)</div>
+      </div>
+      <div class="metal-rate-item">
+        <div class="metal-name">🥇 Gold — 18K (per gram)</div>
+        <div class="metal-price" id="gold18-price">–</div>
+        <div class="metal-unit">Indian Rupees (₹)</div>
+      </div>
+      <div class="metal-rate-item">
+        <div class="metal-name">🥈 Silver (per gram)</div>
+        <div class="metal-price" id="silver-price">–</div>
+        <div class="metal-unit">Indian Rupees (₹)</div>
+        <div id="silver-chg"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+        <button class="metal-refresh" onclick="fetchMetalRates()">🔄 Refresh Rates</button>
+        <div class="metal-asof" id="metal-asof">Fetching live rates…</div>
+      </div>
+    </div>
+
+    <!-- Gold Value Calculator -->
+    <div class="calc-card active" id="gold-calc-card">
+      <div class="card-title"><div class="icon">⚖️</div> Gold Value Calculator</div>
+      <div class="card-desc">Enter weight in grams to instantly see the current value for all karats. Based on live rates.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Weight (Grams)</label><input type="number" id="gold-grams" placeholder="e.g. 10" oninput="calcGoldValue()"></div>
+        <div class="fg"><label>Making Charges % <span style="font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0">(optional)</span></label><input type="number" id="gold-making" placeholder="Leave blank to skip"></div>
+        <div class="fg"><label>GST on Making % <span style="font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0">(optional)</span></label><input type="number" id="gold-gst" placeholder="e.g. 3 — leave blank to skip"></div>
+      </div>
+
+      <div class="gold-karat-grid" id="gold-karat-grid" style="display:none">
+        <div class="karat-card">
+          <div class="karat-label">🥇 24 Karat (Pure Gold)</div>
+          <div class="karat-rate" id="k24-rate">Rate: –</div>
+          <div class="karat-value" id="k24-value">–</div>
+          <div class="karat-total" id="k24-total"></div>
+        </div>
+        <div class="karat-card">
+          <div class="karat-label">🥇 22 Karat</div>
+          <div class="karat-rate" id="k22-rate">Rate: –</div>
+          <div class="karat-value" id="k22-value">–</div>
+          <div class="karat-total" id="k22-total"></div>
+        </div>
+        <div class="karat-card">
+          <div class="karat-label">🥇 18 Karat</div>
+          <div class="karat-rate" id="k18-rate">Rate: –</div>
+          <div class="karat-value" id="k18-value">–</div>
+          <div class="karat-total" id="k18-total"></div>
+        </div>
+      </div>
+      <div style="display:none" id="gold-wa-wrap">
+        <div class="action-bar show" style="margin-top:1.2rem">
+          <span class="act-lbl">Share:</span>
+          <button class="act-btn wa" onclick="shareGoldWA()">📲 Share on WhatsApp</button>
+          <button class="act-btn" onclick="shareGoldMore()">↗ Share</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Silver Value -->
+    <div class="calc-card active" id="silver-calc-card" style="margin-top:1.4rem">
+      <div class="card-title"><div class="icon">🥈</div> Silver Value Calculator</div>
+      <div class="card-desc">Calculate the value of silver by weight using the live silver rate.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Weight (Grams)</label><input type="number" id="silver-grams" placeholder="e.g. 100" oninput="calcSilverValue()"></div>
+        <div class="fg"><label>Making Charges (%)</label><input type="number" id="silver-making" placeholder="e.g. 8 (optional)" step="0.1" oninput="calcSilverValue()"></div>
+      </div>
+      <div class="result-box show" id="silver-result" style="margin-top:1.2rem;display:none">
+        <div class="result-title">Silver Value</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="sv-metal-val">–</div><div class="result-label">Metal Value</div></div>
+          <div class="result-item"><div class="result-value" id="sv-making">–</div><div class="result-label">Making Charges</div></div>
+          <div class="result-item"><div class="result-value" id="sv-total">–</div><div class="result-label">Total Value</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="silver-actions">
+        <span class="act-lbl">Share:</span>
+        <button class="act-btn wa" onclick="shareSilverWA()">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareSilverMore()">↗ Share</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     CONVERTERS
+═══════════════════════════════ -->
+<div class="page-section" id="pg-converters">
+  <div class="pg-header">
+    <div class="pg-header-inner">
+      <button class="pg-back" onclick="goHome()">← Home</button>
+      <div><div class="pg-htitle">🔄 Unit Converters</div><div class="pg-hsub">Length · Temperature · Area · Volume · Weight · Time · Currency</div></div>
+    </div>
+  </div>
+  <div class="sec-wrap">
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="showCalc('conv','length',this)">📏 Length</button>
+      <button class="tab-btn" onclick="showCalc('conv','temperature',this)">🌡️ Temperature</button>
+      <button class="tab-btn" onclick="showCalc('conv','area',this)">⬛ Area</button>
+      <button class="tab-btn" onclick="showCalc('conv','volume',this)">🧪 Volume</button>
+      <button class="tab-btn" onclick="showCalc('conv','weight',this)">⚖️ Weight</button>
+      <button class="tab-btn" onclick="showCalc('conv','time',this)">⏱️ Time</button>
+      <button class="tab-btn" onclick="showCalc('conv','currency',this)">💱 Currency</button>
+    </div>
+
+    <!-- LENGTH -->
+    <div class="calc-card active" id="conv-length">
+      <div class="card-title"><div class="icon">📏</div> Length Converter</div>
+      <div class="card-desc">Convert between metres, kilometres, miles, feet, inches, centimetres and more.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Value</label><input type="number" id="len-val" placeholder="Enter value" oninput="convertLength()"></div>
+        <div class="fg"><label>From</label><select id="len-from" onchange="convertLength()">
+          <option value="m">Metre (m)</option><option value="km">Kilometre (km)</option><option value="cm">Centimetre (cm)</option>
+          <option value="mm">Millimetre (mm)</option><option value="mi">Mile (mi)</option><option value="yd">Yard (yd)</option>
+          <option value="ft">Foot (ft)</option><option value="in">Inch (in)</option><option value="nm">Nautical Mile</option>
+        </select></div>
+        <div class="fg"><label>To</label><select id="len-to" onchange="convertLength()">
+          <option value="km">Kilometre (km)</option><option value="m">Metre (m)</option><option value="cm">Centimetre (cm)</option>
+          <option value="mm">Millimetre (mm)</option><option value="mi">Mile (mi)</option><option value="yd">Yard (yd)</option>
+          <option value="ft">Foot (ft)</option><option value="in">Inch (in)</option><option value="nm">Nautical Mile</option>
+        </select></div>
+      </div>
+      <div class="conv-result" id="len-result">
+        <div class="conv-value" id="len-output">–</div>
+        <div class="conv-label" id="len-label">Result</div>
+      </div>
+    </div>
+
+    <!-- TEMPERATURE -->
+    <div class="calc-card" id="conv-temperature">
+      <div class="card-title"><div class="icon">🌡️</div> Temperature Converter</div>
+      <div class="card-desc">Convert between Celsius, Fahrenheit, Kelvin and Rankine.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Value</label><input type="number" id="tmp-val" placeholder="Enter temperature" oninput="convertTemp()"></div>
+        <div class="fg"><label>From</label><select id="tmp-from" onchange="convertTemp()">
+          <option value="C">Celsius (°C)</option><option value="F">Fahrenheit (°F)</option>
+          <option value="K">Kelvin (K)</option><option value="R">Rankine (°R)</option>
+        </select></div>
+        <div class="fg"><label>To</label><select id="tmp-to" onchange="convertTemp()">
+          <option value="F">Fahrenheit (°F)</option><option value="C">Celsius (°C)</option>
+          <option value="K">Kelvin (K)</option><option value="R">Rankine (°R)</option>
+        </select></div>
+      </div>
+      <div class="conv-result" id="tmp-result">
+        <div class="conv-value" id="tmp-output">–</div>
+        <div class="conv-label" id="tmp-label">Result</div>
+      </div>
+    </div>
+
+    <!-- AREA -->
+    <div class="calc-card" id="conv-area">
+      <div class="card-title"><div class="icon">⬛</div> Area Converter</div>
+      <div class="card-desc">Convert between square metres, acres, hectares, square feet and more.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Value</label><input type="number" id="area-val" placeholder="Enter value" oninput="convertArea()"></div>
+        <div class="fg"><label>From</label><select id="area-from" onchange="convertArea()">
+          <option value="m2">Square Metre (m²)</option><option value="km2">Square Kilometre (km²)</option>
+          <option value="cm2">Square Centimetre (cm²)</option><option value="ft2">Square Foot (ft²)</option>
+          <option value="in2">Square Inch (in²)</option><option value="ac">Acre</option>
+          <option value="ha">Hectare</option><option value="yd2">Square Yard (yd²)</option>
+        </select></div>
+        <div class="fg"><label>To</label><select id="area-to" onchange="convertArea()">
+          <option value="ft2">Square Foot (ft²)</option><option value="m2">Square Metre (m²)</option>
+          <option value="km2">Square Kilometre (km²)</option><option value="cm2">Square Centimetre (cm²)</option>
+          <option value="in2">Square Inch (in²)</option><option value="ac">Acre</option>
+          <option value="ha">Hectare</option><option value="yd2">Square Yard (yd²)</option>
+        </select></div>
+      </div>
+      <div class="conv-result" id="area-result">
+        <div class="conv-value" id="area-output">–</div>
+        <div class="conv-label" id="area-label">Result</div>
+      </div>
+    </div>
+
+    <!-- VOLUME -->
+    <div class="calc-card" id="conv-volume">
+      <div class="card-title"><div class="icon">🧪</div> Volume Converter</div>
+      <div class="card-desc">Convert between litres, millilitres, gallons, cubic metres and more.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Value</label><input type="number" id="vol-val" placeholder="Enter value" oninput="convertVolume()"></div>
+        <div class="fg"><label>From</label><select id="vol-from" onchange="convertVolume()">
+          <option value="L">Litre (L)</option><option value="mL">Millilitre (mL)</option>
+          <option value="m3">Cubic Metre (m³)</option><option value="cm3">Cubic Centimetre (cm³)</option>
+          <option value="ft3">Cubic Foot (ft³)</option><option value="in3">Cubic Inch (in³)</option>
+          <option value="gal">US Gallon</option><option value="qt">US Quart</option>
+          <option value="pt">US Pint</option><option value="floz">US Fl. Oz</option>
+          <option value="tsp">Teaspoon</option><option value="tbsp">Tablespoon</option>
+        </select></div>
+        <div class="fg"><label>To</label><select id="vol-to" onchange="convertVolume()">
+          <option value="mL">Millilitre (mL)</option><option value="L">Litre (L)</option>
+          <option value="m3">Cubic Metre (m³)</option><option value="cm3">Cubic Centimetre (cm³)</option>
+          <option value="ft3">Cubic Foot (ft³)</option><option value="in3">Cubic Inch (in³)</option>
+          <option value="gal">US Gallon</option><option value="qt">US Quart</option>
+          <option value="pt">US Pint</option><option value="floz">US Fl. Oz</option>
+          <option value="tsp">Teaspoon</option><option value="tbsp">Tablespoon</option>
+        </select></div>
+      </div>
+      <div class="conv-result" id="vol-result">
+        <div class="conv-value" id="vol-output">–</div>
+        <div class="conv-label" id="vol-label">Result</div>
+      </div>
+    </div>
+
+    <!-- WEIGHT -->
+    <div class="calc-card" id="conv-weight">
+      <div class="card-title"><div class="icon">⚖️</div> Weight Converter</div>
+      <div class="card-desc">Convert between kilograms, grams, pounds, ounces, tonnes and more.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Value</label><input type="number" id="wt-val" placeholder="Enter value" oninput="convertWeight()"></div>
+        <div class="fg"><label>From</label><select id="wt-from" onchange="convertWeight()">
+          <option value="kg">Kilogram (kg)</option><option value="g">Gram (g)</option>
+          <option value="mg">Milligram (mg)</option><option value="t">Metric Tonne</option>
+          <option value="lb">Pound (lb)</option><option value="oz">Ounce (oz)</option>
+          <option value="st">Stone (st)</option><option value="ct">Carat (ct)</option>
+        </select></div>
+        <div class="fg"><label>To</label><select id="wt-to" onchange="convertWeight()">
+          <option value="g">Gram (g)</option><option value="kg">Kilogram (kg)</option>
+          <option value="mg">Milligram (mg)</option><option value="t">Metric Tonne</option>
+          <option value="lb">Pound (lb)</option><option value="oz">Ounce (oz)</option>
+          <option value="st">Stone (st)</option><option value="ct">Carat (ct)</option>
+        </select></div>
+      </div>
+      <div class="conv-result" id="wt-result">
+        <div class="conv-value" id="wt-output">–</div>
+        <div class="conv-label" id="wt-label">Result</div>
+      </div>
+    </div>
+
+    <!-- TIME -->
+    <div class="calc-card" id="conv-time">
+      <div class="card-title"><div class="icon">⏱️</div> Time Converter</div>
+      <div class="card-desc">Convert between seconds, minutes, hours, days, weeks, months and years.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Value</label><input type="number" id="tim-val" placeholder="Enter value" oninput="convertTime()"></div>
+        <div class="fg"><label>From</label><select id="tim-from" onchange="convertTime()">
+          <option value="s">Second</option><option value="min">Minute</option><option value="hr">Hour</option>
+          <option value="day">Day</option><option value="wk">Week</option>
+          <option value="mo">Month (avg)</option><option value="yr">Year</option>
+        </select></div>
+        <div class="fg"><label>To</label><select id="tim-to" onchange="convertTime()">
+          <option value="min">Minute</option><option value="s">Second</option><option value="hr">Hour</option>
+          <option value="day">Day</option><option value="wk">Week</option>
+          <option value="mo">Month (avg)</option><option value="yr">Year</option>
+        </select></div>
+      </div>
+      <div class="conv-result" id="tim-result">
+        <div class="conv-value" id="tim-output">–</div>
+        <div class="conv-label" id="tim-label">Result</div>
+      </div>
+    </div>
+
+    <!-- CURRENCY -->
+    <div class="calc-card" id="conv-currency">
+      <div class="card-title"><div class="icon">💱</div> Currency Converter</div>
+      <div class="card-desc">Live exchange rates — fetched every time you convert.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Amount</label><input type="number" id="curr-amount" placeholder="e.g. 1000"></div>
+        <div class="fg"><label>From</label>
+          <select id="curr-from"><option value="INR" selected>INR – Indian Rupee</option><option value="USD">USD – US Dollar</option><option value="EUR">EUR – Euro</option><option value="GBP">GBP – British Pound</option><option value="AED">AED – UAE Dirham</option><option value="SGD">SGD – Singapore Dollar</option><option value="AUD">AUD – Australian Dollar</option><option value="CAD">CAD – Canadian Dollar</option><option value="JPY">JPY – Japanese Yen</option><option value="CHF">CHF – Swiss Franc</option></select>
+        </div>
+        <div class="fg"><label>To</label>
+          <select id="curr-to"><option value="USD" selected>USD – US Dollar</option><option value="INR">INR – Indian Rupee</option><option value="EUR">EUR – Euro</option><option value="GBP">GBP – British Pound</option><option value="AED">AED – UAE Dirham</option><option value="SGD">SGD – Singapore Dollar</option><option value="AUD">AUD – Australian Dollar</option><option value="CAD">CAD – Canadian Dollar</option><option value="JPY">JPY – Japanese Yen</option><option value="CHF">CHF – Swiss Franc</option></select>
+        </div>
+      </div>
+      <div id="curr-rate-badge" style="display:none" class="rate-badge loading">⏳ Fetching…</div>
       <button class="calc-btn" onclick="calcCurrency()">Convert with Live Rate</button>
       <div class="result-box" id="curr-result">
-        <div class="result-title">Live Conversion Result</div>
+        <div class="result-title">Live Conversion</div>
         <div class="result-grid">
           <div class="result-item"><div class="result-value" id="curr-converted">–</div><div class="result-label">Converted Amount</div></div>
           <div class="result-item"><div class="result-value" id="curr-rate-val" style="font-size:1.1rem">–</div><div class="result-label">Exchange Rate</div></div>
@@ -497,115 +822,101 @@ footer strong{color:var(--gold)}
       </div>
     </div>
 
-    <!-- ══════ DISCOUNT ══════ -->
-    <div class="calc-card" id="calc-discount">
-      <div class="card-header">
-        <div class="card-title"><div class="icon">🏷️</div> Discount Calculator</div>
-        <div class="card-desc">Find final price, savings and total percentage off.</div>
-      </div>
-      <div class="form-grid">
-        <div class="form-group"><label>Original Price (₹)</label><input type="number" id="disc-original" placeholder="e.g. 2500"></div>
-        <div class="form-group"><label>Discount (%)</label><input type="number" id="disc-percent" placeholder="e.g. 20" step="0.1"></div>
-        <div class="form-group"><label>Additional Coupon (%)</label><input type="number" id="disc-coupon" placeholder="e.g. 5 (optional)" step="0.1"></div>
-      </div>
-      <button class="calc-btn" onclick="calcDiscount()">Calculate Savings</button>
-      <div class="result-box" id="disc-result">
-        <div class="result-title">Savings Breakdown</div>
-        <div class="result-grid">
-          <div class="result-item"><div class="result-value" id="disc-final">–</div><div class="result-label">Final Price</div></div>
-          <div class="result-item"><div class="result-value" id="disc-saved">–</div><div class="result-label">You Save</div></div>
-          <div class="result-item"><div class="result-value" id="disc-total-off">–</div><div class="result-label">Total Discount</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════ AGE ══════ -->
-    <div class="calc-card" id="calc-age">
-      <div class="card-header">
-        <div class="card-title"><div class="icon">🎂</div> Age Calculator</div>
-        <div class="card-desc">Calculate your exact age in years, months, days and hours.</div>
-      </div>
-      <div class="form-grid">
-        <div class="form-group"><label>Date of Birth</label><input type="date" id="age-dob"></div>
-        <div class="form-group"><label>As of Date</label><input type="date" id="age-today"></div>
-      </div>
-      <button class="calc-btn" onclick="calcAge()">Calculate Age</button>
-      <div class="result-box" id="age-result">
-        <div class="result-title">Your Age Breakdown</div>
-        <div class="result-grid">
-          <div class="result-item"><div class="result-value" id="age-years">–</div><div class="result-label">Years</div></div>
-          <div class="result-item"><div class="result-value" id="age-months">–</div><div class="result-label">Months</div></div>
-          <div class="result-item"><div class="result-value" id="age-days">–</div><div class="result-label">Days</div></div>
-          <div class="result-item"><div class="result-value" id="age-hours">–</div><div class="result-label">Total Hours</div></div>
-          <div class="result-item"><div class="result-value" id="age-next">–</div><div class="result-label">Next Birthday</div></div>
-        </div>
-      </div>
-    </div>
   </div>
-</section>
+</div>
 
-<section class="section" id="about" style="background:#fff;border-top:1.5px solid var(--border)">
-  <div class="section-inner" style="text-align:center">
-    <div class="section-label">About</div>
-    <div class="section-title">Punnam Academy</div>
-    <p class="section-desc" style="margin:0 auto">Empowering individuals with financial literacy and tools to plan better, invest smarter, and live confidently. All calculators are free, accurate, and built for everyday use.</p>
-  </div>
-</section>
-
+<!-- ═══════════ FOOTER ═══════════ -->
 <footer>
   <p>© 2025 <strong>Punnam Academy</strong> · Financial &amp; Educational Hub · All rights reserved.</p>
-  <p style="margin-top:.4rem;font-size:.73rem">Rates shown are indicative. Always consult a financial advisor for investment decisions.</p>
+  <p style="margin-top:.3rem;font-size:.72rem;color:rgba(255,255,255,.28)">Rates shown are indicative. Always consult a financial advisor for investment decisions.</p>
+  <p class="dev">Developed and designed by <strong style="color:var(--gl)">Prasad Punnam</strong></p>
 </footer>
 
 <script>
-/* ══ BLOCK e/E and all non-numeric keys in number inputs ══ */
-document.addEventListener('DOMContentLoaded',()=>{
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+function showPage(id, pushState=true){
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='pg-gold') fetchMetalRates();
+  if(pushState){
+    const state={page:id};
+    if(id==='pg-home'){
+      history.pushState(state,'','#home');
+    } else {
+      const slug=id.replace('pg-','');
+      history.pushState(state,'','#'+slug);
+    }
+  }
+}
+function goHome(){ showPage('pg-home'); }
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate',function(e){
+  if(e.state&&e.state.page){
+    showPage(e.state.page, false);
+  } else {
+    showPage('pg-home', false);
+  }
+});
+
+// On first load, set the initial history state
+window.addEventListener('DOMContentLoaded',function(){
+  const hash=window.location.hash.replace('#','');
+  const pageMap={home:'pg-home',finance:'pg-finance',gold:'pg-gold',converters:'pg-converters'};
+  const startPage=(hash&&pageMap[hash])?pageMap[hash]:'pg-home';
+  // Replace current state so back button works from the first page too
+  history.replaceState({page:startPage},'','#'+(hash||'home'));
+  if(startPage!=='pg-home') showPage(startPage, false);
+  initInputs();
+});
+
+function showCalc(ns,id,btn){
+  const prefix=ns+'-';
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach(c=>c.classList.remove('active'));
+  document.getElementById(prefix+id).classList.add('active');
+  const parent=btn.closest('.tab-row');
+  parent.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ══════════════════════════════════════════
+   NUMBER BLOCK — no e/E/letters
+══════════════════════════════════════════ */
+function initInputs(){
   document.querySelectorAll('input[type="number"]').forEach(inp=>{
     inp.addEventListener('keydown',e=>{
-      // Allow: backspace, delete, tab, escape, enter, arrows, home, end, decimal point
-      const allowed=['Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','.'];
-      if(allowed.includes(e.key)) return;
-      // Allow Ctrl/Cmd shortcuts (copy, paste, select all, etc.)
-      if(e.ctrlKey||e.metaKey) return;
-      // Block anything that is not a digit 0-9
+      const ok=['Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','.'];
+      if(ok.includes(e.key)||e.ctrlKey||e.metaKey) return;
       if(!/^\d$/.test(e.key)) e.preventDefault();
     });
     inp.addEventListener('paste',e=>{
-      const text=(e.clipboardData||window.clipboardData).getData('text');
-      // Only allow pastes that are pure numbers (with optional single decimal)
-      if(!/^\d*\.?\d*$/.test(text.trim())) e.preventDefault();
+      const t=(e.clipboardData||window.clipboardData).getData('text');
+      if(!/^\d*\.?\d*$/.test(t.trim())) e.preventDefault();
     });
   });
-});
-function showCalc(id,btn){
-  document.querySelectorAll('.calc-card').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('calc-'+id).classList.add('active');
-  if(btn) btn.classList.add('active');
-}
-
-/* ══ FORMATTING ══ */
-// Indian number format: 1,07,96,711
-function fmtIN(n){ return 'Rs.'+Math.round(Number(n)).toLocaleString('en-IN'); }
-// Plain number for PDF (no rupee symbol — avoids the ¹ glyph bug)
-function fmtPDF(n){ return 'Rs.' + Math.round(Number(n)).toLocaleString('en-IN'); }
-// Raw Indian number string for table cells
-function fmtINr(n){ return Math.round(Number(n)).toLocaleString('en-IN'); }
-// Rupee symbol for on-screen display
-function fmtR(n){ return '₹'+Math.round(Number(n)).toLocaleString('en-IN'); }
-function fmtDec(n,d=2){ return Number(n).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d}); }
-function fmtDate(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}-${m}-${y}`; }
-function todayStr(){ const t=new Date(); return `${String(t.getDate()).padStart(2,'0')}-${String(t.getMonth()+1).padStart(2,'0')}-${t.getFullYear()}`; }
-
-/* ══ INIT ══ */
-window.onload=()=>{
   const t=new Date().toISOString().split('T')[0];
   ['age-today','int-from','emi-start'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=t;});
   const dy=new Date(); dy.setFullYear(dy.getFullYear()+1);
-  document.getElementById('int-to').value=dy.toISOString().split('T')[0];
-};
+  if(document.getElementById('int-to')) document.getElementById('int-to').value=dy.toISOString().split('T')[0];
+}
 
-/* ══ PIE ══ */
+/* ══════════════════════════════════════════
+   FORMATTERS
+══════════════════════════════════════════ */
+function fmtR(n){ return '₹'+Math.round(Number(n)).toLocaleString('en-IN'); }
+function fmtIN(n){ return 'Rs.'+Math.round(Number(n)).toLocaleString('en-IN'); }
+function fmtINr(n){ return Math.round(Number(n)).toLocaleString('en-IN'); }
+function fmtDec(n,d=2){ return Number(n).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function fmtDate(iso){ if(!iso) return ''; const[y,m,d]=iso.split('-'); return `${d}-${m}-${y}`; }
+function todayStr(){ const t=new Date(); return `${String(t.getDate()).padStart(2,'0')}-${String(t.getMonth()+1).padStart(2,'0')}-${t.getFullYear()}`; }
+function pa(n){ return 'Rs. '+Math.round(Number(n)).toLocaleString('en-IN'); }
+
+/* ══════════════════════════════════════════
+   PIE CHARTS
+══════════════════════════════════════════ */
 const CI={};
 const PC=['#c9933a','#1a2535','#e8b96a','#5a8a30'];
 function renderPie(cid,wid,lid,labels,vals){
@@ -622,7 +933,21 @@ function renderPie(cid,wid,lid,labels,vals){
     <div><div class="legend-val">${fmtR(vals[i])}</div><div class="legend-lbl">${l} · ${(vals[i]/tot*100).toFixed(1)}%</div></div></div>`).join('');
 }
 
-/* ══════════════ EMI ══════════════ */
+/* ══════════════════════════════════════════
+   TOGGLE YEAR ROWS
+══════════════════════════════════════════ */
+function toggleYear(yr,tbl){
+  const prefix=tbl==='sip'?'stog-':tbl==='int'?'itog-':'etog-';
+  const rows=document.querySelectorAll(`tr.month-row[data-year="${yr}"][data-tbl="${tbl}"]`);
+  if(!rows.length) return;
+  const hidden=rows[0].classList.contains('hidden');
+  rows.forEach(r=>r.classList.toggle('hidden',!hidden));
+  const t=document.getElementById(prefix+yr); if(t) t.textContent=hidden?'⊟':'⊞';
+}
+
+/* ══════════════════════════════════════════
+   EMI
+══════════════════════════════════════════ */
 let emiData={P:0,emi:0,months:[],byYear:{}};
 function calcEMI(){
   const P=parseFloat(document.getElementById('emi-principal').value);
@@ -635,46 +960,36 @@ function calcEMI(){
   const totalPay=emi*N, totalInt=totalPay-P;
   const start=new Date(sd);
   const end=new Date(start); end.setMonth(end.getMonth()+N-1);
-
   document.getElementById('emi-monthly').textContent=fmtR(emi);
   document.getElementById('emi-total-interest').textContent=fmtR(totalInt);
   document.getElementById('emi-total-payment').textContent=fmtR(totalPay);
   document.getElementById('emi-end-date').textContent=end.toLocaleString('en-IN',{month:'short',year:'numeric'});
   document.getElementById('emi-result').classList.add('show');
   document.getElementById('emi-actions').classList.add('show');
-
-  let bal=P;
-  const months=[];
+  let bal=P; const months=[];
   for(let i=1;i<=N;i++){
-    const ip=bal*r, pp=emi-ip;
-    bal=Math.max(0,bal-pp);
+    const ip=bal*r, pp=emi-ip; bal=Math.max(0,bal-pp);
     const d=new Date(start); d.setMonth(d.getMonth()+i-1);
-    months.push({num:i,year:d.getFullYear(),month:d.toLocaleString('en-IN',{month:'short'}),emi,pp,ip,bal,paidPct:((P-bal)/P*100)});
+    months.push({num:i,year:d.getFullYear(),month:d.toLocaleString('en-IN',{month:'short'}),emi,pp,ip,bal,paidPct:(P-bal)/P*100});
   }
   const byYear={};
   months.forEach(m=>{
     if(!byYear[m.year]) byYear[m.year]={pr:0,int:0,tp:0,bal:0,months:[]};
-    byYear[m.year].pr+=m.pp; byYear[m.year].int+=m.ip;
-    byYear[m.year].tp+=m.emi; byYear[m.year].bal=m.bal;
+    byYear[m.year].pr+=m.pp; byYear[m.year].int+=m.ip; byYear[m.year].tp+=m.emi; byYear[m.year].bal=m.bal;
     byYear[m.year].months.push(m);
   });
   emiData={P,emi,months,byYear};
-
-  const tbody=document.getElementById('emi-table-body');
-  tbody.innerHTML='';
+  const tbody=document.getElementById('emi-table-body'); tbody.innerHTML='';
   Object.keys(byYear).forEach(yr=>{
-    const yd=byYear[yr];
-    const pct=yd.bal===0?100:(P-yd.bal)/P*100;
-    const ytr=document.createElement('tr');
-    ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'emi');
+    const yd=byYear[yr]; const pct=yd.bal===0?100:(P-yd.bal)/P*100;
+    const ytr=document.createElement('tr'); ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'emi');
     ytr.innerHTML=`<td><div class="yr-label"><span class="yr-toggle" id="etog-${yr}">⊞</span>${yr}</div></td>
       <td class="yr-pr">${fmtR(yd.pr)}</td><td class="yr-in">${fmtR(yd.int)}</td>
-      <td class="yr-tp">${fmtR(yd.tp)}</td><td class="yr-bl">${fmtR(yd.bal)}</td>
-      <td class="yr-pct">${fmtDec(pct)}%</td>`;
+      <td class="yr-tp">${fmtR(yd.tp)}</td><td class="yr-bl">${fmtR(yd.bal)}</td><td class="yr-pct">${fmtDec(pct)}%</td>`;
     tbody.appendChild(ytr);
     yd.months.forEach(m=>{
-      const mtr=document.createElement('tr');
-      mtr.className='month-row hidden'; mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','emi');
+      const mtr=document.createElement('tr'); mtr.className='month-row hidden';
+      mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','emi');
       mtr.innerHTML=`<td class="mo-lbl">${m.month}</td><td class="mo-pr">${fmtR(m.pp)}</td>
         <td class="mo-in">${fmtR(m.ip)}</td><td class="mo-tp">${fmtR(m.emi)}</td>
         <td class="mo-bl">${fmtR(m.bal)}</td><td class="mo-pct">${fmtDec(m.paidPct)}%</td>`;
@@ -684,30 +999,19 @@ function calcEMI(){
   document.getElementById('emi-table-wrap').classList.add('show');
 }
 
-function toggleYear(yr,tbl){
-  const prefix=tbl==='sip'?'stog-':tbl==='int'?'itog-':'etog-';
-  const first=document.querySelector(`tr.month-row[data-year="${yr}"][data-tbl="${tbl}"]`);
-  if(!first) return;
-  if(first.classList.contains('hidden')){
-    document.querySelectorAll(`tr.month-row[data-year="${yr}"][data-tbl="${tbl}"]`).forEach(r=>r.classList.remove('hidden'));
-    const t=document.getElementById(prefix+yr); if(t) t.textContent='⊟';
-  } else {
-    document.querySelectorAll(`tr.month-row[data-year="${yr}"][data-tbl="${tbl}"]`).forEach(r=>r.classList.add('hidden'));
-    const t=document.getElementById(prefix+yr); if(t) t.textContent='⊞';
-  }
-}
-
-/* ══════════════ INTEREST ══════════════ */
+/* ══════════════════════════════════════════
+   INTEREST
+══════════════════════════════════════════ */
 let intData={};
 function calcInterest(){
   const P=parseFloat(document.getElementById('int-principal').value);
   const R=parseFloat(document.getElementById('int-rate').value);
   const fromStr=document.getElementById('int-from').value;
   const toStr=document.getElementById('int-to').value;
-  const from=new Date(fromStr), to=new Date(toStr);
   const type=document.getElementById('int-type').value;
   const n=parseInt(document.getElementById('int-compound').value);
   if(!P||!R||!fromStr||!toStr) return alert('Please fill all fields.');
+  const from=new Date(fromStr), to=new Date(toStr);
   if(to<=from) return alert('To date must be after From date.');
   const totalDays=Math.floor((to-from)/86400000), totalYears=totalDays/365;
   let interest,total;
@@ -721,72 +1025,47 @@ function calcInterest(){
   document.getElementById('int-result').classList.add('show');
   document.getElementById('int-actions').classList.add('show');
   renderPie('int-chart','int-chart-wrap','int-legend',['Principal','Interest'],[P,interest]);
-
-  // ── Build year-wise + month-wise breakdown ──
-  // Walk month by month from fromStr to toStr
-  const months=[];
-  let cur=new Date(from.getFullYear(), from.getMonth(), from.getDate());
-  let runningBalance=P, cumInt=0, monthIdx=0;
+  let cur=new Date(from.getFullYear(),from.getMonth(),from.getDate());
+  let runBal=P, cumInt=0, idx=0; const months=[];
   while(cur<to){
-    const next=new Date(cur.getFullYear(), cur.getMonth()+1, cur.getDate());
+    const next=new Date(cur.getFullYear(),cur.getMonth()+1,cur.getDate());
     const periodEnd=next<to?next:to;
-    const daysInPeriod=Math.floor((periodEnd-cur)/86400000);
-    const fracYear=daysInPeriod/365;
-    let mInt;
-    if(type==='simple'){ mInt=P*R/100*fracYear; }
-    else { mInt=runningBalance*(Math.pow(1+(R/100)/n, n*fracYear)-1); }
-    const openBal=runningBalance;
-    runningBalance+=mInt; cumInt+=mInt;
-    months.push({
-      num:++monthIdx, year:cur.getFullYear(),
-      month:cur.toLocaleString('en-IN',{month:'short'}),
-      openBal, mInt, cumInt, closeBal:runningBalance,
-      growthPct:(runningBalance-P)/P*100
-    });
+    const fracYear=Math.floor((periodEnd-cur)/86400000)/365;
+    const mInt=type==='simple'?P*R/100*fracYear:runBal*(Math.pow(1+(R/100)/n,n*fracYear)-1);
+    const ob=runBal; runBal+=mInt; cumInt+=mInt;
+    months.push({num:++idx,year:cur.getFullYear(),month:cur.toLocaleString('en-IN',{month:'short'}),openBal:ob,mInt,cumInt,closeBal:runBal,growthPct:(runBal-P)/P*100});
     cur=next;
   }
   intData.months=months;
-
-  // Group by year
   const byYear={};
   months.forEach(m=>{
-    if(!byYear[m.year]) byYear[m.year]={openBal:m.openBal, yearInt:0, cumInt:0, closeBal:0, months:[]};
-    byYear[m.year].yearInt+=m.mInt;
-    byYear[m.year].cumInt=m.cumInt;
-    byYear[m.year].closeBal=m.closeBal;
+    if(!byYear[m.year]) byYear[m.year]={openBal:m.openBal,yearInt:0,cumInt:0,closeBal:0,months:[]};
+    byYear[m.year].yearInt+=m.mInt; byYear[m.year].cumInt=m.cumInt; byYear[m.year].closeBal=m.closeBal;
     byYear[m.year].months.push(m);
   });
-
-  const tbody=document.getElementById('int-table-body');
-  tbody.innerHTML='';
+  const tbody=document.getElementById('int-table-body'); tbody.innerHTML='';
   Object.keys(byYear).forEach(yr=>{
-    const yd=byYear[yr];
-    const growthPct=(yd.closeBal-P)/P*100;
-    const ytr=document.createElement('tr');
-    ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'int');
+    const yd=byYear[yr]; const gp=(yd.closeBal-P)/P*100;
+    const ytr=document.createElement('tr'); ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'int');
     ytr.innerHTML=`<td><div class="yr-label"><span class="yr-toggle" id="itog-${yr}">⊞</span>${yr}</div></td>
-      <td class="yr-pr">${fmtR(yd.openBal)}</td>
-      <td class="yr-in">${fmtR(yd.yearInt)}</td>
-      <td class="yr-tp">${fmtR(yd.cumInt)}</td>
-      <td class="yr-bl">${fmtR(yd.closeBal)}</td>
-      <td class="yr-pct">${fmtDec(growthPct)}%</td>`;
+      <td class="yr-pr">${fmtR(yd.openBal)}</td><td class="yr-in">${fmtR(yd.yearInt)}</td>
+      <td class="yr-tp">${fmtR(yd.cumInt)}</td><td class="yr-bl">${fmtR(yd.closeBal)}</td><td class="yr-pct">${fmtDec(gp)}%</td>`;
     tbody.appendChild(ytr);
     yd.months.forEach(m=>{
-      const mtr=document.createElement('tr');
-      mtr.className='month-row hidden'; mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','int');
-      mtr.innerHTML=`<td class="mo-lbl">${m.month}</td>
-        <td class="mo-pr">${fmtR(m.openBal)}</td>
-        <td class="mo-in">${fmtR(m.mInt)}</td>
-        <td class="mo-tp">${fmtR(m.cumInt)}</td>
-        <td class="mo-bl">${fmtR(m.closeBal)}</td>
-        <td class="mo-pct">${fmtDec(m.growthPct)}%</td>`;
+      const mtr=document.createElement('tr'); mtr.className='month-row hidden';
+      mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','int');
+      mtr.innerHTML=`<td class="mo-lbl">${m.month}</td><td class="mo-pr">${fmtR(m.openBal)}</td>
+        <td class="mo-in">${fmtR(m.mInt)}</td><td class="mo-tp">${fmtR(m.cumInt)}</td>
+        <td class="mo-bl">${fmtR(m.closeBal)}</td><td class="mo-pct">${fmtDec(m.growthPct)}%</td>`;
       tbody.appendChild(mtr);
     });
   });
   document.getElementById('int-table-wrap').classList.add('show');
 }
 
-/* ══════════════ SIP — with monthly table ══════════════ */
+/* ══════════════════════════════════════════
+   SIP
+══════════════════════════════════════════ */
 let sipData={};
 function calcSIP(){
   const monthly=parseFloat(document.getElementById('sip-monthly').value);
@@ -796,7 +1075,6 @@ function calcSIP(){
   const r=ar/100/12, N=Math.round(years*12);
   const maturity=monthly*(Math.pow(1+r,N)-1)/r*(1+r);
   const invested=monthly*N, returns=maturity-invested;
-
   document.getElementById('sip-invested').textContent=fmtR(invested);
   document.getElementById('sip-returns').textContent=fmtR(returns);
   document.getElementById('sip-maturity').textContent=fmtR(maturity);
@@ -804,60 +1082,40 @@ function calcSIP(){
   document.getElementById('sip-result').classList.add('show');
   document.getElementById('sip-actions').classList.add('show');
   renderPie('sip-chart','sip-chart-wrap','sip-legend',['Amount Invested','Est. Returns'],[invested,returns]);
-
-  // Build monthly schedule
-  let portfolio=0;
-  const sipMonths=[];
-  const byYear={};
+  let portfolio=0; const sipMonths=[]; const byYear={};
   const startDate=new Date();
   for(let i=1;i<=N;i++){
-    const intEarned=portfolio*r;
-    portfolio=portfolio*(1+r)+monthly;
-    const totalInv=monthly*i;
-    const gain=portfolio-totalInv;
-    const gainPct=(gain/totalInv*100);
-    const d=new Date(startDate); d.setMonth(d.getMonth()+i-1);
-    const yr=d.getFullYear();
+    const intEarned=portfolio*r; portfolio=portfolio*(1+r)+monthly;
+    const totalInv=monthly*i; const gain=portfolio-totalInv; const gainPct=gain/totalInv*100;
+    const d=new Date(startDate); d.setMonth(d.getMonth()+i-1); const yr=d.getFullYear();
     sipMonths.push({num:i,year:yr,month:d.toLocaleString('en-IN',{month:'short'}),monthly,intEarned,totalInv,portfolio,gain,gainPct});
     if(!byYear[yr]) byYear[yr]={totalInv:0,intEarned:0,portfolio:0,months:[]};
-    byYear[yr].totalInv=totalInv;
-    byYear[yr].intEarned+=intEarned;
-    byYear[yr].portfolio=portfolio;
+    byYear[yr].totalInv=totalInv; byYear[yr].intEarned+=intEarned; byYear[yr].portfolio=portfolio;
     byYear[yr].months.push(sipMonths[sipMonths.length-1]);
   }
   sipData={monthly,ar,years,invested,returns,maturity,months:sipMonths};
-
-  const tbody=document.getElementById('sip-table-body');
-  tbody.innerHTML='';
+  const tbody=document.getElementById('sip-table-body'); tbody.innerHTML='';
   Object.keys(byYear).forEach(yr=>{
-    const yd=byYear[yr];
-    const gainAmt=yd.portfolio-yd.totalInv;
-    const gainPct=(gainAmt/yd.totalInv*100);
-    const ytr=document.createElement('tr');
-    ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'sip');
+    const yd=byYear[yr]; const gp=(yd.portfolio-yd.totalInv)/yd.totalInv*100;
+    const ytr=document.createElement('tr'); ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'sip');
     ytr.innerHTML=`<td><div class="yr-label"><span class="yr-toggle" id="stog-${yr}">⊞</span>${yr}</div></td>
-      <td class="yr-pr">${fmtR(monthly)}</td>
-      <td class="yr-in">${fmtR(yd.intEarned)}</td>
-      <td class="yr-tp">${fmtR(yd.totalInv)}</td>
-      <td class="yr-bl">${fmtR(yd.portfolio)}</td>
-      <td class="yr-pct" style="color:var(--green-h)">${fmtDec(gainPct)}%</td>`;
+      <td class="yr-pr">${fmtR(monthly)}</td><td class="yr-in">${fmtR(yd.intEarned)}</td>
+      <td class="yr-tp">${fmtR(yd.totalInv)}</td><td class="yr-bl">${fmtR(yd.portfolio)}</td>
+      <td class="yr-pct" style="color:var(--gh)">${fmtDec(gp)}%</td>`;
     tbody.appendChild(ytr);
     yd.months.forEach(m=>{
-      const mtr=document.createElement('tr');
-      mtr.className='month-row hidden'; mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','sip');
-      mtr.innerHTML=`<td class="mo-lbl">${m.month}</td>
-        <td class="mo-pr">${fmtR(m.monthly)}</td>
-        <td class="mo-in">${fmtR(m.intEarned)}</td>
-        <td class="mo-tp">${fmtR(m.totalInv)}</td>
-        <td class="mo-bl">${fmtR(m.portfolio)}</td>
-        <td class="mo-pct" style="color:var(--green-h)">${fmtDec(m.gainPct)}%</td>`;
+      const mtr=document.createElement('tr'); mtr.className='month-row hidden';
+      mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','sip');
+      mtr.innerHTML=`<td class="mo-lbl">${m.month}</td><td class="mo-pr">${fmtR(m.monthly)}</td>
+        <td class="mo-in">${fmtR(m.intEarned)}</td><td class="mo-tp">${fmtR(m.totalInv)}</td>
+        <td class="mo-bl">${fmtR(m.portfolio)}</td><td class="mo-pct" style="color:var(--gh)">${fmtDec(m.gainPct)}%</td>`;
       tbody.appendChild(mtr);
     });
   });
   document.getElementById('sip-table-wrap').classList.add('show');
 }
 
-/* ══════════════ FD ══════════════ */
+/* ══ FD ══ */
 let fdData={};
 function calcFD(){
   const P=parseFloat(document.getElementById('fd-principal').value);
@@ -867,8 +1125,7 @@ function calcFD(){
   const n=parseInt(document.getElementById('fd-compound').value);
   if(!P||!R||!tenure) return alert('Please fill all fields.');
   const years=unit==='years'?tenure:unit==='months'?tenure/12:tenure/365;
-  const maturity=P*Math.pow(1+(R/100)/n,n*years);
-  const interest=maturity-P;
+  const maturity=P*Math.pow(1+(R/100)/n,n*years); const interest=maturity-P;
   fdData={P,R,tenure,unit,maturity,interest};
   document.getElementById('fd-maturity').textContent=fmtR(maturity);
   document.getElementById('fd-interest').textContent=fmtR(interest);
@@ -878,7 +1135,7 @@ function calcFD(){
   renderPie('fd-chart','fd-chart-wrap','fd-legend',['Principal','Interest Earned'],[P,interest]);
 }
 
-/* ══════════════ GST ══════════════ */
+/* ══ GST ══ */
 let gstData={};
 function calcGST(){
   const amount=parseFloat(document.getElementById('gst-amount').value);
@@ -898,7 +1155,7 @@ function calcGST(){
   document.getElementById('gst-actions').classList.add('show');
 }
 
-/* ══════════════ CURRENCY — LIVE ══════════════ */
+/* ══ CURRENCY ══ */
 let currData={};
 async function calcCurrency(){
   const amount=parseFloat(document.getElementById('curr-amount').value);
@@ -906,27 +1163,23 @@ async function calcCurrency(){
   const to=document.getElementById('curr-to').value;
   if(!amount) return alert('Please enter an amount.');
   const badge=document.getElementById('curr-rate-badge');
-  badge.style.display='inline-flex'; badge.className='rate-badge loading'; badge.textContent='⏳ Fetching live rate…';
+  badge.style.display='inline-flex'; badge.className='rate-badge loading'; badge.textContent='⏳ Fetching…';
   const sym={INR:'₹',USD:'$',EUR:'€',GBP:'£',AED:'AED ',SGD:'S$',AUD:'A$',CAD:'C$',JPY:'¥',CHF:'Fr'};
-  async function tryAPI(url,parse){
-    const res=await fetch(url); if(!res.ok) throw new Error();
-    return parse(await res.json());
-  }
   try{
     let rate,dateStr;
     try{
-      const d=await tryAPI(`https://api.frankfurter.app/latest?from=${from}&to=${to}`,j=>{return {rate:j.rates[to],date:j.date};});
-      rate=d.rate; const[dy,dm,dd]=d.date.split('-'); dateStr=`${dd}-${dm}-${dy}`;
+      const res=await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`);
+      if(!res.ok) throw new Error();
+      const j=await res.json(); rate=j.rates[to];
+      const[dy,dm,dd]=j.date.split('-'); dateStr=`${dd}-${dm}-${dy}`;
     } catch(e){
-      const d=await tryAPI(`https://open.er-api.com/v6/latest/${from}`,j=>{
-        const dt=new Date(j.time_last_update_unix*1000);
-        return {rate:j.rates[to],date:`${String(dt.getDate()).padStart(2,'0')}-${String(dt.getMonth()+1).padStart(2,'0')}-${dt.getFullYear()}`};
-      });
-      rate=d.rate; dateStr=d.date;
+      const res=await fetch(`https://open.er-api.com/v6/latest/${from}`);
+      const j=await res.json(); rate=j.rates[to];
+      const dt=new Date(j.time_last_update_unix*1000);
+      dateStr=`${String(dt.getDate()).padStart(2,'0')}-${String(dt.getMonth()+1).padStart(2,'0')}-${dt.getFullYear()}`;
     }
     const converted=amount*rate;
-    badge.className='rate-badge ok';
-    badge.textContent=`✅ Live: 1 ${from} = ${rate.toFixed(4)} ${to}  ·  ${dateStr}`;
+    badge.className='rate-badge ok'; badge.textContent=`✅ Live: 1 ${from} = ${rate.toFixed(4)} ${to}  ·  ${dateStr}`;
     currData={amount,from,to,rate,converted,date:dateStr};
     document.getElementById('curr-converted').textContent=sym[to]+converted.toLocaleString('en-IN',{maximumFractionDigits:2});
     document.getElementById('curr-rate-val').textContent=`1 ${from} = ${fmtDec(rate,4)} ${to}`;
@@ -935,11 +1188,11 @@ async function calcCurrency(){
     document.getElementById('curr-result').classList.add('show');
     document.getElementById('curr-actions').classList.add('show');
   } catch(e){
-    badge.className='rate-badge err'; badge.textContent='⚠ Could not fetch live rate. Check internet connection.';
+    badge.className='rate-badge err'; badge.textContent='⚠ Could not fetch live rate.';
   }
 }
 
-/* ══════════════ DISCOUNT ══════════════ */
+/* ══ DISCOUNT ══ */
 function calcDiscount(){
   const orig=parseFloat(document.getElementById('disc-original').value);
   const pct=parseFloat(document.getElementById('disc-percent').value)||0;
@@ -952,7 +1205,7 @@ function calcDiscount(){
   document.getElementById('disc-result').classList.add('show');
 }
 
-/* ══════════════ AGE ══════════════ */
+/* ══ AGE ══ */
 function calcAge(){
   const dob=new Date(document.getElementById('age-dob').value);
   const ref=new Date(document.getElementById('age-today').value);
@@ -971,265 +1224,452 @@ function calcAge(){
   document.getElementById('age-result').classList.add('show');
 }
 
-/* ══════════════ SHARE ══════════════ */
-function buildShareText(id){
-  const site='Punnam Academy Financial Calculator';
-  if(id==='emi'&&emiData.months.length){
-    return `*EMI Calculation — ${site}*\n\nLoan: ${fmtIN(emiData.P)}\nMonthly EMI: ${fmtIN(emiData.emi)}\nTotal Interest: ${fmtIN(emiData.months.reduce((a,m)=>a+m.ip,0))}\nTotal Payment: ${fmtIN(emiData.emi*emiData.months.length)}\n\nPunnam Academy`;
+/* ══════════════════════════════════════════
+   GOLD & SILVER — LIVE RATES
+══════════════════════════════════════════ */
+let metalRates={gold24:0, silver:0, asof:''};
+
+async function fetchMetalRates(){
+  document.getElementById('metal-asof').textContent='⏳ Fetching live rates…';
+  const TROY=31.1035;
+
+  function applyRates(gold24g, silverG, source, dateStr){
+    // gold24g and silverG are already in INR per gram (adjusted for Indian market)
+    const g22 = gold24g * (22/24);
+    const g18 = gold24g * (18/24);
+    metalRates = {gold24:gold24g, gold22:g22, gold18:g18, silver:silverG, asof:dateStr};
+    document.getElementById('gold24-price').textContent = '₹'+fmtDec(gold24g,0);
+    document.getElementById('gold22-price').textContent = '₹'+fmtDec(g22,0);
+    document.getElementById('gold18-price').textContent = '₹'+fmtDec(g18,0);
+    document.getElementById('silver-price').textContent = silverG ? '₹'+fmtDec(silverG,0) : '–';
+    document.getElementById('metal-asof').textContent = '✅ Live rates · '+dateStr+' · Source: '+source;
+    calcGoldValue(); calcSilverValue();
   }
-  if(id==='int'&&intData.P) return `*Interest — ${site}*\n\nPrincipal: ${fmtIN(intData.P)}\nRate: ${intData.R}% (${intData.type})\nPeriod: ${fmtDate(intData.from)} to ${fmtDate(intData.to)}\nInterest: ${fmtIN(intData.interest)}\nTotal: ${fmtIN(intData.total)}\n\nPunnam Academy`;
-  if(id==='sip'&&sipData.invested) return `*SIP Projection — ${site}*\n\nMonthly: ${fmtIN(sipData.monthly)} for ${sipData.years} yrs @ ${sipData.ar}%\nInvested: ${fmtIN(sipData.invested)}\nReturns: ${fmtIN(sipData.returns)}\nMaturity: ${fmtIN(sipData.maturity)}\n\nPunnam Academy`;
-  if(id==='fd'&&fdData.P) return `*FD — ${site}*\n\nPrincipal: ${fmtIN(fdData.P)} @ ${fdData.R}% for ${fdData.tenure} ${fdData.unit}\nInterest: ${fmtIN(fdData.interest)}\nMaturity: ${fmtIN(fdData.maturity)}\n\nPunnam Academy`;
-  if(id==='gst'&&gstData.base) return `*GST — ${site}*\n\nBase: ${fmtIN(gstData.base)}\nGST@${gstData.rate}%: ${fmtIN(gstData.gstAmt)}\nCGST: ${fmtIN(gstData.gstAmt/2)} | SGST: ${fmtIN(gstData.gstAmt/2)}\nTotal: ${fmtIN(gstData.total)}\n\nPunnam Academy`;
-  if(id==='curr'&&currData.rate) return `*Currency — ${site}*\n\n${currData.amount} ${currData.from} = ${currData.converted.toLocaleString('en-IN',{maximumFractionDigits:2})} ${currData.to}\nRate: 1 ${currData.from} = ${fmtDec(currData.rate,4)} ${currData.to}\nAs of: ${currData.date}\n\nPunnam Academy`;
-  return site;
+
+  function nowDS(){
+    const n=new Date();
+    const dd=String(n.getDate()).padStart(2,'0');
+    const mm=String(n.getMonth()+1).padStart(2,'0');
+    const yyyy=n.getFullYear();
+    const hh=String(n.getHours()).padStart(2,'0');
+    const min=String(n.getMinutes()).padStart(2,'0');
+    const ss=String(n.getSeconds()).padStart(2,'0');
+    return dd+'-'+mm+'-'+yyyy+' '+hh+':'+min+':'+ss;
+  }
+
+  // Step 1: get live USD→INR rate from frankfurter (used as fallback FX layer)
+  let usdInr = 86;
+  try {
+    const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
+    if (fxRes.ok) { const fx = await fxRes.json(); usdInr = fx.rates.INR; }
+  } catch(ex) { console.warn('FX fallback to 86'); }
+
+  // Attempt 1: dpgold.in MCX live broadcast — accurate Indian MCX rates
+  // Response is JSON array. Each item has fields like:
+  //   { RecordID: 241, RecordName: "GOLD Andhra Pradesh - Telangana 999", Bid: 16779.8, Ask: 16779.8, High: ..., Low: ..., Unit: "/ 10 Gm" }
+  // We target RecordID 241 (AP-Telangana 999 gold) → Bid / 10 = price per gram
+  // Silver: RecordID 244 (SILVER 30 KG PAN India) → Bid / 1000 = price per gram
+  try {
+    const ts = Date.now();
+    const res = await fetch(
+      'https://statewisebcast.dpgold.in:7768/VOTSBroadcastStreaming/Services/xml/GetLiveRateByTemplateID/dpgold?_='+ts,
+      { headers: { 'Accept': 'application/json, text/plain, */*', 'Referer': 'https://www.dpgold.com/' } }
+    );
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const items = Array.isArray(data) ? data : (data.Data || data.data || data.rates || data.Result || []);
+    if (!items.length) throw new Error('Empty response');
+
+    let gold24per10g = 0, silverPerKg = 0;
+
+    items.forEach(item => {
+      // Grab all possible field name variants
+      const id = item.RecordID || item.recordID || item.Id || item.id || item.ID;
+      const bid = parseFloat(item.Bid || item.bid || item.BidRate || item.Rate || item.rate || 0);
+      const name = String(item.RecordName || item.recordName || item.Name || item.name || '').toUpperCase();
+
+      // Primary: RecordID 241 = GOLD AP-Telangana 999, price per 10g
+      if (Number(id) === 241) { gold24per10g = bid; return; }
+
+      // Fallback gold: RecordID 242 (GOLD BIS 999 MUMBAI) if 241 missing
+      if (Number(id) === 242 && !gold24per10g) { gold24per10g = bid; return; }
+
+      // Silver: RecordID 244 (SILVER 30 KG PAN India), price per KG
+      if (Number(id) === 244) { silverPerKg = bid; return; }
+    });
+
+    // If IDs didn't match (field name varies), fall back to name matching
+    if (!gold24per10g) {
+      items.forEach(item => {
+        const name = String(item.RecordName || item.recordName || item.Name || item.name || '').toUpperCase();
+        const bid = parseFloat(item.Bid || item.bid || item.BidRate || item.Rate || item.rate || 0);
+        if (!bid) return;
+        if (name.includes('ANDHRA') || (name.includes('GOLD') && name.includes('999') && name.includes('AP'))) {
+          gold24per10g = bid;
+        } else if (!gold24per10g && name.includes('GOLD') && name.includes('999') && name.includes('MUMBAI')) {
+          gold24per10g = bid;
+        }
+        if (!silverPerKg && name.includes('SILVER') && name.includes('30')) {
+          silverPerKg = bid;
+        }
+      });
+    }
+
+    if (!gold24per10g) throw new Error('RecordID 241 not found in dpgold response');
+
+    const gold24g   = gold24per10g / 10;          // per 10g → per 1g
+    const silverG   = silverPerKg  ? silverPerKg / 1000 : 0; // per kg → per 1g
+
+    applyRates(gold24g, silverG, 'dpgold.in (MCX Live)', nowDS());
+    return;
+  } catch(e0) { console.warn('dpgold.in failed:', e0.message); }
+
+  // Attempt 2: gold-api.com — free, no key, CORS-enabled, real-time XAU/XAG in USD → convert to INR
+  try {
+    const [gRes, sRes] = await Promise.all([
+      fetch('https://api.gold-api.com/price/XAU'),
+      fetch('https://api.gold-api.com/price/XAG')
+    ]);
+    if (!gRes.ok) throw new Error('HTTP ' + gRes.status);
+    const gData = await gRes.json();
+    const sData = sRes.ok ? await sRes.json() : null;
+    const goldUSDoz = gData.price;
+    const silverUSDoz = sData ? sData.price : null;
+    if (!goldUSDoz) throw new Error('No price field');
+    const TROY = 31.1035;
+    const INDIA = 1.06 * 1.03; // 6% import duty + 3% GST
+    const gold24g = (goldUSDoz / TROY) * usdInr * INDIA;
+    const silverG = silverUSDoz ? (silverUSDoz / TROY) * usdInr * INDIA : 0;
+    applyRates(gold24g, silverG, 'gold-api.com', nowDS());
+    return;
+  } catch(e1) { console.warn('gold-api.com failed:', e1.message); }
+
+  // Attempt 3: data-asg.goldprice.org — returns xauPrice/xagPrice in INR per oz
+  try {
+    const res = await fetch('https://data-asg.goldprice.org/dbXRates/INR', {
+      headers: { 'Accept': 'application/json', 'Referer': 'https://goldprice.org/' }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const item = data.items && data.items[0];
+    if (!item || !item.xauPrice) throw new Error('No data');
+    const TROY = 31.1035;
+    const INDIA = 1.06 * 1.03;
+    applyRates((item.xauPrice / TROY) * INDIA, (item.xagPrice / TROY) * INDIA, 'goldprice.org', nowDS());
+    return;
+  } catch(e2) { console.warn('goldprice.org failed:', e2.message); }
+
+  document.getElementById('metal-asof').textContent = '⚠ All rate sources unreachable. Check your connection and tap Refresh Rates.';
+}
+
+function calcGoldValue(){
+  const grams=parseFloat(document.getElementById('gold-grams').value)||0;
+  const makingRaw=document.getElementById('gold-making').value;
+  const gstRaw=document.getElementById('gold-gst').value;
+  const makingPct=makingRaw===''?0:parseFloat(makingRaw)||0;
+  const hasMaking=makingRaw!=='';
+  const hasGst=gstRaw!=='';
+  const gstPct=hasGst?(parseFloat(gstRaw)||0):0;
+  if(!grams||!metalRates.gold24) return;
+  document.getElementById('gold-karat-grid').style.display='grid';
+  document.getElementById('gold-wa-wrap').style.display='block';
+  [['24',metalRates.gold24],['22',metalRates.gold22||metalRates.gold24*(22/24)],['18',metalRates.gold18||metalRates.gold24*(18/24)]].forEach(([k,rate])=>{
+    const metalVal=rate*grams;
+    const makingAmt=hasMaking?metalVal*makingPct/100:0;
+    const subTotal=metalVal+makingAmt;
+    const gstAmt=hasGst&&hasMaking?subTotal*gstPct/100:0;
+    const total=subTotal+gstAmt;
+    document.getElementById(`k${k}-rate`).textContent=`Rate: ₹${fmtDec(rate,0)}/g`;
+    document.getElementById(`k${k}-value`).textContent='₹'+fmtDec(metalVal,0);
+    let note='Pure metal value';
+    if(hasMaking&&hasGst) note=`+Making+GST Total: ₹${fmtDec(total,2)}`;
+    else if(hasMaking) note=`+Making (${makingPct}%) Total: ₹${fmtDec(total,2)}`;
+    document.getElementById(`k${k}-total`).textContent=note;
+  });
+}
+
+function calcSilverValue(){
+  const grams=parseFloat(document.getElementById('silver-grams').value)||0;
+  const makingPct=parseFloat(document.getElementById('silver-making').value)||0;
+  if(!grams||!metalRates.silver) return;
+  const metalVal=metalRates.silver*grams;
+  const makingAmt=metalVal*makingPct/100;
+  const total=metalVal+makingAmt;
+  document.getElementById('silver-result').style.display='block';
+  document.getElementById('sv-metal-val').textContent='₹'+fmtDec(metalVal,2);
+  document.getElementById('sv-making').textContent='₹'+fmtDec(makingAmt,2);
+  document.getElementById('sv-total').textContent='₹'+fmtDec(total,2);
+  document.getElementById('silver-actions').classList.add('show');
+}
+
+function buildGoldShareText(){
+  const grams=parseFloat(document.getElementById('gold-grams').value)||0;
+  const makingPct=parseFloat(document.getElementById('gold-making').value)||0;
+  const gstPct=parseFloat(document.getElementById('gold-gst').value)||3;
+  const asof=metalRates.asof?`(as of ${metalRates.asof})`:'';
+  let lines=`*Gold Value Calculator — Punnam Academy*\n\nWeight: ${grams}g | Making: ${makingPct}% | GST: ${gstPct}%\n\n`;
+  [['24',metalRates.gold24],['22',metalRates.gold22||0],['18',metalRates.gold18||0]].forEach(([k,rate])=>{
+    if(!rate) return;
+    const mv=rate*grams, mc=mv*makingPct/100, st=mv+mc, gst=st*gstPct/100, total=st+gst;
+    lines+=`*${k}K Gold:* ₹${fmtDec(mv,2)} (metal)`;
+    if(makingPct>0) lines+=` → Total: ₹${fmtDec(total,2)}`;
+    lines+='\n';
+  });
+  lines+=`\nRate ${asof} · Punnam Academy`;
+  return lines;
+}
+function shareGoldWA(){ window.open('https://wa.me/?text='+encodeURIComponent(buildGoldShareText()),'_blank'); }
+async function shareGoldMore(){
+  if(navigator.share){ try{ await navigator.share({title:'Gold Value',text:buildGoldShareText()}); return; } catch(e){} }
+  try{ await navigator.clipboard.writeText(buildGoldShareText()); alert('Copied to clipboard!'); } catch(e){ prompt('Copy:',buildGoldShareText()); }
+}
+
+function buildSilverShareText(){
+  const grams=parseFloat(document.getElementById('silver-grams').value)||0;
+  const makingPct=parseFloat(document.getElementById('silver-making').value)||0;
+  const mv=metalRates.silver*grams, mc=mv*makingPct/100, total=mv+mc;
+  return `*Silver Value — Punnam Academy*\n\nWeight: ${grams}g\nRate: ₹${fmtDec(metalRates.silver,2)}/g\nMetal Value: ₹${fmtDec(mv,2)}\nMaking (${makingPct}%): ₹${fmtDec(mc,2)}\nTotal: ₹${fmtDec(total,2)}\n\nPunnam Academy`;
+}
+function shareSilverWA(){ window.open('https://wa.me/?text='+encodeURIComponent(buildSilverShareText()),'_blank'); }
+async function shareSilverMore(){
+  if(navigator.share){ try{ await navigator.share({title:'Silver Value',text:buildSilverShareText()}); return; } catch(e){} }
+  try{ await navigator.clipboard.writeText(buildSilverShareText()); alert('Copied!'); } catch(e){ prompt('Copy:',buildSilverShareText()); }
+}
+
+/* ══════════════════════════════════════════
+   UNIT CONVERTERS
+══════════════════════════════════════════ */
+// Length (all to metres)
+const LEN={m:1,km:1000,cm:.01,mm:.001,mi:1609.344,yd:0.9144,ft:0.3048,in:0.0254,nm:1852};
+function convertLength(){
+  const v=parseFloat(document.getElementById('len-val').value);
+  if(isNaN(v)){document.getElementById('len-result').classList.remove('show');return;}
+  const from=document.getElementById('len-from').value, to=document.getElementById('len-to').value;
+  const res=v*LEN[from]/LEN[to];
+  document.getElementById('len-output').textContent=fmtNum(res);
+  document.getElementById('len-label').textContent=`${v} ${from} = ${fmtNum(res)} ${to}`;
+  document.getElementById('len-result').classList.add('show');
+}
+
+// Temperature
+function convertTemp(){
+  const v=parseFloat(document.getElementById('tmp-val').value);
+  if(isNaN(v)){document.getElementById('tmp-result').classList.remove('show');return;}
+  const from=document.getElementById('tmp-from').value, to=document.getElementById('tmp-to').value;
+  let celsius;
+  if(from==='C') celsius=v; else if(from==='F') celsius=(v-32)*5/9; else if(from==='K') celsius=v-273.15; else celsius=(v-491.67)*5/9;
+  let res;
+  if(to==='C') res=celsius; else if(to==='F') res=celsius*9/5+32; else if(to==='K') res=celsius+273.15; else res=(celsius+273.15)*9/5;
+  const units={C:'°C',F:'°F',K:'K',R:'°R'};
+  document.getElementById('tmp-output').textContent=fmtNum(res)+units[to];
+  document.getElementById('tmp-label').textContent=`${v}${units[from]} = ${fmtNum(res)}${units[to]}`;
+  document.getElementById('tmp-result').classList.add('show');
+}
+
+// Area (all to m²)
+const AREA={m2:1,km2:1e6,cm2:1e-4,ft2:0.092903,in2:6.4516e-4,ac:4046.856,ha:10000,yd2:0.836127};
+function convertArea(){
+  const v=parseFloat(document.getElementById('area-val').value);
+  if(isNaN(v)){document.getElementById('area-result').classList.remove('show');return;}
+  const from=document.getElementById('area-from').value, to=document.getElementById('area-to').value;
+  const res=v*AREA[from]/AREA[to];
+  document.getElementById('area-output').textContent=fmtNum(res);
+  document.getElementById('area-label').textContent=`${v} ${from} = ${fmtNum(res)} ${to}`;
+  document.getElementById('area-result').classList.add('show');
+}
+
+// Volume (all to litres)
+const VOL={L:1,mL:.001,m3:1000,cm3:.001,ft3:28.3168,in3:.016387,gal:3.78541,qt:.946353,pt:.473176,floz:.0295735,tsp:.00492892,tbsp:.0147868};
+function convertVolume(){
+  const v=parseFloat(document.getElementById('vol-val').value);
+  if(isNaN(v)){document.getElementById('vol-result').classList.remove('show');return;}
+  const from=document.getElementById('vol-from').value, to=document.getElementById('vol-to').value;
+  const res=v*VOL[from]/VOL[to];
+  document.getElementById('vol-output').textContent=fmtNum(res);
+  document.getElementById('vol-label').textContent=`${v} ${from} = ${fmtNum(res)} ${to}`;
+  document.getElementById('vol-result').classList.add('show');
+}
+
+// Weight (all to kg)
+const WT={kg:1,g:.001,mg:1e-6,t:1000,lb:0.453592,oz:0.0283495,st:6.35029,ct:0.0002};
+function convertWeight(){
+  const v=parseFloat(document.getElementById('wt-val').value);
+  if(isNaN(v)){document.getElementById('wt-result').classList.remove('show');return;}
+  const from=document.getElementById('wt-from').value, to=document.getElementById('wt-to').value;
+  const res=v*WT[from]/WT[to];
+  document.getElementById('wt-output').textContent=fmtNum(res);
+  document.getElementById('wt-label').textContent=`${v} ${from} = ${fmtNum(res)} ${to}`;
+  document.getElementById('wt-result').classList.add('show');
+}
+
+// Time (all to seconds)
+const TIM={s:1,min:60,hr:3600,day:86400,wk:604800,mo:2629800,yr:31557600};
+function convertTime(){
+  const v=parseFloat(document.getElementById('tim-val').value);
+  if(isNaN(v)){document.getElementById('tim-result').classList.remove('show');return;}
+  const from=document.getElementById('tim-from').value, to=document.getElementById('tim-to').value;
+  const res=v*TIM[from]/TIM[to];
+  document.getElementById('tim-output').textContent=fmtNum(res);
+  document.getElementById('tim-label').textContent=`${v} ${from} = ${fmtNum(res)} ${to}`;
+  document.getElementById('tim-result').classList.add('show');
+}
+
+function fmtNum(n){
+  if(Math.abs(n)>=1e9||Math.abs(n)<0.0001&&n!==0) return n.toExponential(4);
+  if(Math.abs(n)>=1000) return Number(n.toFixed(4)).toLocaleString('en-IN',{maximumFractionDigits:4});
+  return Number(n.toPrecision(8)).toString().replace(/\.?0+$/,'');
+}
+
+/* ══════════════════════════════════════════
+   SHARE
+══════════════════════════════════════════ */
+function buildShareText(id){
+  const S='Punnam Academy';
+  if(id==='emi'&&emiData.months.length) return `*EMI — ${S}*\n\nLoan: ${fmtIN(emiData.P)}\nEMI: ${fmtIN(emiData.emi)}\nTotal Interest: ${fmtIN(emiData.months.reduce((a,m)=>a+m.ip,0))}\nTotal: ${fmtIN(emiData.emi*emiData.months.length)}\n\n${S}`;
+  if(id==='int'&&intData.P) return `*Interest — ${S}*\n\nPrincipal: ${fmtIN(intData.P)}\nRate: ${intData.R}% (${intData.type})\nPeriod: ${fmtDate(intData.from)} to ${fmtDate(intData.to)}\nInterest: ${fmtIN(intData.interest)}\nTotal: ${fmtIN(intData.total)}\n\n${S}`;
+  if(id==='sip'&&sipData.invested) return `*SIP — ${S}*\n\nMonthly: ${fmtIN(sipData.monthly)} @ ${sipData.ar}% for ${sipData.years} yrs\nInvested: ${fmtIN(sipData.invested)}\nReturns: ${fmtIN(sipData.returns)}\nMaturity: ${fmtIN(sipData.maturity)}\n\n${S}`;
+  if(id==='fd'&&fdData.P) return `*FD — ${S}*\n\nPrincipal: ${fmtIN(fdData.P)} @ ${fdData.R}% for ${fdData.tenure} ${fdData.unit}\nInterest: ${fmtIN(fdData.interest)}\nMaturity: ${fmtIN(fdData.maturity)}\n\n${S}`;
+  if(id==='gst'&&gstData.base) return `*GST — ${S}*\n\nBase: ${fmtIN(gstData.base)}\nGST@${gstData.rate}%: ${fmtIN(gstData.gstAmt)}\nCGST: ${fmtIN(gstData.gstAmt/2)} | SGST: ${fmtIN(gstData.gstAmt/2)}\nTotal: ${fmtIN(gstData.total)}\n\n${S}`;
+  if(id==='curr'&&currData.rate) return `*Currency — ${S}*\n\n${currData.amount} ${currData.from} = ${currData.converted.toLocaleString('en-IN',{maximumFractionDigits:2})} ${currData.to}\nRate: 1 ${currData.from} = ${fmtDec(currData.rate,4)} ${currData.to}\nAs of: ${currData.date}\n\n${S}`;
+  return S;
 }
 function shareWA(id){ window.open('https://wa.me/?text='+encodeURIComponent(buildShareText(id)),'_blank'); }
 async function shareMore(id){
-  const text=buildShareText(id);
-  if(navigator.share){ try{ await navigator.share({title:'Punnam Academy',text}); return; } catch(e){} }
-  try{ await navigator.clipboard.writeText(text); alert('Copied to clipboard! Paste to share.'); }
-  catch(e){ prompt('Copy this text to share:',text); }
+  const t=buildShareText(id);
+  if(navigator.share){ try{ await navigator.share({title:'Punnam Academy',text:t}); return; } catch(e){} }
+  try{ await navigator.clipboard.writeText(t); alert('Copied to clipboard!'); } catch(e){ prompt('Copy:',t); }
 }
 
-/* ══════════════ EXCEL ══════════════ */
+/* ══════════════════════════════════════════
+   EXCEL
+══════════════════════════════════════════ */
 function downloadXL(id){
   const wb=XLSX.utils.book_new();
   if(id==='emi'){
     if(!emiData.months.length) return alert('Please calculate first.');
-    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
-      ['EMI Summary — Punnam Academy'],[''],
-      ['Loan Amount',fmtINr(emiData.P)],['Monthly EMI',fmtINr(emiData.emi)],
-      ['Total Interest',fmtINr(emiData.months.reduce((a,m)=>a+m.ip,0))],
-      ['Total Payment',fmtINr(emiData.emi*emiData.months.length)],
-    ]),'Summary');
-    const rows=[['#','Month','Year','Monthly EMI','Principal','Interest','Balance','Paid %']];
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['EMI Summary — Punnam Academy'],[''],['Loan Amount',fmtINr(emiData.P)],['Monthly EMI',fmtINr(emiData.emi)],['Total Interest',fmtINr(emiData.months.reduce((a,m)=>a+m.ip,0))],['Total Payment',fmtINr(emiData.emi*emiData.months.length)]]),'Summary');
+    const rows=[['#','Month','Year','EMI','Principal','Interest','Balance','Paid %']];
     emiData.months.forEach(m=>rows.push([m.num,m.month,m.year,Math.round(m.emi),Math.round(m.pp),Math.round(m.ip),Math.round(m.bal),fmtDec(m.paidPct)+'%']));
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Amortisation');
     XLSX.writeFile(wb,'Punnam_Academy_EMI.xlsx');
   } else if(id==='int'){
     if(!intData.months||!intData.months.length) return alert('Please calculate first.');
-    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
-      ['Interest Calculation — Punnam Academy'],[''],
-      ['Principal',fmtINr(intData.P)],['Rate',intData.R+'% ('+intData.type+')'],
-      ['Period',fmtDate(intData.from)+' to '+fmtDate(intData.to)],
-      ['Total Days',intData.totalDays],
-      ['Interest Earned',fmtINr(intData.interest)],['Total Amount',fmtINr(intData.total)],
-    ]),'Summary');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['Interest — Punnam Academy'],[''],['Principal',fmtINr(intData.P)],['Rate',intData.R+'% ('+intData.type+')'],['Period',fmtDate(intData.from)+' to '+fmtDate(intData.to)],['Total Days',intData.totalDays],['Interest Earned',fmtINr(intData.interest)],['Total Amount',fmtINr(intData.total)]]),'Summary');
     const rows=[['#','Month','Year','Opening Balance','Interest Earned','Cumulative Interest','Closing Balance','Growth %']];
     intData.months.forEach(m=>rows.push([m.num,m.month,m.year,Math.round(m.openBal),Math.round(m.mInt),Math.round(m.cumInt),Math.round(m.closeBal),fmtDec(m.growthPct)+'%']));
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Month-wise Breakdown');
     XLSX.writeFile(wb,'Punnam_Academy_Interest.xlsx');
   } else if(id==='sip'){
     if(!sipData.months||!sipData.months.length) return alert('Please calculate first.');
-    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
-      ['SIP Summary — Punnam Academy'],[''],
-      ['Monthly Investment',fmtINr(sipData.monthly)],['Annual Return',sipData.ar+'%'],
-      ['Period',sipData.years+' Years'],['Total Invested',fmtINr(sipData.invested)],
-      ['Estimated Returns',fmtINr(sipData.returns)],['Maturity Value',fmtINr(sipData.maturity)],
-    ]),'Summary');
-    const rows=[['#','Month','Year','Monthly SIP','Interest Earned','Total Invested','Portfolio Value','Total Gain %']];
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([['SIP — Punnam Academy'],[''],['Monthly Investment',fmtINr(sipData.monthly)],['Annual Return',sipData.ar+'%'],['Period',sipData.years+' Years'],['Total Invested',fmtINr(sipData.invested)],['Returns',fmtINr(sipData.returns)],['Maturity',fmtINr(sipData.maturity)]]),'Summary');
+    const rows=[['#','Month','Year','Monthly SIP','Interest','Total Invested','Portfolio Value','Gain %']];
     sipData.months.forEach(m=>rows.push([m.num,m.month,m.year,Math.round(m.monthly),Math.round(m.intEarned),Math.round(m.totalInv),Math.round(m.portfolio),fmtDec(m.gainPct)+'%']));
     XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Monthly Growth');
     XLSX.writeFile(wb,'Punnam_Academy_SIP.xlsx');
   }
 }
 
-/* ══════════════ PDF — fixed ₹ glyph bug, full monthly EMI ══════════════ */
+/* ══════════════════════════════════════════
+   PDF
+══════════════════════════════════════════ */
 function downloadPDF(id){
-  if(id==='emi'&&!emiData.months.length) return alert('Please calculate first.');
-  if(id==='int'&&!intData.P) return alert('Please calculate first.');
-  if(id==='sip'&&(!sipData.months||!sipData.months.length)) return alert('Please calculate first.');
-  if(id==='fd'&&!fdData.P) return alert('Please calculate first.');
-  if(id==='gst'&&!gstData.base) return alert('Please calculate first.');
-
-  const {jsPDF}=window.jspdf;
-  // Use landscape for EMI/SIP to fit all columns
-  const isLandscape=(id==='emi'||id==='sip'||id==='int');
-  const doc=new jsPDF({orientation:isLandscape?'landscape':'portrait',unit:'mm',format:'a4'});
-  const PW=isLandscape?297:210;
-  const gold=[201,147,58], dark=[13,17,23], white=[255,255,255], grey=[245,242,238], lgrey=[248,246,242];
-
+  const checks={emi:()=>emiData.months.length,int:()=>intData.P,sip:()=>sipData.months&&sipData.months.length,fd:()=>fdData.P,gst:()=>gstData.base};
+  if(checks[id]&&!checks[id]()) return alert('Please calculate first.');
+  const{jsPDF}=window.jspdf;
+  const isLand=(id==='emi'||id==='sip'||id==='int');
+  const doc=new jsPDF({orientation:isLand?'landscape':'portrait',unit:'mm',format:'a4'});
+  const PW=isLand?297:210;
+  const gold=[201,147,58],dark=[13,17,23],white=[255,255,255],grey=[245,242,238],lgrey=[248,246,242];
   function drawHeader(){
-    doc.setFillColor(...dark); doc.rect(0,0,PW,28,'F');
-    doc.setFillColor(...gold); doc.rect(0,25,PW,3,'F');
-    doc.setTextColor(...white);
-    doc.setFont('helvetica','bold'); doc.setFontSize(16);
+    doc.setFillColor(...dark);doc.rect(0,0,PW,28,'F');
+    doc.setFillColor(...gold);doc.rect(0,25,PW,3,'F');
+    doc.setTextColor(...white);doc.setFont('helvetica','bold');doc.setFontSize(15);
     doc.text('Punnam Academy',14,12);
-    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.setFont('helvetica','normal');doc.setFontSize(8.5);
     doc.text('Financial & Educational Hub',14,19);
     doc.text('Generated: '+todayStr(),PW-14,12,{align:'right'});
   }
   drawHeader();
   let y=36;
-
-  function section(title){
-    doc.setFillColor(...grey); doc.roundedRect(10,y-5,PW-20,10,2,2,'F');
-    doc.setTextColor(...dark); doc.setFont('helvetica','bold'); doc.setFontSize(12);
-    doc.text(title,14,y+1); y+=12;
-  }
+  function section(title){doc.setFillColor(...grey);doc.roundedRect(10,y-5,PW-20,10,2,2,'F');doc.setTextColor(...dark);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text(title,14,y+1);y+=12;}
   function dataRow(label,value,alt){
-    if(alt){doc.setFillColor(...lgrey); doc.rect(10,y-4,PW-20,8,'F');}
-    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(80,80,80);
-    doc.text(label,16,y);
-    doc.setFont('helvetica','bold'); doc.setTextColor(...dark);
-    // Use "Rs." prefix to avoid the rupee symbol glyph bug in jsPDF
-    doc.text(value,PW-14,y,{align:'right'});
-    y+=8;
+    if(alt){doc.setFillColor(...lgrey);doc.rect(10,y-4,PW-20,8,'F');}
+    doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(80,80,80);
+    doc.text(label,16,y);doc.setFont('helvetica','bold');doc.setTextColor(...dark);
+    doc.text(value,PW-14,y,{align:'right'});y+=8;
   }
-  // Plain amount formatter for PDF — avoids ₹ glyph rendering as ¹
-  function pa(n){ return 'Rs. '+Math.round(Number(n)).toLocaleString('en-IN'); }
-
-  function addFooter(){
-    const pc=doc.internal.getNumberOfPages();
-    for(let i=1;i<=pc;i++){
-      doc.setPage(i);
-      doc.setFillColor(...dark); doc.rect(0,isLandscape?200:285,PW,12,'F');
-      doc.setTextColor(...gold); doc.setFont('helvetica','bold'); doc.setFontSize(8);
-      doc.text('Punnam Academy · Financial & Educational Hub',14,isLandscape?208:293);
-      doc.setTextColor(150,150,150); doc.setFont('helvetica','normal');
-      doc.text('Page '+i+' of '+pc,PW-14,isLandscape?208:293,{align:'right'});
-    }
-  }
-
   if(id==='emi'){
     section('EMI Summary');
-    dataRow('Loan Amount',pa(emiData.P),false);
-    dataRow('Monthly EMI',pa(emiData.emi),true);
-    dataRow('Total Interest',pa(emiData.months.reduce((a,m)=>a+m.ip,0)),false);
-    dataRow('Total Payment',pa(emiData.emi*emiData.months.length),true);
+    dataRow('Loan Amount',pa(emiData.P),false);dataRow('Monthly EMI',pa(emiData.emi),true);
+    dataRow('Total Interest',pa(emiData.months.reduce((a,m)=>a+m.ip,0)),false);dataRow('Total Payment',pa(emiData.emi*emiData.months.length),true);
     y+=4;
-    // Year summary table
-    const yrData=Object.entries(emiData.byYear).map(([yr,yd])=>{
-      const pct=yd.bal===0?100:(emiData.P-yd.bal)/emiData.P*100;
-      return [yr, pa(yd.pr), pa(yd.int), pa(yd.tp), pa(yd.bal), fmtDec(pct)+'%'];
-    });
-    doc.autoTable({
-      head:[['Year','Principal (A)','Interest (B)','Total Payment (A+B)','Balance','Paid %']],
-      body:yrData, startY:y,
-      styles:{fontSize:8,cellPadding:2,halign:'right'},
-      columnStyles:{0:{halign:'left'}},
-      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
-      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
-      didDrawPage:(d)=>{ drawHeader(); }
-    });
-    y=doc.lastAutoTable.finalY+8;
-    // Full monthly detail table
-    doc.addPage();
-    drawHeader();
-    y=36;
-    section('Monthly Amortisation Schedule — All Months');
-    const moData=emiData.months.map(m=>[
-      m.num, m.month+' '+m.year, pa(m.emi), pa(m.pp), pa(m.ip), pa(m.bal), fmtDec(m.paidPct)+'%'
-    ]);
-    doc.autoTable({
-      head:[['#','Month','EMI','Principal (A)','Interest (B)','Balance','Paid %']],
-      body:moData, startY:y,
-      styles:{fontSize:7.5,cellPadding:2,halign:'right'},
-      columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:22}},
-      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
-      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
-      didDrawPage:(d)=>{ drawHeader(); }
-    });
+    doc.autoTable({head:[['Year','Principal (A)','Interest (B)','Total Payment (A+B)','Balance','Paid %']],
+      body:Object.entries(emiData.byYear).map(([yr,yd])=>{const pct=yd.bal===0?100:(emiData.P-yd.bal)/emiData.P*100;return[yr,pa(yd.pr),pa(yd.int),pa(yd.tp),pa(yd.bal),fmtDec(pct)+'%'];}),
+      startY:y,styles:{fontSize:7.5,cellPadding:2,halign:'right'},columnStyles:{0:{halign:'left'}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},alternateRowStyles:{fillColor:lgrey},margin:{left:10,right:10},
+      didDrawPage:()=>drawHeader()});
+    doc.addPage();drawHeader();y=36;
+    section('Monthly Amortisation — All Months');
+    doc.autoTable({head:[['#','Month','EMI','Principal (A)','Interest (B)','Balance','Paid %']],
+      body:emiData.months.map(m=>[m.num,m.month+' '+m.year,pa(m.emi),pa(m.pp),pa(m.ip),pa(m.bal),fmtDec(m.paidPct)+'%']),
+      startY:y,styles:{fontSize:7,cellPadding:1.8,halign:'right'},columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:20}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},alternateRowStyles:{fillColor:lgrey},margin:{left:10,right:10},
+      didDrawPage:()=>drawHeader()});
   } else if(id==='int'){
-    section('Interest Calculation Summary');
-    dataRow('Principal',pa(intData.P),false);
-    dataRow('Rate',intData.R+'% ('+intData.type+')',true);
-    dataRow('Period',fmtDate(intData.from)+' to '+fmtDate(intData.to),false);
-    dataRow('Total Days',intData.totalDays.toLocaleString('en-IN'),true);
-    dataRow('Interest Earned',pa(intData.interest),false);
-    dataRow('Total Amount',pa(intData.total),true);
+    section('Interest Calculation');
+    dataRow('Principal',pa(intData.P),false);dataRow('Rate',intData.R+'% ('+intData.type+')',true);
+    dataRow('Period',fmtDate(intData.from)+' to '+fmtDate(intData.to),false);dataRow('Days',intData.totalDays+'',true);
+    dataRow('Interest Earned',pa(intData.interest),false);dataRow('Total Amount',pa(intData.total),true);
     y+=4;
-    // Year summary table
-    const intYrData=Object.entries(
-      (intData.months||[]).reduce((acc,m)=>{
-        if(!acc[m.year]) acc[m.year]={openBal:m.openBal, yearInt:0, cumInt:0, closeBal:0};
-        acc[m.year].yearInt+=m.mInt; acc[m.year].cumInt=m.cumInt; acc[m.year].closeBal=m.closeBal;
-        return acc;
-      },{})
-    ).map(([yr,yd])=>[ yr, pa(yd.openBal), pa(yd.yearInt), pa(yd.cumInt), pa(yd.closeBal), fmtDec((yd.closeBal-intData.P)/intData.P*100)+'%' ]);
-    doc.autoTable({
-      head:[['Year','Opening Balance','Interest This Year','Cumulative Interest','Closing Balance','Growth %']],
-      body:intYrData, startY:y,
-      styles:{fontSize:8,cellPadding:2,halign:'right'},
-      columnStyles:{0:{halign:'left'}},
-      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
-      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
-      didDrawPage:(d)=>{ drawHeader(); }
-    });
-    // Full monthly table on new page
-    doc.addPage(); drawHeader(); y=36;
-    section('Month-wise Interest Breakdown');
-    const intMoData=(intData.months||[]).map(m=>[
-      m.num, m.month+' '+m.year, pa(m.openBal), pa(m.mInt), pa(m.cumInt), pa(m.closeBal), fmtDec(m.growthPct)+'%'
-    ]);
-    doc.autoTable({
-      head:[['#','Month','Opening Balance','Interest Earned','Cumulative Interest','Closing Balance','Growth %']],
-      body:intMoData, startY:y,
-      styles:{fontSize:7.5,cellPadding:2,halign:'right'},
-      columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:22}},
-      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
-      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
-      didDrawPage:(d)=>{ drawHeader(); }
-    });
+    doc.autoTable({head:[['Year','Opening Bal','Interest This Year','Cumulative Interest','Closing Bal','Growth %']],
+      body:Object.entries((intData.months||[]).reduce((acc,m)=>{if(!acc[m.year])acc[m.year]={ob:m.openBal,yi:0,ci:0,cb:0};acc[m.year].yi+=m.mInt;acc[m.year].ci=m.cumInt;acc[m.year].cb=m.closeBal;return acc;},{})).map(([yr,yd])=>[yr,pa(yd.ob),pa(yd.yi),pa(yd.ci),pa(yd.cb),fmtDec((yd.cb-intData.P)/intData.P*100)+'%']),
+      startY:y,styles:{fontSize:7.5,cellPadding:2,halign:'right'},columnStyles:{0:{halign:'left'}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},alternateRowStyles:{fillColor:lgrey},margin:{left:10,right:10},
+      didDrawPage:()=>drawHeader()});
+    doc.addPage();drawHeader();y=36;
+    section('Month-wise Breakdown');
+    doc.autoTable({head:[['#','Month','Opening Bal','Interest Earned','Cumulative Interest','Closing Bal','Growth %']],
+      body:(intData.months||[]).map(m=>[m.num,m.month+' '+m.year,pa(m.openBal),pa(m.mInt),pa(m.cumInt),pa(m.closeBal),fmtDec(m.growthPct)+'%']),
+      startY:y,styles:{fontSize:7,cellPadding:1.8,halign:'right'},columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:20}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},alternateRowStyles:{fillColor:lgrey},margin:{left:10,right:10},
+      didDrawPage:()=>drawHeader()});
   } else if(id==='sip'){
-    section('SIP Projection Summary');
-    dataRow('Monthly Investment',pa(sipData.monthly),false);
-    dataRow('Annual Return',sipData.ar+'%',true);
-    dataRow('Period',sipData.years+' Years',false);
-    dataRow('Total Invested',pa(sipData.invested),true);
-    dataRow('Estimated Returns',pa(sipData.returns),false);
-    dataRow('Maturity Value',pa(sipData.maturity),true);
+    section('SIP Projection');
+    dataRow('Monthly Investment',pa(sipData.monthly),false);dataRow('Annual Return',sipData.ar+'%',true);
+    dataRow('Period',sipData.years+' Years',false);dataRow('Total Invested',pa(sipData.invested),true);
+    dataRow('Estimated Returns',pa(sipData.returns),false);dataRow('Maturity Value',pa(sipData.maturity),true);
     y+=4;
-    // Year summary
-    const sipYrData=Object.entries(
-      sipData.months.reduce((acc,m)=>{
-        if(!acc[m.year]) acc[m.year]={inv:0,ie:0,pf:0};
-        acc[m.year].inv=m.totalInv; acc[m.year].ie+=m.intEarned; acc[m.year].pf=m.portfolio;
-        return acc;
-      },{})
-    ).map(([yr,yd])=>[ yr, pa(sipData.monthly), pa(yd.ie), pa(yd.inv), pa(yd.pf), fmtDec((yd.pf-yd.inv)/yd.inv*100)+'%' ]);
-    doc.autoTable({
-      head:[['Year','Monthly SIP','Interest Earned','Total Invested','Portfolio Value','Gain %']],
-      body:sipYrData, startY:y,
-      styles:{fontSize:8,cellPadding:2,halign:'right'},
-      columnStyles:{0:{halign:'left'}},
-      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
-      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
-      didDrawPage:(d)=>{ drawHeader(); }
-    });
-    // Full monthly table
-    doc.addPage(); drawHeader(); y=36;
-    section('Monthly SIP Growth Schedule');
-    const sipMoData=sipData.months.map(m=>[
-      m.num, m.month+' '+m.year, pa(m.monthly), pa(m.intEarned), pa(m.totalInv), pa(m.portfolio), fmtDec(m.gainPct)+'%'
-    ]);
-    doc.autoTable({
-      head:[['#','Month','SIP','Interest','Total Invested','Portfolio','Gain %']],
-      body:sipMoData, startY:y,
-      styles:{fontSize:7.5,cellPadding:2,halign:'right'},
-      columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:22}},
-      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
-      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
-      didDrawPage:(d)=>{ drawHeader(); }
-    });
+    const yrMap=sipData.months.reduce((acc,m)=>{if(!acc[m.year])acc[m.year]={inv:0,ie:0,pf:0};acc[m.year].inv=m.totalInv;acc[m.year].ie+=m.intEarned;acc[m.year].pf=m.portfolio;return acc;},{});
+    doc.autoTable({head:[['Year','Monthly SIP','Interest Earned','Total Invested','Portfolio Value','Gain %']],
+      body:Object.entries(yrMap).map(([yr,yd])=>[yr,pa(sipData.monthly),pa(yd.ie),pa(yd.inv),pa(yd.pf),fmtDec((yd.pf-yd.inv)/yd.inv*100)+'%']),
+      startY:y,styles:{fontSize:7.5,cellPadding:2,halign:'right'},columnStyles:{0:{halign:'left'}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},alternateRowStyles:{fillColor:lgrey},margin:{left:10,right:10},
+      didDrawPage:()=>drawHeader()});
+    doc.addPage();drawHeader();y=36;section('Monthly SIP Growth');
+    doc.autoTable({head:[['#','Month','SIP','Interest','Total Invested','Portfolio','Gain %']],
+      body:sipData.months.map(m=>[m.num,m.month+' '+m.year,pa(m.monthly),pa(m.intEarned),pa(m.totalInv),pa(m.portfolio),fmtDec(m.gainPct)+'%']),
+      startY:y,styles:{fontSize:7,cellPadding:1.8,halign:'right'},columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:20}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},alternateRowStyles:{fillColor:lgrey},margin:{left:10,right:10},
+      didDrawPage:()=>drawHeader()});
   } else if(id==='fd'){
-    section('Fixed Deposit Calculation');
-    dataRow('Principal',pa(fdData.P),false);
-    dataRow('Rate',fdData.R+'%',true);
-    dataRow('Tenure',fdData.tenure+' '+fdData.unit,false);
-    dataRow('Interest Earned',pa(fdData.interest),true);
+    section('Fixed Deposit');
+    dataRow('Principal',pa(fdData.P),false);dataRow('Rate',fdData.R+'%',true);
+    dataRow('Tenure',fdData.tenure+' '+fdData.unit,false);dataRow('Interest Earned',pa(fdData.interest),true);
     dataRow('Maturity Amount',pa(fdData.maturity),false);
   } else if(id==='gst'){
     section('GST Calculation');
-    dataRow('Base Amount',pa(gstData.base),false);
-    dataRow('GST Rate',gstData.rate+'%',true);
-    dataRow('CGST',pa(gstData.gstAmt/2),false);
-    dataRow('SGST',pa(gstData.gstAmt/2),true);
+    dataRow('Base Amount',pa(gstData.base),false);dataRow('GST Rate',gstData.rate+'%',true);
+    dataRow('CGST',pa(gstData.gstAmt/2),false);dataRow('SGST',pa(gstData.gstAmt/2),true);
     dataRow('Total Amount',pa(gstData.total),false);
   }
-
-  addFooter();
+  const pc=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pc;i++){
+    doc.setPage(i);doc.setFillColor(...dark);doc.rect(0,isLand?200:285,PW,12,'F');
+    doc.setTextColor(...gold);doc.setFont('helvetica','bold');doc.setFontSize(7.5);
+    doc.text('Punnam Academy · Financial & Educational Hub · Developed by Prasad Punnam',14,isLand?208:293);
+    doc.setTextColor(150,150,150);doc.setFont('helvetica','normal');
+    doc.text('Page '+i+' of '+pc,PW-14,isLand?208:293,{align:'right'});
+  }
   doc.save('Punnam_Academy_'+id.toUpperCase()+'.pdf');
 }
 </script>
