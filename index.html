@@ -88,7 +88,7 @@ nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
 
 /* ═══ RESULT VALUE — user specified ═══ */
 .result-value{
-  font-family:'Playfair Display',Calibri,serif;
+  font-family: Aptos;
   font-size:2rem;font-weight:700;
   color:#e8b96a;
   line-height:1;letter-spacing:-.02em;
@@ -558,7 +558,25 @@ footer strong{color:var(--gold)}
 </footer>
 
 <script>
-/* ══ TABS ══ */
+/* ══ BLOCK e/E and all non-numeric keys in number inputs ══ */
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('input[type="number"]').forEach(inp=>{
+    inp.addEventListener('keydown',e=>{
+      // Allow: backspace, delete, tab, escape, enter, arrows, home, end, decimal point
+      const allowed=['Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','.'];
+      if(allowed.includes(e.key)) return;
+      // Allow Ctrl/Cmd shortcuts (copy, paste, select all, etc.)
+      if(e.ctrlKey||e.metaKey) return;
+      // Block anything that is not a digit 0-9
+      if(!/^\d$/.test(e.key)) e.preventDefault();
+    });
+    inp.addEventListener('paste',e=>{
+      const text=(e.clipboardData||window.clipboardData).getData('text');
+      // Only allow pastes that are pure numbers (with optional single decimal)
+      if(!/^\d*\.?\d*$/.test(text.trim())) e.preventDefault();
+    });
+  });
+});
 function showCalc(id,btn){
   document.querySelectorAll('.calc-card').forEach(c=>c.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
