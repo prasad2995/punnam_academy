@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlphaKids - Learn with Fun!</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient(180deg, #87CEEB 0%, #c5eaff 58%, #5DBB63 58%, #4aaa50 100%);
+  background-attachment: fixed;
+}
+
+/* ── Clouds ── */
+.clouds { position: fixed; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 0; }
+.cloud { position: absolute; background: #fff; border-radius: 50px; opacity: .88; animation: floatCloud linear infinite; }
+.cloud::before, .cloud::after { content:''; position:absolute; background:#fff; border-radius:50%; }
+.cloud-1 { width:130px;height:44px;top:28px;animation-duration:38s;animation-delay:0s; }
+.cloud-1::before { width:65px;height:65px;top:-32px;left:16px; }
+.cloud-1::after  { width:44px;height:44px;top:-22px;left:58px; }
+.cloud-2 { width:95px;height:32px;top:82px;animation-duration:52s;animation-delay:-18s; }
+.cloud-2::before { width:48px;height:48px;top:-24px;left:10px; }
+.cloud-2::after  { width:32px;height:32px;top:-16px;left:44px; }
+.cloud-3 { width:160px;height:52px;top:12px;animation-duration:46s;animation-delay:-28s; }
+.cloud-3::before { width:74px;height:74px;top:-37px;left:22px; }
+.cloud-3::after  { width:52px;height:52px;top:-26px;left:74px; }
+@keyframes floatCloud { from{left:-220px} to{left:110%} }
+
+/* ── Sun ── */
+.sun {
+  position: fixed; top:18px; right:38px; width:76px; height:76px;
+  background: radial-gradient(circle,#FFE566,#FFD700);
+  border-radius: 50%;
+  box-shadow: 0 0 28px #FFD70080, 0 0 56px #FFD70040;
+  z-index: 2; animation: sunPulse 3s ease-in-out infinite;
+  display: flex; align-items: center; justify-content: center; font-size: 50px;
+}
+@keyframes sunPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.09)} }
+
+/* ── Header ── */
+header {
+  position: relative; z-index: 10;
+  text-align: center; padding: 28px 20px 6px;
+}
+header h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2.4rem, 8vw, 4.8rem);
+  color: #fff;
+  text-shadow: 4px 4px 0 #FF5252, 8px 8px 0 #FF982070;
+  letter-spacing: 2px;
+  animation: titleBounce 2.4s ease-in-out infinite;
+  cursor: pointer;
+}
+@keyframes titleBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+header p { font-size:1.15rem; color:#fff; font-weight:700; text-shadow:1px 1px 3px rgba(0,0,0,.3); margin-top:5px; }
+
+/* ── Pages ── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ══════════════════════════
+   HOME PAGE — 3 big cards
+══════════════════════════ */
+.home-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 40px 24px 80px;
+  position: relative; z-index: 10;
+}
+
+.home-card {
+  width: 220px; height: 220px;
+  border-radius: 32px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 0 rgba(0,0,0,.18), 0 16px 40px rgba(0,0,0,.14);
+  transition: all .22s cubic-bezier(.34,1.56,.64,1);
+  user-select: none;
+  border: 4px solid rgba(255,255,255,.5);
+  position: relative; overflow: hidden;
+}
+.home-card::before {
+  content:''; position:absolute; inset:0;
+  background: rgba(255,255,255,.12); border-radius:32px;
+}
+.home-card:hover { transform: translateY(-10px) scale(1.06); box-shadow: 0 18px 0 rgba(0,0,0,.18), 0 28px 50px rgba(0,0,0,.18); }
+.home-card:active { transform: translateY(3px) scale(.97); box-shadow: 0 4px 0 rgba(0,0,0,.18); }
+
+.home-card.card-abc  { background: linear-gradient(140deg, #FF8A65, #FF5252); }
+.home-card.card-nums { background: linear-gradient(140deg, #64B5F6, #1565C0); }
+.home-card.card-quiz { background: linear-gradient(140deg, #CE93D8, #7B1FA2); }
+
+.home-card-icon { font-size: 5.5rem; line-height: 1; }
+.home-card-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2rem; color: #fff;
+  text-shadow: 2px 2px 0 rgba(0,0,0,.2);
+  margin-top: 10px;
+}
+
+/* ══════════════════════════
+   LETTER / NUMBER VIEWER
+══════════════════════════ */
+.viewer-page {
+  position: relative; z-index: 10;
+  min-height: calc(100vh - 130px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 16px 20px 60px;
+}
+
+/* Back / Home button */
+.home-btn {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.15rem; color: #fff;
+  background: rgba(0,0,0,.25);
+  border: none; border-radius: 50px;
+  padding: 9px 22px; cursor: pointer;
+  transition: all .2s; backdrop-filter: blur(4px);
+  margin-bottom: 18px;
+  align-self: flex-start;
+  margin-left: 4px;
+  position: relative; z-index: 20;
+}
+.home-btn:hover { background: rgba(0,0,0,.42); transform: scale(1.06); }
+
+/* Big letter/number card */
+.letter-card {
+  background: #fff;
+  border-radius: 36px;
+  width: min(88vw, 440px);
+  padding: 40px 30px 36px;
+  text-align: center;
+  box-shadow: 0 10px 0 rgba(0,0,0,.13), 0 20px 50px rgba(0,0,0,.12);
+  animation: cardIn .45s cubic-bezier(.34,1.56,.64,1);
+  position: relative;
+}
+@keyframes cardIn { from{transform:scale(.8) translateY(30px);opacity:0} to{transform:none;opacity:1} }
+
+.letter-big {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(6rem, 22vw, 11rem);
+  line-height: 1;
+  display: block;
+}
+.letter-emoji { font-size: clamp(3.5rem, 10vw, 5.5rem); display:block; margin: 10px 0 6px; }
+.letter-word {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  color: #555;
+}
+
+/* Speak button */
+.speak-btn {
+  margin-top: 20px;
+  background: linear-gradient(135deg, #FFD700, #FF9800);
+  border: none; border-radius: 50px;
+  padding: 13px 32px;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.25rem; color: #fff;
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0,0,0,.18);
+  transition: all .2s;
+}
+.speak-btn:hover { transform: scale(1.08); }
+.speak-btn:active { transform: scale(.96) translateY(3px); }
+
+/* Progress dots */
+.progress-dots {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 7px; margin-top: 22px; max-width: 440px;
+}
+.dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  background: rgba(255,255,255,.45);
+  cursor: pointer;
+  transition: all .2s;
+  border: 2px solid rgba(255,255,255,.6);
+}
+.dot.active { background:#fff; transform: scale(1.4); border-color:#fff; }
+.dot:hover { background: rgba(255,255,255,.8); }
+
+/* ── NAV ARROWS ── */
+.card-row {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%;
+  gap: 14px;
+}
+.arrow-btn {
+  flex-shrink: 0;
+  width: 62px; height: 62px;
+  border-radius: 50%;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.9rem;
+  box-shadow: 0 6px 0 rgba(0,0,0,.2), 0 10px 24px rgba(0,0,0,.15);
+  transition: all .2s cubic-bezier(.34,1.56,.64,1);
+  color: #fff;
+}
+.arrow-btn:hover { transform: scale(1.14); }
+.arrow-btn:active { transform: scale(.93) translateY(3px); }
+.arrow-btn.left  { background: linear-gradient(135deg,#78909C,#546E7A); }
+.arrow-btn.right { background: linear-gradient(135deg,#42A5F5,#1565C0); }
+.arrow-btn:disabled { opacity: .28; cursor: default; transform:none; }
+
+/* ══════════════════════════
+   QUIZ PAGE
+══════════════════════════ */
+.quiz-wrap {
+  position: relative; z-index: 10;
+  max-width: 600px; margin: 0 auto;
+  padding: 16px 20px 80px;
+}
+.quiz-top-bar {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.quiz-box {
+  background:#fff; border-radius:30px; padding:34px 28px;
+  box-shadow:0 8px 0 rgba(0,0,0,.12),0 16px 40px rgba(0,0,0,.1);
+  text-align:center;
+}
+.quiz-scores { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-bottom:22px; }
+.sbadge {
+  font-family:'Fredoka One',cursive; font-size:1.2rem;
+  padding:9px 22px; border-radius:50px; color:#fff;
+}
+.sbadge.ok  { background:linear-gradient(135deg,#66BB6A,#43A047); }
+.sbadge.err { background:linear-gradient(135deg,#EF5350,#E53935); }
+.sbadge.hot { background:linear-gradient(135deg,#FFA726,#FB8C00); }
+
+.quiz-q { font-family:'Fredoka One',cursive; font-size:clamp(1.1rem,3.5vw,1.5rem); color:#333; margin-bottom:14px; }
+.quiz-t {
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(3rem,12vw,7rem);
+  margin:6px 0 22px;
+  animation:titleBounce 2s infinite;
+  line-height:1.1;
+}
+.quiz-t-word {
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(1.2rem,4vw,1.8rem);
+  color:#777; margin-bottom:22px;
+}
+.quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:12px; max-width:460px; margin:0 auto 20px; }
+.opt {
+  font-family:'Fredoka One',cursive; font-size:1.45rem;
+  padding:16px; border:4px solid #ddd; border-radius:18px;
+  background:#fff; cursor:pointer; color:#333;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+}
+.opt:hover:not(:disabled) { transform:scale(1.06); border-color:#2196F3; background:#f0f8ff; }
+.opt.ok  { background:#E8F5E9; border-color:#4CAF50; color:#2e7d32; animation:pop .5s; }
+.opt.err { background:#FFEBEE; border-color:#F44336; color:#c62828; }
+.opt:disabled { cursor:default; }
+@keyframes pop { 0%{transform:scale(1)} 40%{transform:scale(1.22) rotate(-3deg)} 70%{transform:scale(.96)} 100%{transform:scale(1)} }
+
+.quiz-res { font-family:'Fredoka One',cursive; font-size:1.9rem; min-height:2.4rem; margin:6px 0; }
+.quiz-res.ok  { color:#4CAF50; }
+.quiz-res.err { color:#F44336; }
+.next-btn {
+  font-family:'Fredoka One',cursive; font-size:1.35rem;
+  padding:13px 38px; background:linear-gradient(135deg,#AB47BC,#7B1FA2);
+  color:#fff; border:none; border-radius:50px; cursor:pointer;
+  box-shadow:0 6px 0 rgba(0,0,0,.2); transition:all .2s; display:none;
+}
+.next-btn.show { display:inline-block; }
+.next-btn:hover { transform:translateY(-3px) scale(1.05); }
+
+/* ── Stars burst ── */
+.star-burst {
+  position:fixed; pointer-events:none; z-index:9999; font-size:2rem;
+  animation:starFly 1.2s ease-out forwards;
+}
+@keyframes starFly {
+  0%  { transform:translate(0,0) scale(1); opacity:1; }
+  100%{ transform:translate(var(--dx),var(--dy)) scale(.15); opacity:0; }
+}
+
+/* ── Quiz select page ── */
+.quiz-select-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 30px 24px 60px;
+  position: relative; z-index: 10;
+}
+.quiz-select-card {
+  width: 210px; height: 210px;
+  border-radius: 32px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 0 rgba(0,0,0,.18), 0 16px 40px rgba(0,0,0,.14);
+  transition: all .22s cubic-bezier(.34,1.56,.64,1);
+  user-select: none;
+  border: 4px solid rgba(255,255,255,.5);
+  position: relative; overflow: hidden;
+}
+.quiz-select-card::before {
+  content:''; position:absolute; inset:0;
+  background: rgba(255,255,255,.12); border-radius:32px;
+}
+.quiz-select-card:hover { transform: translateY(-10px) scale(1.06); box-shadow: 0 18px 0 rgba(0,0,0,.18), 0 28px 50px rgba(0,0,0,.18); }
+.quiz-select-card:active { transform: translateY(3px) scale(.97); }
+.quiz-select-card.abc-quiz  { background: linear-gradient(140deg, #FF8A65, #FF5252); }
+.quiz-select-card.num-quiz  { background: linear-gradient(140deg, #64B5F6, #1565C0); }
+.quiz-select-icon  { font-size: 5rem; line-height: 1; }
+.quiz-select-label {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem; color: #fff;
+  text-shadow: 2px 2px 0 rgba(0,0,0,.2);
+  margin-top: 10px;
+}
+
+/* ── Responsive ── */
+@media(max-width:520px){
+  .home-card { width:150px; height:150px; border-radius:24px; }
+  .home-card-icon { font-size:3.8rem; }
+  .home-card-label { font-size:1.45rem; }
+  .arrow-btn { width:50px; height:50px; font-size:1.5rem; }
+  .quiz-select-card { width:150px; height:150px; border-radius:24px; }
+  .quiz-select-icon { font-size:3.5rem; }
+  .quiz-select-label { font-size:1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="clouds">
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+</div>
+<div class="sun">☀️</div>
+
+<header>
+  <h1 onclick="goHome()" title="Go Home">🌟 AlphaKids 🌟</h1>
+  <p id="header-sub">Learn. Play. Grow! 🚀</p>
+</header>
+
+<!-- ═══════════ HOME PAGE ═══════════ -->
+<div class="page active" id="page-home">
+  <div class="home-grid">
+    <div class="home-card card-abc" onclick="openAlphabet()">
+      <div class="home-card-icon">🔤</div>
+      <div class="home-card-label">Alphabets</div>
+    </div>
+    <div class="home-card card-nums" onclick="openNumbers()">
+      <div class="home-card-icon">🔢</div>
+      <div class="home-card-label">Numbers</div>
+    </div>
+    <div class="home-card card-quiz" onclick="openQuiz()">
+      <div class="home-card-icon">🎯</div>
+      <div class="home-card-label">Quiz!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ALPHABET VIEWER ═══════════ -->
+<div class="page" id="page-abc">
+  <div class="viewer-page">
+    <button class="home-btn" onclick="goHome()">🏠 Home</button>
+
+    <div class="card-row">
+      <button class="arrow-btn left"  id="abc-prev" onclick="navLetter(-1)">◀</button>
+
+      <div class="letter-card" id="abc-card">
+        <span class="letter-big"   id="abc-big"></span>
+        <span class="letter-emoji" id="abc-emoji"></span>
+        <span class="letter-word"  id="abc-word"></span>
+        <br>
+        <button class="speak-btn" onclick="speakLetter()">🔊 Say it again!</button>
+      </div>
+
+      <button class="arrow-btn right" id="abc-next" onclick="navLetter(1)">▶</button>
+    </div>
+
+    <div class="progress-dots" id="abc-dots"></div>
+  </div>
+</div>
+
+<!-- ═══════════ NUMBER VIEWER ═══════════ -->
+<div class="page" id="page-nums">
+  <div class="viewer-page">
+    <button class="home-btn" onclick="goHome()">🏠 Home</button>
+
+    <div class="card-row">
+      <button class="arrow-btn left"  id="num-prev" onclick="navNumber(-1)">◀</button>
+
+      <div class="letter-card" id="num-card">
+        <span class="letter-big"   id="num-big"></span>
+        <span class="letter-emoji" id="num-emoji"></span>
+        <span class="letter-word"  id="num-word"></span>
+        <br>
+        <button class="speak-btn" onclick="speakNumber()">🔊 Say it again!</button>
+      </div>
+
+      <button class="arrow-btn right" id="num-next" onclick="navNumber(1)">▶</button>
+    </div>
+
+    <div class="progress-dots" id="num-dots"></div>
+  </div>
+</div>
+
+<!-- ═══════════ QUIZ PAGE ═══════════ -->
+<!-- ═══════════ QUIZ SELECT PAGE ═══════════ -->
+<div class="page" id="page-quiz-select">
+  <div class="viewer-page" style="justify-content:flex-start; padding-top:16px;">
+    <button class="home-btn" onclick="goHome()">🏠 Home</button>
+    <p style="font-family:'Fredoka One',cursive; font-size:1.6rem; color:#fff; text-shadow:2px 2px 0 rgba(0,0,0,.2); margin-bottom:24px; text-align:center;">Which quiz do you want?</p>
+    <div class="quiz-select-grid">
+      <div class="quiz-select-card abc-quiz" onclick="startQuiz('letter')">
+        <div class="quiz-select-icon">🔤</div>
+        <div class="quiz-select-label">Alphabets</div>
+      </div>
+      <div class="quiz-select-card num-quiz" onclick="startQuiz('number')">
+        <div class="quiz-select-icon">🔢</div>
+        <div class="quiz-select-label">Numbers</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-quiz">
+  <div class="quiz-wrap">
+    <div class="quiz-top-bar">
+      <button class="home-btn" style="margin-bottom:0" onclick="openQuiz()">◀ Back</button>
+      <button class="home-btn" style="margin-bottom:0" onclick="goHome()">🏠 Home</button>
+    </div>
+    <div class="quiz-box">
+      <div class="quiz-scores">
+        <div class="sbadge ok">✅ <span id="q-ok">0</span></div>
+        <div class="sbadge err">❌ <span id="q-err">0</span></div>
+        <div class="sbadge hot">🔥 <span id="q-streak">0</span></div>
+      </div>
+      <div class="quiz-q"    id="quiz-q"></div>
+      <div class="quiz-t"    id="quiz-t"></div>
+      <div class="quiz-t-word" id="quiz-tw"></div>
+      <div class="quiz-opts" id="quiz-opts"></div>
+      <div class="quiz-res"  id="quiz-res"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQ()">Next ➡️</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════
+   DATA
+══════════════ */
+const alphabet = [
+  {l:'A',w:'Apple',e:'🍎'},{l:'B',w:'Ball',e:'⚽'},{l:'C',w:'Cat',e:'🐱'},
+  {l:'D',w:'Dog',e:'🐶'},{l:'E',w:'Elephant',e:'🐘'},{l:'F',w:'Fish',e:'🐟'},
+  {l:'G',w:'Grapes',e:'🍇'},{l:'H',w:'Hat',e:'🎩'},{l:'I',w:'Ice cream',e:'🍦'},
+  {l:'J',w:'Jellyfish',e:'🪼'},{l:'K',w:'Kite',e:'🪁'},{l:'L',w:'Lion',e:'🦁'},
+  {l:'M',w:'Moon',e:'🌙'},{l:'N',w:'Nest',e:'🪺'},{l:'O',w:'Orange',e:'🍊'},
+  {l:'P',w:'Penguin',e:'🐧'},{l:'Q',w:'Queen',e:'👸'},{l:'R',w:'Rainbow',e:'🌈'},
+  {l:'S',w:'Star',e:'⭐'},{l:'T',w:'Tiger',e:'🐯'},{l:'U',w:'Umbrella',e:'☂️'},
+  {l:'V',w:'Violin',e:'🎻'},{l:'W',w:'Whale',e:'🐳'},{l:'X',w:'Xylophone',e:'🎵'},
+  {l:'Y',w:'Yo-yo',e:'🪀'},{l:'Z',w:'Zebra',e:'🦓'}
+];
+
+const numbers = [
+  {n:1,w:'One'},{n:2,w:'Two'},{n:3,w:'Three'},
+  {n:4,w:'Four'},{n:5,w:'Five'},{n:6,w:'Six'},
+  {n:7,w:'Seven'},{n:8,w:'Eight'},{n:9,w:'Nine'},
+  {n:10,w:'Ten'},{n:11,w:'Eleven'},{n:12,w:'Twelve'},
+  {n:13,w:'Thirteen'},{n:14,w:'Fourteen'},{n:15,w:'Fifteen'},
+  {n:16,w:'Sixteen'},{n:17,w:'Seventeen'},{n:18,w:'Eighteen'},
+  {n:19,w:'Nineteen'},{n:20,w:'Twenty'},{n:30,w:'Thirty'},
+  {n:40,w:'Forty'},{n:50,w:'Fifty'},{n:100,w:'One Hundred'}
+];
+
+const COLORS = ['#FF5252','#FF9800','#4CAF50','#2196F3','#9C27B0','#E91E8C','#00BCD4','#FF5722'];
+
+let letterIdx = 0;
+let numberIdx = 0;
+
+/* ══ Page routing with History API ══ */
+
+// Map each page-id to its subtitle
+const PAGE_SUBTITLES = {
+  'page-home':         'Learn. Play. Grow! 🚀',
+  'page-abc':          '🔤 Tap ▶ to go to the next letter!',
+  'page-nums':         '🔢 Tap ▶ to go to the next number!',
+  'page-quiz-select':  '🎯 Choose your quiz!',
+  'page-quiz':         '🎯 Pick the right answer!',
+};
+
+function showPage(id, pushHistory = true) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.speechSynthesis.cancel();
+
+  // Update subtitle
+  const sub = PAGE_SUBTITLES[id] || '';
+  document.getElementById('header-sub').textContent = sub;
+
+  // Push a new history entry so the back button works
+  if (pushHistory) {
+    const state = { page: id, quizMode: qLockedMode };
+    history.pushState(state, '', '#' + id.replace('page-', ''));
+  }
+}
+
+// Handle browser back / forward
+window.addEventListener('popstate', e => {
+  const state = e.state;
+  if (!state || !state.page) {
+    // Popped all the way to the start — show home without pushing again
+    _activatePage('page-home');
+    return;
+  }
+  // Restore quiz mode if going back into quiz
+  if (state.quizMode) qLockedMode = state.quizMode;
+  _activatePage(state.page);
+});
+
+// Internal: switch visible page WITHOUT pushing another history entry
+function _activatePage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+  window.speechSynthesis.cancel();
+  const sub = PAGE_SUBTITLES[id] || '';
+  document.getElementById('header-sub').textContent = sub;
+
+  // Re-initialise content if returning to a content page
+  if (id === 'page-abc') {
+    buildDots('abc-dots', alphabet.length, letterIdx, jumpLetter);
+    renderLetter(false);
+  } else if (id === 'page-nums') {
+    buildDots('num-dots', numbers.length, numberIdx, jumpNumber);
+    renderNumber(false);
+  } else if (id === 'page-quiz') {
+    generateQ();
+  }
+}
+
+function goHome() {
+  showPage('page-home');
+}
+
+/* ══ Indian voice speech ══ */
+let voices = [];
+window.speechSynthesis.onvoiceschanged = () => { voices = window.speechSynthesis.getVoices(); };
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+
+  // Try to pick an Indian English voice
+  const allVoices = window.speechSynthesis.getVoices();
+  const indian = allVoices.find(v =>
+    v.lang === 'en-IN' ||
+    v.name.toLowerCase().includes('india') ||
+    v.name.toLowerCase().includes('ravi') ||
+    v.name.toLowerCase().includes('veena') ||
+    v.name.toLowerCase().includes('heera')
+  );
+  if (indian) u.voice = indian;
+  else {
+    // Fallback: any English voice
+    const eng = allVoices.find(v => v.lang.startsWith('en'));
+    if (eng) u.voice = eng;
+  }
+
+  u.lang = 'en-IN';
+  u.rate = 0.82;
+  u.pitch = 1.15;
+  window.speechSynthesis.speak(u);
+}
+
+/* ══ ALPHABET ══ */
+function openAlphabet() {
+  letterIdx = 0;
+  buildDots('abc-dots', alphabet.length, 0, jumpLetter);
+  renderLetter(true);
+  document.getElementById('header-sub').textContent = '🔤 Tap ▶ to go to the next letter!';
+  showPage('page-abc');
+  // speak after page visible so voices are loaded
+  setTimeout(() => speakLetter(), 100);
+}
+
+function renderLetter(autoSpeak) {
+  const item = alphabet[letterIdx];
+  const col  = COLORS[letterIdx % COLORS.length];
+
+  document.getElementById('abc-big').textContent   = item.l;
+  document.getElementById('abc-big').style.color   = col;
+  document.getElementById('abc-emoji').textContent = item.e;
+  document.getElementById('abc-word').textContent  = item.w;
+  document.getElementById('abc-word').style.color  = col;
+
+  // re-trigger card animation
+  const card = document.getElementById('abc-card');
+  card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
+
+  document.getElementById('abc-prev').disabled = letterIdx === 0;
+  document.getElementById('abc-next').disabled = letterIdx === alphabet.length - 1;
+
+  updateDots('abc-dots', letterIdx);
+  if (autoSpeak) speakLetter();
+  burst(document.getElementById('abc-card'));
+}
+
+function navLetter(dir) {
+  letterIdx = Math.max(0, Math.min(alphabet.length - 1, letterIdx + dir));
+  renderLetter(true);
+}
+function jumpLetter(i) { letterIdx = i; renderLetter(true); }
+function speakLetter() {
+  const item = alphabet[letterIdx];
+  speak(`${item.l}. ${item.w}. ${item.l} is for ${item.w}!`);
+}
+
+/* ══ NUMBERS ══ */
+function openNumbers() {
+  numberIdx = 0;
+  buildDots('num-dots', numbers.length, 0, jumpNumber);
+  renderNumber(true);
+  document.getElementById('header-sub').textContent = '🔢 Tap ▶ to go to the next number!';
+  showPage('page-nums');
+  setTimeout(() => speakNumber(), 100);
+}
+
+function renderNumber(autoSpeak) {
+  const item = numbers[numberIdx];
+  const col  = COLORS[numberIdx % COLORS.length];
+
+  document.getElementById('num-big').textContent   = item.n;
+  document.getElementById('num-big').style.color   = col;
+  // show just a simple dot pattern or nothing for emoji — use big number only
+  document.getElementById('num-emoji').textContent = '';
+  document.getElementById('num-word').textContent  = item.w;
+  document.getElementById('num-word').style.color  = col;
+
+  const card = document.getElementById('num-card');
+  card.style.animation = 'none'; void card.offsetWidth; card.style.animation = '';
+
+  document.getElementById('num-prev').disabled = numberIdx === 0;
+  document.getElementById('num-next').disabled = numberIdx === numbers.length - 1;
+
+  updateDots('num-dots', numberIdx);
+  if (autoSpeak) speakNumber();
+  burst(document.getElementById('num-card'));
+}
+
+function navNumber(dir) {
+  numberIdx = Math.max(0, Math.min(numbers.length - 1, numberIdx + dir));
+  renderNumber(true);
+}
+function jumpNumber(i) { numberIdx = i; renderNumber(true); }
+function speakNumber() {
+  // Simple: just say the word, e.g. "One", "Two", "Fifteen"
+  speak(numbers[numberIdx].w);
+}
+
+/* ══ Progress dots ══ */
+function buildDots(cid, count, active, cb) {
+  const c = document.getElementById(cid);
+  c.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === active ? ' active' : '');
+    d.addEventListener('click', () => cb(i));
+    c.appendChild(d);
+  }
+}
+function updateDots(cid, active) {
+  document.querySelectorAll(`#${cid} .dot`).forEach((d,i) =>
+    d.classList.toggle('active', i === active)
+  );
+}
+
+/* ══ Burst animation ══ */
+function burst(el) {
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  const cx = r.left + r.width/2, cy = r.top + r.height/2;
+  const emojis = ['⭐','🌟','✨','🎉','💫','🎈','🌈'];
+  for (let i = 0; i < 8; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-burst';
+    s.textContent = emojis[i % emojis.length];
+    const angle = (i/8)*Math.PI*2;
+    const dist  = 70 + Math.random()*70;
+    s.style.left = cx+'px'; s.style.top = cy+'px';
+    s.style.setProperty('--dx', Math.cos(angle)*dist+'px');
+    s.style.setProperty('--dy', Math.sin(angle)*dist+'px');
+    s.style.animationDelay = (i*.04)+'s';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1400);
+  }
+}
+
+/* ══════════════════════════
+   QUIZ
+══════════════════════════ */
+let qCorrect=0, qWrong=0, qStreak=0, qAnswered=false, qCurrent=null, qMode='letter', qLockedMode='letter';
+
+function openQuiz() {
+  document.getElementById('header-sub').textContent = '🎯 Choose your quiz!';
+  showPage('page-quiz-select');
+}
+
+function startQuiz(mode) {
+  qMode = mode;
+  qLockedMode = mode;
+  qCorrect = 0; qWrong = 0; qStreak = 0;
+  document.getElementById('q-ok').textContent = '0';
+  document.getElementById('q-err').textContent = '0';
+  document.getElementById('q-streak').textContent = '0';
+  document.getElementById('header-sub').textContent = '🎯 Pick the right answer!';
+  showPage('page-quiz');
+  setTimeout(() => generateQ(), 80);
+}
+
+function generateQ() {
+  qAnswered = false;
+  document.getElementById('quiz-res').textContent  = '';
+  document.getElementById('quiz-res').className    = 'quiz-res';
+  document.getElementById('next-btn').className    = 'next-btn';
+  document.getElementById('quiz-tw').textContent   = '';
+
+  qMode = qLockedMode; // use the mode chosen on quiz select screen
+
+  if (qMode === 'letter') {
+    const correct = alphabet[Math.floor(Math.random() * alphabet.length)];
+    qCurrent = correct;
+    // Show emoji + word; ask which letter
+    document.getElementById('quiz-q').textContent = `What letter does ${correct.w} start with?`;
+    document.getElementById('quiz-t').textContent = correct.e;
+    document.getElementById('quiz-tw').textContent = correct.w;
+    speak(`What letter does ${correct.w} start with?`);
+
+    // 3 wrong letters
+    const wrongs = [];
+    while (wrongs.length < 3) {
+      const r = alphabet[Math.floor(Math.random()*alphabet.length)];
+      if (r.l !== correct.l && !wrongs.find(w=>w.l===r.l)) wrongs.push(r);
+    }
+    const opts = [correct,...wrongs].sort(()=>Math.random()-.5);
+    buildOpts(opts, o => o.l, o => o.l, o => o.l === qCurrent.l);
+
+  } else {
+    // Number quiz — show the numeral, ask which word
+    const pool = numbers.filter(n => n.n <= 20);
+    const correct = pool[Math.floor(Math.random()*pool.length)];
+    qCurrent = correct;
+    document.getElementById('quiz-q').textContent = `What number is this?`;
+    // Display the actual digit large — NOT an emoji
+    document.getElementById('quiz-t').textContent = correct.n;
+    document.getElementById('quiz-tw').textContent = '';
+    speak(`What number is this? ${correct.w}`);
+
+    const wrongs = [];
+    while (wrongs.length < 3) {
+      const r = pool[Math.floor(Math.random()*pool.length)];
+      if (r.n !== correct.n && !wrongs.find(w=>w.n===r.n)) wrongs.push(r);
+    }
+    const opts = [correct,...wrongs].sort(()=>Math.random()-.5);
+    // show number digits as button labels
+    buildOpts(opts, o => o.n, o => o.n, o => o.n === qCurrent.n);
+  }
+}
+
+function buildOpts(opts, labelFn, checkFn, isCorrectFn) {
+  const c = document.getElementById('quiz-opts');
+  c.innerHTML = '';
+  opts.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = labelFn(o);
+    b.addEventListener('click', () => answerQ(isCorrectFn(o), b, labelFn(o)));
+    c.appendChild(b);
+  });
+}
+
+function answerQ(isCorrect, btn, chosen) {
+  if (qAnswered) return;
+  qAnswered = true;
+  document.querySelectorAll('.opt').forEach(b => b.disabled = true);
+  const res = document.getElementById('quiz-res');
+
+  if (isCorrect) {
+    btn.classList.add('ok');
+    qCorrect++; qStreak++;
+    const praise = ['🎉 Amazing!','⭐ Super!','🌟 Brilliant!','🎊 Fantastic!','🚀 You got it!'];
+    res.textContent = praise[Math.floor(Math.random()*praise.length)];
+    res.className   = 'quiz-res ok';
+    speak('Correct! Great job!');
+    burst(btn);
+  } else {
+    btn.classList.add('err');
+    qWrong++; qStreak = 0;
+    const ans = qMode === 'letter' ? qCurrent.l : qCurrent.n;
+    res.textContent = `Not quite! It's ${ans} 🤗`;
+    res.className   = 'quiz-res err';
+    // highlight correct button
+    document.querySelectorAll('.opt').forEach(b => {
+      if (b.textContent == String(ans)) b.classList.add('ok');
+    });
+    speak(`Not quite! The answer is ${qMode==='letter' ? qCurrent.l : qCurrent.w}`);
+  }
+
+  document.getElementById('q-ok').textContent     = qCorrect;
+  document.getElementById('q-err').textContent    = qWrong;
+  document.getElementById('q-streak').textContent = qStreak;
+  document.getElementById('next-btn').className   = 'next-btn show';
+}
+
+function nextQ() { generateQ(); }
+
+/* ══ Seed initial history state so back-button has somewhere to go ══ */
+(function() {
+  // Only push the home state if there's no state yet
+  if (!history.state) {
+    history.replaceState({ page: 'page-home' }, '', '#home');
+  }
+})();
+
+/* ══ Keyboard navigation ══ */
+document.addEventListener('keydown', e => {
+  if (document.getElementById('page-abc').classList.contains('active')) {
+    if (e.key === 'ArrowRight') navLetter(1);
+    if (e.key === 'ArrowLeft')  navLetter(-1);
+  }
+  if (document.getElementById('page-nums').classList.contains('active')) {
+    if (e.key === 'ArrowRight') navNumber(1);
+    if (e.key === 'ArrowLeft')  navNumber(-1);
+  }
+});
+</script>
+</body>
+</html>

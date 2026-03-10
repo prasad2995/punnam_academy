@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Punnam Academy – Financial & Educational Calculators</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root{
+  --ink:#0d1117;--cream:#f4efe6;--gold:#c9933a;--gold-light:#e8b96a;--amber:#d4900e;
+  --slate:#2d3748;--muted:#6b7280;--border:#ddd6cb;--card:#ffffff;--shadow:rgba(13,17,23,.07);
+  --green-h:#5a8a30;--orange-h:#d4720e;--red-h:#b83232;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+
+/* HEADER */
+header{background:var(--ink);padding:0 2rem;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--gold)}
+.header-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-icon{width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--amber));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;font-weight:800;box-shadow:0 3px 10px rgba(201,147,58,.4)}
+.logo-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:#fff;line-height:1}
+.logo-sub{font-size:.6rem;color:var(--gold-light);letter-spacing:.18em;text-transform:uppercase;margin-top:2px}
+nav{display:flex;gap:4px}
+nav a{color:rgba(255,255,255,.65);text-decoration:none;font-size:.82rem;font-weight:500;padding:6px 13px;border-radius:6px;transition:all .2s}
+nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
+
+/* HERO */
+.hero{background:var(--ink);padding:4rem 2rem 5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 100%,rgba(201,147,58,.13) 0%,transparent 70%)}
+.hero-grid{position:absolute;inset:0;opacity:.035;background-image:linear-gradient(var(--gold) 1px,transparent 1px),linear-gradient(90deg,var(--gold) 1px,transparent 1px);background-size:40px 40px}
+.hero-inner{max-width:1240px;margin:0 auto;position:relative;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,147,58,.12);border:1px solid rgba(201,147,58,.28);color:var(--gold-light);font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:5px 15px;border-radius:100px;margin-bottom:1.4rem;animation:fadeUp .6s ease both}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.6rem,6vw,4.6rem);color:#fff;line-height:1.08;font-weight:800;margin-bottom:1.1rem;animation:fadeUp .6s .1s ease both}
+.hero h1 span{color:var(--gold)}
+.hero p{color:rgba(255,255,255,.55);font-size:1rem;max-width:520px;margin:0 auto 2.5rem;line-height:1.75;animation:fadeUp .6s .2s ease both}
+.hero-stats{display:flex;justify-content:center;gap:3rem;animation:fadeUp .6s .3s ease both}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);font-weight:700}
+.stat-label{font-size:.68rem;color:rgba(255,255,255,.45);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION */
+.section{padding:3.5rem 2rem}
+.section-inner{max-width:1240px;margin:0 auto}
+.section-label{font-size:.67rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;color:var(--ink);margin-bottom:.4rem}
+.section-desc{color:var(--muted);font-size:.91rem;max-width:450px;line-height:1.72}
+
+/* TABS */
+.calc-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:2.2rem 0 1.6rem}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:100px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-size:.81rem;font-weight:500;color:var(--muted);transition:all .2s}
+.tab-btn:hover{border-color:var(--gold);color:var(--ink)}
+.tab-btn.active{background:var(--ink);border-color:var(--ink);color:#fff;box-shadow:0 4px 12px rgba(13,17,23,.22)}
+
+/* CARD */
+.calc-card{background:var(--card);border:1.5px solid var(--border);border-radius:18px;box-shadow:0 8px 30px var(--shadow);padding:2.2rem;display:none;animation:slideIn .3s ease both}
+.calc-card.active{display:block}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card-header{margin-bottom:1.7rem}
+.card-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:10px}
+.card-title .icon{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--amber));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.card-desc{color:var(--muted);font-size:.86rem;margin-top:.35rem;margin-left:48px}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group label{font-size:.72rem;font-weight:600;color:var(--slate);letter-spacing:.06em;text-transform:uppercase}
+.form-group input,.form-group select{padding:10px 13px;border-radius:9px;border:1.5px solid var(--border);background:#fafafa;font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--ink);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,147,58,.13);background:#fff}
+.form-group select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px;background-color:#fafafa}
+
+/* BUTTON */
+.calc-btn{margin-top:1.3rem;padding:12px 28px;background:var(--ink);color:#fff;border:none;border-radius:9px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:600;letter-spacing:.02em;transition:all .2s;box-shadow:0 4px 14px rgba(13,17,23,.18)}
+.calc-btn:hover{background:var(--gold);transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,147,58,.32)}
+
+/* ══ RESULT BOX ══ */
+.result-box{margin-top:1.8rem;background:linear-gradient(140deg,#0d1520 0%,#162032 100%);border-radius:16px;padding:1.8rem 2rem;display:none;border:1px solid rgba(255,255,255,.08);box-shadow:0 16px 48px rgba(0,0,0,.35);animation:slideIn .3s ease both}
+.result-box.show{display:block}
+.result-title{font-family:'Inter',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.32);margin-bottom:1.6rem}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.result-item{text-align:center;padding:0.6rem 0.8rem;border-right:1px solid rgba(255,255,255,.06)}
+.result-item:last-child{border-right:none}
+
+/* ═══ RESULT VALUE — user specified ═══ */
+.result-value{
+  font-family:'Playfair Display',Calibri,serif;
+  font-size:2rem;font-weight:700;
+  color:#e8b96a;
+  line-height:1;letter-spacing:-.02em;
+}
+.result-label{font-family:'Inter',sans-serif;font-size:.68rem;font-weight:500;color:rgba(255,255,255,.38);margin-top:8px;letter-spacing:.05em;text-transform:uppercase}
+
+/* ACTION BAR */
+.action-bar{display:none;margin-top:1.2rem;gap:8px;flex-wrap:wrap;align-items:center}
+.action-bar.show{display:flex}
+.act-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:var(--slate);transition:all .2s;text-decoration:none}
+.act-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.act-btn.wa{background:#25d366;border-color:#25d366;color:#fff}
+.act-btn.wa:hover{background:#1ebe5d}
+.act-btn.xl{background:#1d6f42;border-color:#1d6f42;color:#fff}
+.act-btn.xl:hover{background:#175c36}
+.act-btn.pdf{background:#e74c3c;border-color:#e74c3c;color:#fff}
+.act-btn.pdf:hover{background:#c0392b}
+.act-lbl{font-size:.68rem;color:var(--muted);font-weight:500;align-self:center}
+
+/* PIE CHART */
+.chart-wrap{margin-top:1.4rem;display:none;background:#fff;border-radius:14px;border:1.5px solid var(--border);padding:1.4rem}
+.chart-wrap.show{display:flex;flex-wrap:wrap;gap:1.4rem;align-items:center;justify-content:center}
+.chart-canvas-wrap{width:190px;height:190px;flex-shrink:0}
+.chart-legend{display:flex;flex-direction:column;gap:10px}
+.legend-item{display:flex;align-items:center;gap:10px}
+.legend-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.legend-val{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ink);font-size:.86rem}
+.legend-lbl{color:var(--muted);font-size:.74rem;margin-top:1px}
+
+/* ══ EMI / SIP TABLE ══ */
+.data-table-wrap{margin-top:1.6rem;display:none;border-radius:12px;border:1.5px solid var(--border);overflow:hidden}
+.data-table-wrap.show{display:block}
+.data-scroll{overflow-x:auto;max-height:520px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;min-width:600px}
+thead{position:sticky;top:0;z-index:5}
+
+/* ── Column header colours — dark/gold theme ── */
+.th-yr{background:#1a1a2e;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-light);text-align:left;border-bottom:2px solid #2d2d4a}
+.th-pr{background:#1a3320;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7ecc6e;text-align:right}
+.th-pr span{display:block;font-size:.6rem;font-weight:400;opacity:.75;margin-top:1px}
+.th-in{background:#2d1a00;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#f4a94e;text-align:right}
+.th-in span{display:block;font-size:.6rem;font-weight:400;opacity:.75;margin-top:1px}
+.th-tp{background:#0d1520;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-light);text-align:right}
+.th-tp span{display:block;font-size:.6rem;font-weight:400;opacity:.75;margin-top:1px}
+.th-bl{background:#2d0a0a;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#f07070;text-align:right}
+.th-pct{background:#1a1a2e;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-light);text-align:right}
+.th-pct span{display:block;font-size:.6rem;font-weight:400;opacity:.75;margin-top:1px}
+/* SIP table extras */
+.th-val{background:#0d1520;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-light);text-align:right}
+.th-gain{background:#1a3320;padding:11px 14px;font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7ecc6e;text-align:right}
+
+/* Year row */
+tr.year-row td{background:#f7f3ee;border-bottom:1.5px solid #e0d5c8;cursor:pointer;user-select:none;vertical-align:middle}
+.yr-label{padding:10px 14px;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
+.yr-toggle{font-size:.85rem;color:var(--gold);width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;background:rgba(201,147,58,.12);border-radius:4px;flex-shrink:0}
+.yr-pr{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--green-h);text-align:right;padding:10px 14px;font-weight:600}
+.yr-in{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--orange-h);text-align:right;padding:10px 14px;font-weight:600}
+.yr-tp{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:#444;text-align:right;padding:10px 14px;font-weight:600}
+.yr-bl{font-family:'JetBrains Mono',monospace;font-size:.84rem;color:var(--red-h);text-align:right;padding:10px 14px;font-weight:600}
+.yr-pct{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--slate);text-align:right;padding:10px 14px;font-weight:600}
+
+/* Month row */
+tr.month-row td{border-bottom:1px solid #f0ebe3;vertical-align:middle}
+tr.month-row:hover td{background:#faf6f0}
+tr.month-row.hidden{display:none}
+.mo-lbl{padding:7px 14px 7px 34px;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--muted)}
+.mo-pr{font-family:'JetBrains Mono',monospace;font-size:.79rem;color:var(--green-h);text-align:right;padding:7px 14px}
+.mo-in{font-family:'JetBrains Mono',monospace;font-size:.79rem;color:var(--orange-h);text-align:right;padding:7px 14px}
+.mo-tp{font-family:'JetBrains Mono',monospace;font-size:.79rem;color:#555;text-align:right;padding:7px 14px}
+.mo-bl{font-family:'JetBrains Mono',monospace;font-size:.79rem;color:var(--ink);text-align:right;padding:7px 14px}
+.mo-pct{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);text-align:right;padding:7px 14px}
+
+/* CURRENCY */
+.rate-badge{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;padding:5px 11px;border-radius:6px;margin-top:.6rem}
+.rate-badge.loading{background:#fdf6e8;border:1px solid #f0d080;color:#8a6000}
+.rate-badge.ok{background:#f0faf3;border:1px solid #b8dfca;color:#2d6a4f}
+.rate-badge.err{background:#fdf0ef;border:1px solid #f0b8b0;color:#8b1a10}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(255,255,255,.42);padding:2rem;text-align:center;border-top:3px solid var(--gold);font-size:.81rem}
+footer strong{color:var(--gold)}
+
+@media(max-width:640px){
+  nav{display:none}
+  .hero-stats{gap:1.4rem}
+  .calc-card{padding:1.3rem}
+  .result-value{font-size:1.5rem}
+  .chart-canvas-wrap{width:150px;height:150px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">P</div>
+      <div class="logo-text">
+        <span class="logo-name">Punnam Academy</span>
+        <span class="logo-sub">Financial &amp; Educational Hub</span>
+      </div>
+    </a>
+    <nav>
+      <a href="#calculators">Calculators</a>
+      <a href="#about">About</a>
+      <a href="AlphaKids.html" style="background:linear-gradient(135deg,#c9933a,#d4900e);color:#fff;border-radius:7px;padding:6px 14px;font-weight:600;letter-spacing:.02em;display:inline-flex;align-items:center;gap:6px;">🧒 AlphaKids</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">✦ Smart Financial Tools</div>
+    <h1>Master Your Finances<br>with <span>Punnam Academy</span></h1>
+    <p>Free, powerful calculators for every life stage — from planning your first loan to understanding compound interest.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">8+</div><div class="stat-label">Calculators</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free</div></div>
+      <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Calculations</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="calculators">
+  <div class="section-inner">
+    <div class="section-label">Tools</div>
+    <div class="section-title">Financial &amp; Life Calculators</div>
+    <p class="section-desc">Everything you need to make smart decisions — built with precision and simplicity.</p>
+    <div class="calc-tabs">
+      <button class="tab-btn active" onclick="showCalc('emi',this)"><span>🏦</span> EMI</button>
+      <button class="tab-btn" onclick="showCalc('interest',this)"><span>📈</span> Interest</button>
+      <button class="tab-btn" onclick="showCalc('sip',this)"><span>💰</span> SIP</button>
+      <button class="tab-btn" onclick="showCalc('fd',this)"><span>🏛️</span> FD</button>
+      <button class="tab-btn" onclick="showCalc('gst',this)"><span>🧾</span> GST</button>
+      <button class="tab-btn" onclick="showCalc('currency',this)"><span>💱</span> Currency</button>
+      <button class="tab-btn" onclick="showCalc('discount',this)"><span>🏷️</span> Discount</button>
+      <button class="tab-btn" onclick="showCalc('age',this)"><span>🎂</span> Age</button>
+    </div>
+
+    <!-- ══════ EMI ══════ -->
+    <div class="calc-card active" id="calc-emi">
+      <div class="card-header">
+        <div class="card-title"><div class="icon">🏦</div> EMI Calculator</div>
+        <div class="card-desc">Monthly EMI with complete year-wise amortisation. Click any year row to expand months.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Loan Amount (₹)</label><input type="number" id="emi-principal" placeholder="e.g. 7500000"></div>
+        <div class="form-group"><label>Annual Interest Rate (%)</label><input type="number" id="emi-rate" placeholder="e.g. 9" step="0.01"></div>
+        <div class="form-group"><label>Tenure (Months)</label><input type="number" id="emi-tenure" placeholder="e.g. 120"></div>
+        <div class="form-group"><label>EMI Start Date</label><input type="date" id="emi-start"></div>
+      </div>
+      <button class="calc-btn" onclick="calcEMI()">Calculate EMI</button>
+      <div class="result-box" id="emi-result">
+        <div class="result-title">EMI Summary</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="emi-monthly">–</div><div class="result-label">Monthly EMI</div></div>
+          <div class="result-item"><div class="result-value" id="emi-total-interest">–</div><div class="result-label">Total Interest</div></div>
+          <div class="result-item"><div class="result-value" id="emi-total-payment">–</div><div class="result-label">Total Payment</div></div>
+          <div class="result-item"><div class="result-value" id="emi-end-date">–</div><div class="result-label">End Date</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="emi-actions">
+        <span class="act-lbl">Share / Export:</span>
+        <button class="act-btn wa" onclick="shareWA('emi')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('emi')">↗ Share</button>
+        <button class="act-btn xl" onclick="downloadXL('emi')">📊 Excel</button>
+        <button class="act-btn pdf" onclick="downloadPDF('emi')">📄 PDF</button>
+      </div>
+      <div class="data-table-wrap" id="emi-table-wrap">
+        <div class="data-scroll">
+          <table id="emi-table">
+            <thead><tr>
+              <th class="th-yr">Year</th>
+              <th class="th-pr">Principal<span>(A)</span></th>
+              <th class="th-in">Interest<span>(B)</span></th>
+              <th class="th-tp">Total Payment<span>(A + B)</span></th>
+              <th class="th-bl">Balance</th>
+              <th class="th-pct">Loan Paid<span>To Date</span></th>
+            </tr></thead>
+            <tbody id="emi-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ INTEREST ══════ -->
+    <div class="calc-card" id="calc-interest">
+      <div class="card-header">
+        <div class="card-title"><div class="icon">📈</div> Interest Calculator</div>
+        <div class="card-desc">Calculate simple or compound interest between two dates.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Principal Amount (₹)</label><input type="number" id="int-principal" placeholder="e.g. 100000"></div>
+        <div class="form-group"><label>Annual Interest Rate (%)</label><input type="number" id="int-rate" placeholder="e.g. 8.5" step="0.01"></div>
+        <div class="form-group"><label>From Date</label><input type="date" id="int-from"></div>
+        <div class="form-group"><label>To Date</label><input type="date" id="int-to"></div>
+        <div class="form-group"><label>Interest Type</label>
+          <select id="int-type"><option value="simple">Simple Interest</option><option value="compound">Compound Interest</option></select>
+        </div>
+        <div class="form-group"><label>Compounding</label>
+          <select id="int-compound"><option value="1">Annually</option><option value="2">Semi-Annually</option><option value="4">Quarterly</option><option value="12" selected>Monthly</option><option value="365">Daily</option></select>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcInterest()">Calculate Interest</button>
+      <div class="result-box" id="int-result">
+        <div class="result-title">Interest Summary</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="int-days-result">–</div><div class="result-label">Days</div></div>
+          <div class="result-item"><div class="result-value" id="int-interest">–</div><div class="result-label">Interest Earned</div></div>
+          <div class="result-item"><div class="result-value" id="int-total">–</div><div class="result-label">Total Amount</div></div>
+          <div class="result-item"><div class="result-value" id="int-effective">–</div><div class="result-label">Effective Rate</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="int-actions">
+        <span class="act-lbl">Share / Export:</span>
+        <button class="act-btn wa" onclick="shareWA('int')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('int')">↗ Share</button>
+        <button class="act-btn xl" onclick="downloadXL('int')">📊 Excel</button>
+        <button class="act-btn pdf" onclick="downloadPDF('int')">📄 PDF</button>
+      </div>
+      <div class="chart-wrap" id="int-chart-wrap">
+        <div class="chart-canvas-wrap"><canvas id="int-chart"></canvas></div>
+        <div class="chart-legend" id="int-legend"></div>
+      </div>
+      <div class="data-table-wrap" id="int-table-wrap">
+        <div class="data-scroll">
+          <table id="int-table">
+            <thead><tr>
+              <th class="th-yr">Year</th>
+              <th class="th-pr">Opening Balance<span>Start of Year</span></th>
+              <th class="th-in">Interest Earned<span>This Year</span></th>
+              <th class="th-tp">Cumulative Interest<span>Total so far</span></th>
+              <th class="th-bl">Closing Balance<span>End of Year</span></th>
+              <th class="th-pct">Growth<span>% of Principal</span></th>
+            </tr></thead>
+            <tbody id="int-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ SIP ══════ -->
+    <div class="calc-card" id="calc-sip">
+      <div class="card-header">
+        <div class="card-title"><div class="icon">💰</div> SIP Calculator</div>
+        <div class="card-desc">Project wealth from Systematic Investment Plans with a full month-wise growth table.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Monthly Investment (₹)</label><input type="number" id="sip-monthly" placeholder="e.g. 5000"></div>
+        <div class="form-group"><label>Expected Annual Return (%)</label><input type="number" id="sip-rate" placeholder="e.g. 12" step="0.1"></div>
+        <div class="form-group"><label>Investment Period (Years)</label><input type="number" id="sip-years" placeholder="e.g. 10"></div>
+      </div>
+      <button class="calc-btn" onclick="calcSIP()">Calculate SIP Returns</button>
+      <div class="result-box" id="sip-result">
+        <div class="result-title">SIP Projection</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="sip-invested">–</div><div class="result-label">Total Invested</div></div>
+          <div class="result-item"><div class="result-value" id="sip-returns">–</div><div class="result-label">Est. Returns</div></div>
+          <div class="result-item"><div class="result-value" id="sip-maturity">–</div><div class="result-label">Maturity Value</div></div>
+          <div class="result-item"><div class="result-value" id="sip-gain">–</div><div class="result-label">Gain %</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="sip-actions">
+        <span class="act-lbl">Share / Export:</span>
+        <button class="act-btn wa" onclick="shareWA('sip')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('sip')">↗ Share</button>
+        <button class="act-btn xl" onclick="downloadXL('sip')">📊 Excel</button>
+        <button class="act-btn pdf" onclick="downloadPDF('sip')">📄 PDF</button>
+      </div>
+      <div class="chart-wrap" id="sip-chart-wrap">
+        <div class="chart-canvas-wrap"><canvas id="sip-chart"></canvas></div>
+        <div class="chart-legend" id="sip-legend"></div>
+      </div>
+      <div class="data-table-wrap" id="sip-table-wrap">
+        <div class="data-scroll">
+          <table id="sip-table">
+            <thead><tr>
+              <th class="th-yr">Year</th>
+              <th class="th-pr">Monthly SIP<span>Invested</span></th>
+              <th class="th-in">Interest Earned<span>This Month</span></th>
+              <th class="th-tp">Total Invested<span>Cumulative</span></th>
+              <th class="th-val">Portfolio Value<span>End of Month</span></th>
+              <th class="th-gain">Total Gain<span>Returns %</span></th>
+            </tr></thead>
+            <tbody id="sip-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ FD ══════ -->
+    <div class="calc-card" id="calc-fd">
+      <div class="card-header">
+        <div class="card-title"><div class="icon">🏛️</div> FD Calculator</div>
+        <div class="card-desc">Calculate maturity amount for Fixed Deposits.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Principal Amount (₹)</label><input type="number" id="fd-principal" placeholder="e.g. 100000"></div>
+        <div class="form-group"><label>Annual Interest Rate (%)</label><input type="number" id="fd-rate" placeholder="e.g. 7.5" step="0.1"></div>
+        <div class="form-group"><label>Tenure</label><input type="number" id="fd-tenure" placeholder="e.g. 2"></div>
+        <div class="form-group"><label>Tenure Unit</label>
+          <select id="fd-unit"><option value="years">Years</option><option value="months">Months</option><option value="days">Days</option></select>
+        </div>
+        <div class="form-group"><label>Compounding Frequency</label>
+          <select id="fd-compound"><option value="1">Annually</option><option value="2">Semi-Annually</option><option value="4" selected>Quarterly</option><option value="12">Monthly</option></select>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcFD()">Calculate FD Maturity</button>
+      <div class="result-box" id="fd-result">
+        <div class="result-title">FD Maturity Details</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="fd-maturity">–</div><div class="result-label">Maturity Amount</div></div>
+          <div class="result-item"><div class="result-value" id="fd-interest">–</div><div class="result-label">Interest Earned</div></div>
+          <div class="result-item"><div class="result-value" id="fd-effective">–</div><div class="result-label">Effective Rate</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="fd-actions">
+        <span class="act-lbl">Share / Export:</span>
+        <button class="act-btn wa" onclick="shareWA('fd')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('fd')">↗ Share</button>
+        <button class="act-btn pdf" onclick="downloadPDF('fd')">📄 PDF</button>
+      </div>
+      <div class="chart-wrap" id="fd-chart-wrap">
+        <div class="chart-canvas-wrap"><canvas id="fd-chart"></canvas></div>
+        <div class="chart-legend" id="fd-legend"></div>
+      </div>
+    </div>
+
+    <!-- ══════ GST ══════ -->
+    <div class="calc-card" id="calc-gst">
+      <div class="card-header">
+        <div class="card-title"><div class="icon">🧾</div> GST Calculator</div>
+        <div class="card-desc">Compute GST amounts and determine pre/post-tax prices.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Amount (₹)</label><input type="number" id="gst-amount" placeholder="e.g. 10000"></div>
+        <div class="form-group"><label>GST Rate (%)</label>
+          <select id="gst-rate"><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option><option value="custom">Custom</option></select>
+        </div>
+        <div class="form-group"><label>Custom Rate (%)</label><input type="number" id="gst-custom" placeholder="Enter custom %" step="0.1"></div>
+        <div class="form-group"><label>Calculation Type</label>
+          <select id="gst-type"><option value="exclusive">Add GST to Amount</option><option value="inclusive">Extract GST from Amount</option></select>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcGST()">Calculate GST</button>
+      <div class="result-box" id="gst-result">
+        <div class="result-title">GST Breakdown</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="gst-base">–</div><div class="result-label">Base Amount</div></div>
+          <div class="result-item"><div class="result-value" id="gst-cgst">–</div><div class="result-label">CGST (50%)</div></div>
+          <div class="result-item"><div class="result-value" id="gst-sgst">–</div><div class="result-label">SGST (50%)</div></div>
+          <div class="result-item"><div class="result-value" id="gst-total">–</div><div class="result-label">Total incl. GST</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="gst-actions">
+        <span class="act-lbl">Share / Export:</span>
+        <button class="act-btn wa" onclick="shareWA('gst')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('gst')">↗ Share</button>
+        <button class="act-btn pdf" onclick="downloadPDF('gst')">📄 PDF</button>
+      </div>
+    </div>
+
+    <!-- ══════ CURRENCY ══════ -->
+    <div class="calc-card" id="calc-currency">
+      <div class="card-header">
+        <div class="card-title"><div class="icon">💱</div> Currency Converter</div>
+        <div class="card-desc">Live exchange rates fetched every time you convert — always accurate.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Amount</label><input type="number" id="curr-amount" placeholder="e.g. 1000"></div>
+        <div class="form-group"><label>From Currency</label>
+          <select id="curr-from">
+            <option value="INR" selected>INR – Indian Rupee</option><option value="USD">USD – US Dollar</option>
+            <option value="EUR">EUR – Euro</option><option value="GBP">GBP – British Pound</option>
+            <option value="AED">AED – UAE Dirham</option><option value="SGD">SGD – Singapore Dollar</option>
+            <option value="AUD">AUD – Australian Dollar</option><option value="CAD">CAD – Canadian Dollar</option>
+            <option value="JPY">JPY – Japanese Yen</option><option value="CHF">CHF – Swiss Franc</option>
+          </select>
+        </div>
+        <div class="form-group"><label>To Currency</label>
+          <select id="curr-to">
+            <option value="USD" selected>USD – US Dollar</option><option value="INR">INR – Indian Rupee</option>
+            <option value="EUR">EUR – Euro</option><option value="GBP">GBP – British Pound</option>
+            <option value="AED">AED – UAE Dirham</option><option value="SGD">SGD – Singapore Dollar</option>
+            <option value="AUD">AUD – Australian Dollar</option><option value="CAD">CAD – Canadian Dollar</option>
+            <option value="JPY">JPY – Japanese Yen</option><option value="CHF">CHF – Swiss Franc</option>
+          </select>
+        </div>
+      </div>
+      <div id="curr-rate-badge" style="display:none" class="rate-badge loading">⏳ Fetching live rate…</div>
+      <button class="calc-btn" onclick="calcCurrency()">Convert with Live Rate</button>
+      <div class="result-box" id="curr-result">
+        <div class="result-title">Live Conversion Result</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="curr-converted">–</div><div class="result-label">Converted Amount</div></div>
+          <div class="result-item"><div class="result-value" id="curr-rate-val" style="font-size:1.1rem">–</div><div class="result-label">Exchange Rate</div></div>
+          <div class="result-item"><div class="result-value" id="curr-inverse" style="font-size:1.1rem">–</div><div class="result-label">Inverse Rate</div></div>
+          <div class="result-item"><div class="result-value" id="curr-as-of" style="font-size:1rem">–</div><div class="result-label">Rate as of</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="curr-actions">
+        <span class="act-lbl">Share:</span>
+        <button class="act-btn wa" onclick="shareWA('curr')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('curr')">↗ Share</button>
+      </div>
+    </div>
+
+    <!-- ══════ DISCOUNT ══════ -->
+    <div class="calc-card" id="calc-discount">
+      <div class="card-header">
+        <div class="card-title"><div class="icon">🏷️</div> Discount Calculator</div>
+        <div class="card-desc">Find final price, savings and total percentage off.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Original Price (₹)</label><input type="number" id="disc-original" placeholder="e.g. 2500"></div>
+        <div class="form-group"><label>Discount (%)</label><input type="number" id="disc-percent" placeholder="e.g. 20" step="0.1"></div>
+        <div class="form-group"><label>Additional Coupon (%)</label><input type="number" id="disc-coupon" placeholder="e.g. 5 (optional)" step="0.1"></div>
+      </div>
+      <button class="calc-btn" onclick="calcDiscount()">Calculate Savings</button>
+      <div class="result-box" id="disc-result">
+        <div class="result-title">Savings Breakdown</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="disc-final">–</div><div class="result-label">Final Price</div></div>
+          <div class="result-item"><div class="result-value" id="disc-saved">–</div><div class="result-label">You Save</div></div>
+          <div class="result-item"><div class="result-value" id="disc-total-off">–</div><div class="result-label">Total Discount</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════ AGE ══════ -->
+    <div class="calc-card" id="calc-age">
+      <div class="card-header">
+        <div class="card-title"><div class="icon">🎂</div> Age Calculator</div>
+        <div class="card-desc">Calculate your exact age in years, months, days and hours.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group"><label>Date of Birth</label><input type="date" id="age-dob"></div>
+        <div class="form-group"><label>As of Date</label><input type="date" id="age-today"></div>
+      </div>
+      <button class="calc-btn" onclick="calcAge()">Calculate Age</button>
+      <div class="result-box" id="age-result">
+        <div class="result-title">Your Age Breakdown</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="age-years">–</div><div class="result-label">Years</div></div>
+          <div class="result-item"><div class="result-value" id="age-months">–</div><div class="result-label">Months</div></div>
+          <div class="result-item"><div class="result-value" id="age-days">–</div><div class="result-label">Days</div></div>
+          <div class="result-item"><div class="result-value" id="age-hours">–</div><div class="result-label">Total Hours</div></div>
+          <div class="result-item"><div class="result-value" id="age-next">–</div><div class="result-label">Next Birthday</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about" style="background:#fff;border-top:1.5px solid var(--border)">
+  <div class="section-inner" style="text-align:center">
+    <div class="section-label">About</div>
+    <div class="section-title">Punnam Academy</div>
+    <p class="section-desc" style="margin:0 auto">Empowering individuals with financial literacy and tools to plan better, invest smarter, and live confidently. All calculators are free, accurate, and built for everyday use.</p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 <strong>Punnam Academy</strong> · Financial &amp; Educational Hub · All rights reserved.</p>
+  <p style="margin-top:.4rem;font-size:.73rem">Rates shown are indicative. Always consult a financial advisor for investment decisions.</p>
+</footer>
+
+<script>
+/* ══ TABS ══ */
+function showCalc(id,btn){
+  document.querySelectorAll('.calc-card').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('calc-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+
+/* ══ FORMATTING ══ */
+// Indian number format: 1,07,96,711
+function fmtIN(n){ return 'Rs.'+Math.round(Number(n)).toLocaleString('en-IN'); }
+// Plain number for PDF (no rupee symbol — avoids the ¹ glyph bug)
+function fmtPDF(n){ return 'Rs.' + Math.round(Number(n)).toLocaleString('en-IN'); }
+// Raw Indian number string for table cells
+function fmtINr(n){ return Math.round(Number(n)).toLocaleString('en-IN'); }
+// Rupee symbol for on-screen display
+function fmtR(n){ return '₹'+Math.round(Number(n)).toLocaleString('en-IN'); }
+function fmtDec(n,d=2){ return Number(n).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function fmtDate(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}-${m}-${y}`; }
+function todayStr(){ const t=new Date(); return `${String(t.getDate()).padStart(2,'0')}-${String(t.getMonth()+1).padStart(2,'0')}-${t.getFullYear()}`; }
+
+/* ══ INIT ══ */
+window.onload=()=>{
+  const t=new Date().toISOString().split('T')[0];
+  ['age-today','int-from','emi-start'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=t;});
+  const dy=new Date(); dy.setFullYear(dy.getFullYear()+1);
+  document.getElementById('int-to').value=dy.toISOString().split('T')[0];
+};
+
+/* ══ PIE ══ */
+const CI={};
+const PC=['#c9933a','#1a2535','#e8b96a','#5a8a30'];
+function renderPie(cid,wid,lid,labels,vals){
+  document.getElementById(wid).classList.add('show');
+  if(CI[cid]) CI[cid].destroy();
+  CI[cid]=new Chart(document.getElementById(cid).getContext('2d'),{
+    type:'doughnut',
+    data:{labels,datasets:[{data:vals,backgroundColor:PC.slice(0,vals.length),borderWidth:3,borderColor:'#fff'}]},
+    options:{cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+fmtR(c.raw)}}},animation:{duration:700}}
+  });
+  const tot=vals.reduce((a,b)=>a+b,0);
+  document.getElementById(lid).innerHTML=labels.map((l,i)=>`
+    <div class="legend-item"><div class="legend-dot" style="background:${PC[i]}"></div>
+    <div><div class="legend-val">${fmtR(vals[i])}</div><div class="legend-lbl">${l} · ${(vals[i]/tot*100).toFixed(1)}%</div></div></div>`).join('');
+}
+
+/* ══════════════ EMI ══════════════ */
+let emiData={P:0,emi:0,months:[],byYear:{}};
+function calcEMI(){
+  const P=parseFloat(document.getElementById('emi-principal').value);
+  const ar=parseFloat(document.getElementById('emi-rate').value);
+  const N=parseInt(document.getElementById('emi-tenure').value);
+  const sd=document.getElementById('emi-start').value;
+  if(!P||!ar||!N||!sd) return alert('Please fill all fields.');
+  const r=ar/100/12;
+  const emi=r===0?P/N:P*r*Math.pow(1+r,N)/(Math.pow(1+r,N)-1);
+  const totalPay=emi*N, totalInt=totalPay-P;
+  const start=new Date(sd);
+  const end=new Date(start); end.setMonth(end.getMonth()+N-1);
+
+  document.getElementById('emi-monthly').textContent=fmtR(emi);
+  document.getElementById('emi-total-interest').textContent=fmtR(totalInt);
+  document.getElementById('emi-total-payment').textContent=fmtR(totalPay);
+  document.getElementById('emi-end-date').textContent=end.toLocaleString('en-IN',{month:'short',year:'numeric'});
+  document.getElementById('emi-result').classList.add('show');
+  document.getElementById('emi-actions').classList.add('show');
+
+  let bal=P;
+  const months=[];
+  for(let i=1;i<=N;i++){
+    const ip=bal*r, pp=emi-ip;
+    bal=Math.max(0,bal-pp);
+    const d=new Date(start); d.setMonth(d.getMonth()+i-1);
+    months.push({num:i,year:d.getFullYear(),month:d.toLocaleString('en-IN',{month:'short'}),emi,pp,ip,bal,paidPct:((P-bal)/P*100)});
+  }
+  const byYear={};
+  months.forEach(m=>{
+    if(!byYear[m.year]) byYear[m.year]={pr:0,int:0,tp:0,bal:0,months:[]};
+    byYear[m.year].pr+=m.pp; byYear[m.year].int+=m.ip;
+    byYear[m.year].tp+=m.emi; byYear[m.year].bal=m.bal;
+    byYear[m.year].months.push(m);
+  });
+  emiData={P,emi,months,byYear};
+
+  const tbody=document.getElementById('emi-table-body');
+  tbody.innerHTML='';
+  Object.keys(byYear).forEach(yr=>{
+    const yd=byYear[yr];
+    const pct=yd.bal===0?100:(P-yd.bal)/P*100;
+    const ytr=document.createElement('tr');
+    ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'emi');
+    ytr.innerHTML=`<td><div class="yr-label"><span class="yr-toggle" id="etog-${yr}">⊞</span>${yr}</div></td>
+      <td class="yr-pr">${fmtR(yd.pr)}</td><td class="yr-in">${fmtR(yd.int)}</td>
+      <td class="yr-tp">${fmtR(yd.tp)}</td><td class="yr-bl">${fmtR(yd.bal)}</td>
+      <td class="yr-pct">${fmtDec(pct)}%</td>`;
+    tbody.appendChild(ytr);
+    yd.months.forEach(m=>{
+      const mtr=document.createElement('tr');
+      mtr.className='month-row hidden'; mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','emi');
+      mtr.innerHTML=`<td class="mo-lbl">${m.month}</td><td class="mo-pr">${fmtR(m.pp)}</td>
+        <td class="mo-in">${fmtR(m.ip)}</td><td class="mo-tp">${fmtR(m.emi)}</td>
+        <td class="mo-bl">${fmtR(m.bal)}</td><td class="mo-pct">${fmtDec(m.paidPct)}%</td>`;
+      tbody.appendChild(mtr);
+    });
+  });
+  document.getElementById('emi-table-wrap').classList.add('show');
+}
+
+function toggleYear(yr,tbl){
+  const prefix=tbl==='sip'?'stog-':tbl==='int'?'itog-':'etog-';
+  const first=document.querySelector(`tr.month-row[data-year="${yr}"][data-tbl="${tbl}"]`);
+  if(!first) return;
+  if(first.classList.contains('hidden')){
+    document.querySelectorAll(`tr.month-row[data-year="${yr}"][data-tbl="${tbl}"]`).forEach(r=>r.classList.remove('hidden'));
+    const t=document.getElementById(prefix+yr); if(t) t.textContent='⊟';
+  } else {
+    document.querySelectorAll(`tr.month-row[data-year="${yr}"][data-tbl="${tbl}"]`).forEach(r=>r.classList.add('hidden'));
+    const t=document.getElementById(prefix+yr); if(t) t.textContent='⊞';
+  }
+}
+
+/* ══════════════ INTEREST ══════════════ */
+let intData={};
+function calcInterest(){
+  const P=parseFloat(document.getElementById('int-principal').value);
+  const R=parseFloat(document.getElementById('int-rate').value);
+  const fromStr=document.getElementById('int-from').value;
+  const toStr=document.getElementById('int-to').value;
+  const from=new Date(fromStr), to=new Date(toStr);
+  const type=document.getElementById('int-type').value;
+  const n=parseInt(document.getElementById('int-compound').value);
+  if(!P||!R||!fromStr||!toStr) return alert('Please fill all fields.');
+  if(to<=from) return alert('To date must be after From date.');
+  const totalDays=Math.floor((to-from)/86400000), totalYears=totalDays/365;
+  let interest,total;
+  if(type==='simple'){interest=P*R/100*totalYears;total=P+interest;}
+  else{total=P*Math.pow(1+(R/100)/n,n*totalYears);interest=total-P;}
+  intData={P,R,type,n,totalDays,interest,total,from:fromStr,to:toStr};
+  document.getElementById('int-days-result').textContent=totalDays.toLocaleString('en-IN');
+  document.getElementById('int-interest').textContent=fmtR(interest);
+  document.getElementById('int-total').textContent=fmtR(total);
+  document.getElementById('int-effective').textContent=fmtDec(interest/P/totalYears*100)+'%';
+  document.getElementById('int-result').classList.add('show');
+  document.getElementById('int-actions').classList.add('show');
+  renderPie('int-chart','int-chart-wrap','int-legend',['Principal','Interest'],[P,interest]);
+
+  // ── Build year-wise + month-wise breakdown ──
+  // Walk month by month from fromStr to toStr
+  const months=[];
+  let cur=new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  let runningBalance=P, cumInt=0, monthIdx=0;
+  while(cur<to){
+    const next=new Date(cur.getFullYear(), cur.getMonth()+1, cur.getDate());
+    const periodEnd=next<to?next:to;
+    const daysInPeriod=Math.floor((periodEnd-cur)/86400000);
+    const fracYear=daysInPeriod/365;
+    let mInt;
+    if(type==='simple'){ mInt=P*R/100*fracYear; }
+    else { mInt=runningBalance*(Math.pow(1+(R/100)/n, n*fracYear)-1); }
+    const openBal=runningBalance;
+    runningBalance+=mInt; cumInt+=mInt;
+    months.push({
+      num:++monthIdx, year:cur.getFullYear(),
+      month:cur.toLocaleString('en-IN',{month:'short'}),
+      openBal, mInt, cumInt, closeBal:runningBalance,
+      growthPct:(runningBalance-P)/P*100
+    });
+    cur=next;
+  }
+  intData.months=months;
+
+  // Group by year
+  const byYear={};
+  months.forEach(m=>{
+    if(!byYear[m.year]) byYear[m.year]={openBal:m.openBal, yearInt:0, cumInt:0, closeBal:0, months:[]};
+    byYear[m.year].yearInt+=m.mInt;
+    byYear[m.year].cumInt=m.cumInt;
+    byYear[m.year].closeBal=m.closeBal;
+    byYear[m.year].months.push(m);
+  });
+
+  const tbody=document.getElementById('int-table-body');
+  tbody.innerHTML='';
+  Object.keys(byYear).forEach(yr=>{
+    const yd=byYear[yr];
+    const growthPct=(yd.closeBal-P)/P*100;
+    const ytr=document.createElement('tr');
+    ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'int');
+    ytr.innerHTML=`<td><div class="yr-label"><span class="yr-toggle" id="itog-${yr}">⊞</span>${yr}</div></td>
+      <td class="yr-pr">${fmtR(yd.openBal)}</td>
+      <td class="yr-in">${fmtR(yd.yearInt)}</td>
+      <td class="yr-tp">${fmtR(yd.cumInt)}</td>
+      <td class="yr-bl">${fmtR(yd.closeBal)}</td>
+      <td class="yr-pct">${fmtDec(growthPct)}%</td>`;
+    tbody.appendChild(ytr);
+    yd.months.forEach(m=>{
+      const mtr=document.createElement('tr');
+      mtr.className='month-row hidden'; mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','int');
+      mtr.innerHTML=`<td class="mo-lbl">${m.month}</td>
+        <td class="mo-pr">${fmtR(m.openBal)}</td>
+        <td class="mo-in">${fmtR(m.mInt)}</td>
+        <td class="mo-tp">${fmtR(m.cumInt)}</td>
+        <td class="mo-bl">${fmtR(m.closeBal)}</td>
+        <td class="mo-pct">${fmtDec(m.growthPct)}%</td>`;
+      tbody.appendChild(mtr);
+    });
+  });
+  document.getElementById('int-table-wrap').classList.add('show');
+}
+
+/* ══════════════ SIP — with monthly table ══════════════ */
+let sipData={};
+function calcSIP(){
+  const monthly=parseFloat(document.getElementById('sip-monthly').value);
+  const ar=parseFloat(document.getElementById('sip-rate').value);
+  const years=parseFloat(document.getElementById('sip-years').value);
+  if(!monthly||!ar||!years) return alert('Please fill all fields.');
+  const r=ar/100/12, N=Math.round(years*12);
+  const maturity=monthly*(Math.pow(1+r,N)-1)/r*(1+r);
+  const invested=monthly*N, returns=maturity-invested;
+
+  document.getElementById('sip-invested').textContent=fmtR(invested);
+  document.getElementById('sip-returns').textContent=fmtR(returns);
+  document.getElementById('sip-maturity').textContent=fmtR(maturity);
+  document.getElementById('sip-gain').textContent=fmtDec(returns/invested*100)+'%';
+  document.getElementById('sip-result').classList.add('show');
+  document.getElementById('sip-actions').classList.add('show');
+  renderPie('sip-chart','sip-chart-wrap','sip-legend',['Amount Invested','Est. Returns'],[invested,returns]);
+
+  // Build monthly schedule
+  let portfolio=0;
+  const sipMonths=[];
+  const byYear={};
+  const startDate=new Date();
+  for(let i=1;i<=N;i++){
+    const intEarned=portfolio*r;
+    portfolio=portfolio*(1+r)+monthly;
+    const totalInv=monthly*i;
+    const gain=portfolio-totalInv;
+    const gainPct=(gain/totalInv*100);
+    const d=new Date(startDate); d.setMonth(d.getMonth()+i-1);
+    const yr=d.getFullYear();
+    sipMonths.push({num:i,year:yr,month:d.toLocaleString('en-IN',{month:'short'}),monthly,intEarned,totalInv,portfolio,gain,gainPct});
+    if(!byYear[yr]) byYear[yr]={totalInv:0,intEarned:0,portfolio:0,months:[]};
+    byYear[yr].totalInv=totalInv;
+    byYear[yr].intEarned+=intEarned;
+    byYear[yr].portfolio=portfolio;
+    byYear[yr].months.push(sipMonths[sipMonths.length-1]);
+  }
+  sipData={monthly,ar,years,invested,returns,maturity,months:sipMonths};
+
+  const tbody=document.getElementById('sip-table-body');
+  tbody.innerHTML='';
+  Object.keys(byYear).forEach(yr=>{
+    const yd=byYear[yr];
+    const gainAmt=yd.portfolio-yd.totalInv;
+    const gainPct=(gainAmt/yd.totalInv*100);
+    const ytr=document.createElement('tr');
+    ytr.className='year-row'; ytr.onclick=()=>toggleYear(yr,'sip');
+    ytr.innerHTML=`<td><div class="yr-label"><span class="yr-toggle" id="stog-${yr}">⊞</span>${yr}</div></td>
+      <td class="yr-pr">${fmtR(monthly)}</td>
+      <td class="yr-in">${fmtR(yd.intEarned)}</td>
+      <td class="yr-tp">${fmtR(yd.totalInv)}</td>
+      <td class="yr-bl">${fmtR(yd.portfolio)}</td>
+      <td class="yr-pct" style="color:var(--green-h)">${fmtDec(gainPct)}%</td>`;
+    tbody.appendChild(ytr);
+    yd.months.forEach(m=>{
+      const mtr=document.createElement('tr');
+      mtr.className='month-row hidden'; mtr.setAttribute('data-year',yr); mtr.setAttribute('data-tbl','sip');
+      mtr.innerHTML=`<td class="mo-lbl">${m.month}</td>
+        <td class="mo-pr">${fmtR(m.monthly)}</td>
+        <td class="mo-in">${fmtR(m.intEarned)}</td>
+        <td class="mo-tp">${fmtR(m.totalInv)}</td>
+        <td class="mo-bl">${fmtR(m.portfolio)}</td>
+        <td class="mo-pct" style="color:var(--green-h)">${fmtDec(m.gainPct)}%</td>`;
+      tbody.appendChild(mtr);
+    });
+  });
+  document.getElementById('sip-table-wrap').classList.add('show');
+}
+
+/* ══════════════ FD ══════════════ */
+let fdData={};
+function calcFD(){
+  const P=parseFloat(document.getElementById('fd-principal').value);
+  const R=parseFloat(document.getElementById('fd-rate').value);
+  const tenure=parseFloat(document.getElementById('fd-tenure').value);
+  const unit=document.getElementById('fd-unit').value;
+  const n=parseInt(document.getElementById('fd-compound').value);
+  if(!P||!R||!tenure) return alert('Please fill all fields.');
+  const years=unit==='years'?tenure:unit==='months'?tenure/12:tenure/365;
+  const maturity=P*Math.pow(1+(R/100)/n,n*years);
+  const interest=maturity-P;
+  fdData={P,R,tenure,unit,maturity,interest};
+  document.getElementById('fd-maturity').textContent=fmtR(maturity);
+  document.getElementById('fd-interest').textContent=fmtR(interest);
+  document.getElementById('fd-effective').textContent=fmtDec((Math.pow(1+(R/100)/n,n)-1)*100)+'%';
+  document.getElementById('fd-result').classList.add('show');
+  document.getElementById('fd-actions').classList.add('show');
+  renderPie('fd-chart','fd-chart-wrap','fd-legend',['Principal','Interest Earned'],[P,interest]);
+}
+
+/* ══════════════ GST ══════════════ */
+let gstData={};
+function calcGST(){
+  const amount=parseFloat(document.getElementById('gst-amount').value);
+  const rs=document.getElementById('gst-rate').value;
+  const rate=rs==='custom'?parseFloat(document.getElementById('gst-custom').value):parseFloat(rs);
+  const type=document.getElementById('gst-type').value;
+  if(!amount||!rate) return alert('Please fill all required fields.');
+  let base,gstAmt,total;
+  if(type==='exclusive'){base=amount;gstAmt=amount*rate/100;total=amount+gstAmt;}
+  else{total=amount;base=amount/(1+rate/100);gstAmt=total-base;}
+  gstData={base,gstAmt,total,rate};
+  document.getElementById('gst-base').textContent=fmtR(base);
+  document.getElementById('gst-cgst').textContent=fmtR(gstAmt/2);
+  document.getElementById('gst-sgst').textContent=fmtR(gstAmt/2);
+  document.getElementById('gst-total').textContent=fmtR(total);
+  document.getElementById('gst-result').classList.add('show');
+  document.getElementById('gst-actions').classList.add('show');
+}
+
+/* ══════════════ CURRENCY — LIVE ══════════════ */
+let currData={};
+async function calcCurrency(){
+  const amount=parseFloat(document.getElementById('curr-amount').value);
+  const from=document.getElementById('curr-from').value;
+  const to=document.getElementById('curr-to').value;
+  if(!amount) return alert('Please enter an amount.');
+  const badge=document.getElementById('curr-rate-badge');
+  badge.style.display='inline-flex'; badge.className='rate-badge loading'; badge.textContent='⏳ Fetching live rate…';
+  const sym={INR:'₹',USD:'$',EUR:'€',GBP:'£',AED:'AED ',SGD:'S$',AUD:'A$',CAD:'C$',JPY:'¥',CHF:'Fr'};
+  async function tryAPI(url,parse){
+    const res=await fetch(url); if(!res.ok) throw new Error();
+    return parse(await res.json());
+  }
+  try{
+    let rate,dateStr;
+    try{
+      const d=await tryAPI(`https://api.frankfurter.app/latest?from=${from}&to=${to}`,j=>{return {rate:j.rates[to],date:j.date};});
+      rate=d.rate; const[dy,dm,dd]=d.date.split('-'); dateStr=`${dd}-${dm}-${dy}`;
+    } catch(e){
+      const d=await tryAPI(`https://open.er-api.com/v6/latest/${from}`,j=>{
+        const dt=new Date(j.time_last_update_unix*1000);
+        return {rate:j.rates[to],date:`${String(dt.getDate()).padStart(2,'0')}-${String(dt.getMonth()+1).padStart(2,'0')}-${dt.getFullYear()}`};
+      });
+      rate=d.rate; dateStr=d.date;
+    }
+    const converted=amount*rate;
+    badge.className='rate-badge ok';
+    badge.textContent=`✅ Live: 1 ${from} = ${rate.toFixed(4)} ${to}  ·  ${dateStr}`;
+    currData={amount,from,to,rate,converted,date:dateStr};
+    document.getElementById('curr-converted').textContent=sym[to]+converted.toLocaleString('en-IN',{maximumFractionDigits:2});
+    document.getElementById('curr-rate-val').textContent=`1 ${from} = ${fmtDec(rate,4)} ${to}`;
+    document.getElementById('curr-inverse').textContent=`1 ${to} = ${fmtDec(1/rate,4)} ${from}`;
+    document.getElementById('curr-as-of').textContent=dateStr;
+    document.getElementById('curr-result').classList.add('show');
+    document.getElementById('curr-actions').classList.add('show');
+  } catch(e){
+    badge.className='rate-badge err'; badge.textContent='⚠ Could not fetch live rate. Check internet connection.';
+  }
+}
+
+/* ══════════════ DISCOUNT ══════════════ */
+function calcDiscount(){
+  const orig=parseFloat(document.getElementById('disc-original').value);
+  const pct=parseFloat(document.getElementById('disc-percent').value)||0;
+  const coupon=parseFloat(document.getElementById('disc-coupon').value)||0;
+  if(!orig) return alert('Please enter original price.');
+  const final=orig*(1-pct/100)*(1-coupon/100), saved=orig-final;
+  document.getElementById('disc-final').textContent=fmtR(final);
+  document.getElementById('disc-saved').textContent=fmtR(saved);
+  document.getElementById('disc-total-off').textContent=fmtDec(saved/orig*100)+'%';
+  document.getElementById('disc-result').classList.add('show');
+}
+
+/* ══════════════ AGE ══════════════ */
+function calcAge(){
+  const dob=new Date(document.getElementById('age-dob').value);
+  const ref=new Date(document.getElementById('age-today').value);
+  if(!document.getElementById('age-dob').value) return alert('Please enter date of birth.');
+  if(dob>ref) return alert('Date of birth cannot be in the future!');
+  let y=ref.getFullYear()-dob.getFullYear(),m=ref.getMonth()-dob.getMonth(),d=ref.getDate()-dob.getDate();
+  if(d<0){m--;d+=new Date(ref.getFullYear(),ref.getMonth(),0).getDate();} if(m<0){y--;m+=12;}
+  const totalH=Math.floor((ref-dob)/3600000);
+  let nb=new Date(ref.getFullYear(),dob.getMonth(),dob.getDate());
+  if(nb<=ref) nb.setFullYear(ref.getFullYear()+1);
+  document.getElementById('age-years').textContent=y;
+  document.getElementById('age-months').textContent=m+' mo';
+  document.getElementById('age-days').textContent=d+' d';
+  document.getElementById('age-hours').textContent=totalH.toLocaleString('en-IN');
+  document.getElementById('age-next').textContent=Math.ceil((nb-ref)/86400000)+' days';
+  document.getElementById('age-result').classList.add('show');
+}
+
+/* ══════════════ SHARE ══════════════ */
+function buildShareText(id){
+  const site='Punnam Academy Financial Calculator';
+  if(id==='emi'&&emiData.months.length){
+    return `*EMI Calculation — ${site}*\n\nLoan: ${fmtIN(emiData.P)}\nMonthly EMI: ${fmtIN(emiData.emi)}\nTotal Interest: ${fmtIN(emiData.months.reduce((a,m)=>a+m.ip,0))}\nTotal Payment: ${fmtIN(emiData.emi*emiData.months.length)}\n\nPunnam Academy`;
+  }
+  if(id==='int'&&intData.P) return `*Interest — ${site}*\n\nPrincipal: ${fmtIN(intData.P)}\nRate: ${intData.R}% (${intData.type})\nPeriod: ${fmtDate(intData.from)} to ${fmtDate(intData.to)}\nInterest: ${fmtIN(intData.interest)}\nTotal: ${fmtIN(intData.total)}\n\nPunnam Academy`;
+  if(id==='sip'&&sipData.invested) return `*SIP Projection — ${site}*\n\nMonthly: ${fmtIN(sipData.monthly)} for ${sipData.years} yrs @ ${sipData.ar}%\nInvested: ${fmtIN(sipData.invested)}\nReturns: ${fmtIN(sipData.returns)}\nMaturity: ${fmtIN(sipData.maturity)}\n\nPunnam Academy`;
+  if(id==='fd'&&fdData.P) return `*FD — ${site}*\n\nPrincipal: ${fmtIN(fdData.P)} @ ${fdData.R}% for ${fdData.tenure} ${fdData.unit}\nInterest: ${fmtIN(fdData.interest)}\nMaturity: ${fmtIN(fdData.maturity)}\n\nPunnam Academy`;
+  if(id==='gst'&&gstData.base) return `*GST — ${site}*\n\nBase: ${fmtIN(gstData.base)}\nGST@${gstData.rate}%: ${fmtIN(gstData.gstAmt)}\nCGST: ${fmtIN(gstData.gstAmt/2)} | SGST: ${fmtIN(gstData.gstAmt/2)}\nTotal: ${fmtIN(gstData.total)}\n\nPunnam Academy`;
+  if(id==='curr'&&currData.rate) return `*Currency — ${site}*\n\n${currData.amount} ${currData.from} = ${currData.converted.toLocaleString('en-IN',{maximumFractionDigits:2})} ${currData.to}\nRate: 1 ${currData.from} = ${fmtDec(currData.rate,4)} ${currData.to}\nAs of: ${currData.date}\n\nPunnam Academy`;
+  return site;
+}
+function shareWA(id){ window.open('https://wa.me/?text='+encodeURIComponent(buildShareText(id)),'_blank'); }
+async function shareMore(id){
+  const text=buildShareText(id);
+  if(navigator.share){ try{ await navigator.share({title:'Punnam Academy',text}); return; } catch(e){} }
+  try{ await navigator.clipboard.writeText(text); alert('Copied to clipboard! Paste to share.'); }
+  catch(e){ prompt('Copy this text to share:',text); }
+}
+
+/* ══════════════ EXCEL ══════════════ */
+function downloadXL(id){
+  const wb=XLSX.utils.book_new();
+  if(id==='emi'){
+    if(!emiData.months.length) return alert('Please calculate first.');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+      ['EMI Summary — Punnam Academy'],[''],
+      ['Loan Amount',fmtINr(emiData.P)],['Monthly EMI',fmtINr(emiData.emi)],
+      ['Total Interest',fmtINr(emiData.months.reduce((a,m)=>a+m.ip,0))],
+      ['Total Payment',fmtINr(emiData.emi*emiData.months.length)],
+    ]),'Summary');
+    const rows=[['#','Month','Year','Monthly EMI','Principal','Interest','Balance','Paid %']];
+    emiData.months.forEach(m=>rows.push([m.num,m.month,m.year,Math.round(m.emi),Math.round(m.pp),Math.round(m.ip),Math.round(m.bal),fmtDec(m.paidPct)+'%']));
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Amortisation');
+    XLSX.writeFile(wb,'Punnam_Academy_EMI.xlsx');
+  } else if(id==='int'){
+    if(!intData.months||!intData.months.length) return alert('Please calculate first.');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+      ['Interest Calculation — Punnam Academy'],[''],
+      ['Principal',fmtINr(intData.P)],['Rate',intData.R+'% ('+intData.type+')'],
+      ['Period',fmtDate(intData.from)+' to '+fmtDate(intData.to)],
+      ['Total Days',intData.totalDays],
+      ['Interest Earned',fmtINr(intData.interest)],['Total Amount',fmtINr(intData.total)],
+    ]),'Summary');
+    const rows=[['#','Month','Year','Opening Balance','Interest Earned','Cumulative Interest','Closing Balance','Growth %']];
+    intData.months.forEach(m=>rows.push([m.num,m.month,m.year,Math.round(m.openBal),Math.round(m.mInt),Math.round(m.cumInt),Math.round(m.closeBal),fmtDec(m.growthPct)+'%']));
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Month-wise Breakdown');
+    XLSX.writeFile(wb,'Punnam_Academy_Interest.xlsx');
+  } else if(id==='sip'){
+    if(!sipData.months||!sipData.months.length) return alert('Please calculate first.');
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet([
+      ['SIP Summary — Punnam Academy'],[''],
+      ['Monthly Investment',fmtINr(sipData.monthly)],['Annual Return',sipData.ar+'%'],
+      ['Period',sipData.years+' Years'],['Total Invested',fmtINr(sipData.invested)],
+      ['Estimated Returns',fmtINr(sipData.returns)],['Maturity Value',fmtINr(sipData.maturity)],
+    ]),'Summary');
+    const rows=[['#','Month','Year','Monthly SIP','Interest Earned','Total Invested','Portfolio Value','Total Gain %']];
+    sipData.months.forEach(m=>rows.push([m.num,m.month,m.year,Math.round(m.monthly),Math.round(m.intEarned),Math.round(m.totalInv),Math.round(m.portfolio),fmtDec(m.gainPct)+'%']));
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Monthly Growth');
+    XLSX.writeFile(wb,'Punnam_Academy_SIP.xlsx');
+  }
+}
+
+/* ══════════════ PDF — fixed ₹ glyph bug, full monthly EMI ══════════════ */
+function downloadPDF(id){
+  if(id==='emi'&&!emiData.months.length) return alert('Please calculate first.');
+  if(id==='int'&&!intData.P) return alert('Please calculate first.');
+  if(id==='sip'&&(!sipData.months||!sipData.months.length)) return alert('Please calculate first.');
+  if(id==='fd'&&!fdData.P) return alert('Please calculate first.');
+  if(id==='gst'&&!gstData.base) return alert('Please calculate first.');
+
+  const {jsPDF}=window.jspdf;
+  // Use landscape for EMI/SIP to fit all columns
+  const isLandscape=(id==='emi'||id==='sip'||id==='int');
+  const doc=new jsPDF({orientation:isLandscape?'landscape':'portrait',unit:'mm',format:'a4'});
+  const PW=isLandscape?297:210;
+  const gold=[201,147,58], dark=[13,17,23], white=[255,255,255], grey=[245,242,238], lgrey=[248,246,242];
+
+  function drawHeader(){
+    doc.setFillColor(...dark); doc.rect(0,0,PW,28,'F');
+    doc.setFillColor(...gold); doc.rect(0,25,PW,3,'F');
+    doc.setTextColor(...white);
+    doc.setFont('helvetica','bold'); doc.setFontSize(16);
+    doc.text('Punnam Academy',14,12);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9);
+    doc.text('Financial & Educational Hub',14,19);
+    doc.text('Generated: '+todayStr(),PW-14,12,{align:'right'});
+  }
+  drawHeader();
+  let y=36;
+
+  function section(title){
+    doc.setFillColor(...grey); doc.roundedRect(10,y-5,PW-20,10,2,2,'F');
+    doc.setTextColor(...dark); doc.setFont('helvetica','bold'); doc.setFontSize(12);
+    doc.text(title,14,y+1); y+=12;
+  }
+  function dataRow(label,value,alt){
+    if(alt){doc.setFillColor(...lgrey); doc.rect(10,y-4,PW-20,8,'F');}
+    doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(80,80,80);
+    doc.text(label,16,y);
+    doc.setFont('helvetica','bold'); doc.setTextColor(...dark);
+    // Use "Rs." prefix to avoid the rupee symbol glyph bug in jsPDF
+    doc.text(value,PW-14,y,{align:'right'});
+    y+=8;
+  }
+  // Plain amount formatter for PDF — avoids ₹ glyph rendering as ¹
+  function pa(n){ return 'Rs. '+Math.round(Number(n)).toLocaleString('en-IN'); }
+
+  function addFooter(){
+    const pc=doc.internal.getNumberOfPages();
+    for(let i=1;i<=pc;i++){
+      doc.setPage(i);
+      doc.setFillColor(...dark); doc.rect(0,isLandscape?200:285,PW,12,'F');
+      doc.setTextColor(...gold); doc.setFont('helvetica','bold'); doc.setFontSize(8);
+      doc.text('Punnam Academy · Financial & Educational Hub',14,isLandscape?208:293);
+      doc.setTextColor(150,150,150); doc.setFont('helvetica','normal');
+      doc.text('Page '+i+' of '+pc,PW-14,isLandscape?208:293,{align:'right'});
+    }
+  }
+
+  if(id==='emi'){
+    section('EMI Summary');
+    dataRow('Loan Amount',pa(emiData.P),false);
+    dataRow('Monthly EMI',pa(emiData.emi),true);
+    dataRow('Total Interest',pa(emiData.months.reduce((a,m)=>a+m.ip,0)),false);
+    dataRow('Total Payment',pa(emiData.emi*emiData.months.length),true);
+    y+=4;
+    // Year summary table
+    const yrData=Object.entries(emiData.byYear).map(([yr,yd])=>{
+      const pct=yd.bal===0?100:(emiData.P-yd.bal)/emiData.P*100;
+      return [yr, pa(yd.pr), pa(yd.int), pa(yd.tp), pa(yd.bal), fmtDec(pct)+'%'];
+    });
+    doc.autoTable({
+      head:[['Year','Principal (A)','Interest (B)','Total Payment (A+B)','Balance','Paid %']],
+      body:yrData, startY:y,
+      styles:{fontSize:8,cellPadding:2,halign:'right'},
+      columnStyles:{0:{halign:'left'}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
+      didDrawPage:(d)=>{ drawHeader(); }
+    });
+    y=doc.lastAutoTable.finalY+8;
+    // Full monthly detail table
+    doc.addPage();
+    drawHeader();
+    y=36;
+    section('Monthly Amortisation Schedule — All Months');
+    const moData=emiData.months.map(m=>[
+      m.num, m.month+' '+m.year, pa(m.emi), pa(m.pp), pa(m.ip), pa(m.bal), fmtDec(m.paidPct)+'%'
+    ]);
+    doc.autoTable({
+      head:[['#','Month','EMI','Principal (A)','Interest (B)','Balance','Paid %']],
+      body:moData, startY:y,
+      styles:{fontSize:7.5,cellPadding:2,halign:'right'},
+      columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:22}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
+      didDrawPage:(d)=>{ drawHeader(); }
+    });
+  } else if(id==='int'){
+    section('Interest Calculation Summary');
+    dataRow('Principal',pa(intData.P),false);
+    dataRow('Rate',intData.R+'% ('+intData.type+')',true);
+    dataRow('Period',fmtDate(intData.from)+' to '+fmtDate(intData.to),false);
+    dataRow('Total Days',intData.totalDays.toLocaleString('en-IN'),true);
+    dataRow('Interest Earned',pa(intData.interest),false);
+    dataRow('Total Amount',pa(intData.total),true);
+    y+=4;
+    // Year summary table
+    const intYrData=Object.entries(
+      (intData.months||[]).reduce((acc,m)=>{
+        if(!acc[m.year]) acc[m.year]={openBal:m.openBal, yearInt:0, cumInt:0, closeBal:0};
+        acc[m.year].yearInt+=m.mInt; acc[m.year].cumInt=m.cumInt; acc[m.year].closeBal=m.closeBal;
+        return acc;
+      },{})
+    ).map(([yr,yd])=>[ yr, pa(yd.openBal), pa(yd.yearInt), pa(yd.cumInt), pa(yd.closeBal), fmtDec((yd.closeBal-intData.P)/intData.P*100)+'%' ]);
+    doc.autoTable({
+      head:[['Year','Opening Balance','Interest This Year','Cumulative Interest','Closing Balance','Growth %']],
+      body:intYrData, startY:y,
+      styles:{fontSize:8,cellPadding:2,halign:'right'},
+      columnStyles:{0:{halign:'left'}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
+      didDrawPage:(d)=>{ drawHeader(); }
+    });
+    // Full monthly table on new page
+    doc.addPage(); drawHeader(); y=36;
+    section('Month-wise Interest Breakdown');
+    const intMoData=(intData.months||[]).map(m=>[
+      m.num, m.month+' '+m.year, pa(m.openBal), pa(m.mInt), pa(m.cumInt), pa(m.closeBal), fmtDec(m.growthPct)+'%'
+    ]);
+    doc.autoTable({
+      head:[['#','Month','Opening Balance','Interest Earned','Cumulative Interest','Closing Balance','Growth %']],
+      body:intMoData, startY:y,
+      styles:{fontSize:7.5,cellPadding:2,halign:'right'},
+      columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:22}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
+      didDrawPage:(d)=>{ drawHeader(); }
+    });
+  } else if(id==='sip'){
+    section('SIP Projection Summary');
+    dataRow('Monthly Investment',pa(sipData.monthly),false);
+    dataRow('Annual Return',sipData.ar+'%',true);
+    dataRow('Period',sipData.years+' Years',false);
+    dataRow('Total Invested',pa(sipData.invested),true);
+    dataRow('Estimated Returns',pa(sipData.returns),false);
+    dataRow('Maturity Value',pa(sipData.maturity),true);
+    y+=4;
+    // Year summary
+    const sipYrData=Object.entries(
+      sipData.months.reduce((acc,m)=>{
+        if(!acc[m.year]) acc[m.year]={inv:0,ie:0,pf:0};
+        acc[m.year].inv=m.totalInv; acc[m.year].ie+=m.intEarned; acc[m.year].pf=m.portfolio;
+        return acc;
+      },{})
+    ).map(([yr,yd])=>[ yr, pa(sipData.monthly), pa(yd.ie), pa(yd.inv), pa(yd.pf), fmtDec((yd.pf-yd.inv)/yd.inv*100)+'%' ]);
+    doc.autoTable({
+      head:[['Year','Monthly SIP','Interest Earned','Total Invested','Portfolio Value','Gain %']],
+      body:sipYrData, startY:y,
+      styles:{fontSize:8,cellPadding:2,halign:'right'},
+      columnStyles:{0:{halign:'left'}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
+      didDrawPage:(d)=>{ drawHeader(); }
+    });
+    // Full monthly table
+    doc.addPage(); drawHeader(); y=36;
+    section('Monthly SIP Growth Schedule');
+    const sipMoData=sipData.months.map(m=>[
+      m.num, m.month+' '+m.year, pa(m.monthly), pa(m.intEarned), pa(m.totalInv), pa(m.portfolio), fmtDec(m.gainPct)+'%'
+    ]);
+    doc.autoTable({
+      head:[['#','Month','SIP','Interest','Total Invested','Portfolio','Gain %']],
+      body:sipMoData, startY:y,
+      styles:{fontSize:7.5,cellPadding:2,halign:'right'},
+      columnStyles:{0:{halign:'center',cellWidth:10},1:{halign:'left',cellWidth:22}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},
+      alternateRowStyles:{fillColor:lgrey}, margin:{left:10,right:10},
+      didDrawPage:(d)=>{ drawHeader(); }
+    });
+  } else if(id==='fd'){
+    section('Fixed Deposit Calculation');
+    dataRow('Principal',pa(fdData.P),false);
+    dataRow('Rate',fdData.R+'%',true);
+    dataRow('Tenure',fdData.tenure+' '+fdData.unit,false);
+    dataRow('Interest Earned',pa(fdData.interest),true);
+    dataRow('Maturity Amount',pa(fdData.maturity),false);
+  } else if(id==='gst'){
+    section('GST Calculation');
+    dataRow('Base Amount',pa(gstData.base),false);
+    dataRow('GST Rate',gstData.rate+'%',true);
+    dataRow('CGST',pa(gstData.gstAmt/2),false);
+    dataRow('SGST',pa(gstData.gstAmt/2),true);
+    dataRow('Total Amount',pa(gstData.total),false);
+  }
+
+  addFooter();
+  doc.save('Punnam_Academy_'+id.toUpperCase()+'.pdf');
+}
+</script>
+</body>
+</html>
