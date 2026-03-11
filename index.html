@@ -101,7 +101,7 @@ header{background:var(--ink);padding:0 1.5rem;position:sticky;top:0;z-index:200;
 .result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 .result-item{text-align:center;padding:.6rem .7rem;border-right:1px solid rgba(255,255,255,.06)}
 .result-item:last-child{border-right:none}
-.result-value{font-family:Aptos ;font-size:1.85rem;font-weight:700;color:var(--gl);line-height:1;letter-spacing:-.02em}
+.result-value{font-family:'Aptos',Calibri,sans-serif;font-size:1.85rem;font-weight:700;color:var(--gl);line-height:1;letter-spacing:-.02em}
 .result-label{font-family:'Inter',sans-serif;font-size:.65rem;font-weight:500;color:rgba(255,255,255,.36);margin-top:7px;letter-spacing:.05em;text-transform:uppercase}
 
 /* ── ACTION BAR ── */
@@ -161,7 +161,8 @@ tr.month-row.hidden{display:none}
 .metal-rates-bar{background:linear-gradient(135deg,#0d1520,#1a2535);border-radius:14px;padding:1.6rem 2rem;margin-bottom:2rem;display:flex;flex-wrap:wrap;gap:1.2rem;align-items:center;border:1px solid rgba(255,255,255,.08)}
 .metal-rate-item{flex:1;min-width:140px;text-align:center}
 .metal-name{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:.4rem}
-.metal-price{font-family:Aptos;font-size:1.6rem;font-weight:700;color:var(--gl);letter-spacing:-.01em}
+.metal-price{font-family:'Aptos',Calibri,sans-serif;font-size:1.6rem;font-weight:700;color:var(--gl);letter-spacing:-.01em;min-width:60px;transition:all .3s}
+.metal-price.loading-dots{color:rgba(232,185,106,.35);letter-spacing:.2em}
 .metal-unit{font-size:.68rem;color:rgba(255,255,255,.38);margin-top:3px}
 .metal-badge{font-size:.63rem;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:4px;display:inline-block}
 .metal-badge.up{background:rgba(90,138,48,.22);color:#7ecc6e}
@@ -174,14 +175,14 @@ tr.month-row.hidden{display:none}
 .gold-karat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.4rem}
 .karat-card{background:linear-gradient(135deg,#0d1520,#1a2535);border-radius:14px;padding:1.4rem;border:1px solid rgba(255,255,255,.07);text-align:center}
 .karat-label{font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:.5rem}
-.karat-rate{font-family:Aptos;font-size:.88rem;color:rgba(255,255,255,.55);margin-bottom:.8rem}
-.karat-value{font-family:Aptos;font-size:1.7rem;font-weight:700;color:var(--gl);letter-spacing:-.01em}
+.karat-rate{font-family:'Aptos',sans-serif;font-size:.88rem;color:rgba(255,255,255,.55);margin-bottom:.8rem}
+.karat-value{font-family:'Aptos',Calibri,sans-serif;font-size:1.7rem;font-weight:700;color:var(--gl);letter-spacing:-.01em}
 .karat-total{font-size:.7rem;color:rgba(255,255,255,.38);margin-top:.3rem}
 
 /* ── CONVERTER ── */
 .conv-result{margin-top:1.2rem;background:linear-gradient(140deg,#0d1520,#162032);border-radius:12px;padding:1.4rem 1.6rem;display:none;border:1px solid rgba(255,255,255,.08)}
 .conv-result.show{display:block}
-.conv-value{font-family:Aptos;font-size:2.2rem;font-weight:700;color:var(--gl);letter-spacing:-.02em}
+.conv-value{font-family:'Aptos',Calibri,sans-serif;font-size:2.2rem;font-weight:700;color:var(--gl);letter-spacing:-.02em}
 .conv-label{font-size:.7rem;color:rgba(255,255,255,.38);margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
 
 /* ── FOOTER ── */
@@ -197,6 +198,22 @@ footer .dev{margin-top:.5rem;font-size:.72rem;color:rgba(255,255,255,.28)}
   .calc-card{padding:1.3rem}
 }
 </style>
+<script>
+// Early bootstrap — ensures onclick="showPage(...)" works before main script loads
+function showPage(id, pushState){
+  if(pushState===undefined) pushState=true;
+  document.querySelectorAll('.page-section').forEach(function(s){s.classList.remove('active');});
+  var el=document.getElementById(id);
+  if(el) el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='pg-gold' && typeof fetchMetalRates==='function') fetchMetalRates();
+  if(pushState){
+    var slug=id.replace('pg-','');
+    history.pushState({page:id},'','#'+(slug==='home'?'home':slug));
+  }
+}
+function goHome(){ showPage('pg-home'); }
+</script>
 </head>
 <body>
 
@@ -249,7 +266,7 @@ footer .dev{margin-top:.5rem;font-size:.72rem;color:rgba(255,255,255,.28)}
     <div class="cat-card" style="--accent:#b8860b;--accent2:#c9933a" onclick="showPage('pg-gold')">
       <div class="cat-icon">🥇</div>
       <div class="cat-title">Gold &amp; Silver Rates</div>
-      <div class="cat-desc">Live gold and silver prices per gram. Calculate exact value for 18K, 22K and 24K gold for any weight.</div>
+      <div class="cat-desc">Live gold and silver prices. Calculate exact value for 18K, 22K and 24K gold for any weight.</div>
       <div class="cat-pills">
         <span class="cat-pill">Live Rates</span><span class="cat-pill">18K / 22K / 24K</span><span class="cat-pill">Silver</span>
       </div>
@@ -532,23 +549,23 @@ footer .dev{margin-top:.5rem;font-size:.72rem;color:rgba(255,255,255,.28)}
     <!-- Live rates bar -->
     <div class="metal-rates-bar" id="metal-rates-bar">
       <div class="metal-rate-item">
-        <div class="metal-name">🥇 Gold — 24K (per gram)</div>
+        <div class="metal-name">🥇 Gold — 24K (per 1g)</div>
         <div class="metal-price" id="gold24-price">–</div>
         <div class="metal-unit">Indian Rupees (₹)</div>
         <div id="gold24-chg"></div>
       </div>
       <div class="metal-rate-item">
-        <div class="metal-name">🥇 Gold — 22K (per gram)</div>
+        <div class="metal-name">🥇 Gold — 22K (per 1g)</div>
         <div class="metal-price" id="gold22-price">–</div>
         <div class="metal-unit">Indian Rupees (₹)</div>
       </div>
       <div class="metal-rate-item">
-        <div class="metal-name">🥇 Gold — 18K (per gram)</div>
+        <div class="metal-name">🥇 Gold — 18K (per 1g)</div>
         <div class="metal-price" id="gold18-price">–</div>
         <div class="metal-unit">Indian Rupees (₹)</div>
       </div>
       <div class="metal-rate-item">
-        <div class="metal-name">🥈 Silver (per gram)</div>
+        <div class="metal-name">🥈 Silver (per kg)</div>
         <div class="metal-price" id="silver-price">–</div>
         <div class="metal-unit">Indian Rupees (₹)</div>
         <div id="silver-chg"></div>
@@ -1231,135 +1248,108 @@ let metalRates={gold24:0, silver:0, asof:''};
 
 async function fetchMetalRates(){
   document.getElementById('metal-asof').textContent='⏳ Fetching live rates…';
-  const TROY=31.1035;
 
-  function applyRates(gold24g, silverG, source, dateStr){
-    // gold24g and silverG are already in INR per gram (adjusted for Indian market)
+  // Show animated loading dots on all price fields
+  ['gold24-price','gold22-price','gold18-price','silver-price'].forEach(id=>{
+    document.getElementById(id).textContent='···';
+  });
+
+  function applyRates(gold24g, silverG, dateStr){
     const g22 = gold24g * (22/24);
     const g18 = gold24g * (18/24);
     metalRates = {gold24:gold24g, gold22:g22, gold18:g18, silver:silverG, asof:dateStr};
-    document.getElementById('gold24-price').textContent = '₹'+fmtDec(gold24g,0);
-    document.getElementById('gold22-price').textContent = '₹'+fmtDec(g22,0);
-    document.getElementById('gold18-price').textContent = '₹'+fmtDec(g18,0);
-    document.getElementById('silver-price').textContent = silverG ? '₹'+fmtDec(silverG,0) : '–';
-    document.getElementById('metal-asof').textContent = '✅ Live rates · '+dateStr+' · Source: '+source;
+    document.getElementById('gold24-price').textContent = '₹'+Math.round(gold24g).toLocaleString('en-IN');
+    document.getElementById('gold22-price').textContent = '₹'+Math.round(g22).toLocaleString('en-IN');
+    document.getElementById('gold18-price').textContent = '₹'+Math.round(g18).toLocaleString('en-IN');
+    document.getElementById('silver-price').textContent = silverG ? '₹'+Math.round(silverG).toLocaleString('en-IN') : '–';
+    document.getElementById('metal-asof').textContent = '✅ Live rates · '+dateStr+' · dpgold.in (MCX)';
     calcGoldValue(); calcSilverValue();
   }
 
-  function nowDS(){
+  function nowDT(){
     const n=new Date();
-    const dd=String(n.getDate()).padStart(2,'0');
-    const mm=String(n.getMonth()+1).padStart(2,'0');
-    const yyyy=n.getFullYear();
-    const hh=String(n.getHours()).padStart(2,'0');
-    const min=String(n.getMinutes()).padStart(2,'0');
-    const ss=String(n.getSeconds()).padStart(2,'0');
-    return dd+'-'+mm+'-'+yyyy+' '+hh+':'+min+':'+ss;
+    return String(n.getDate()).padStart(2,'0')+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+n.getFullYear()
+      +' '+String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');
   }
 
-  // Step 1: get live USD→INR rate from frankfurter (used as fallback FX layer)
-  let usdInr = 86;
-  try {
-    const fxRes = await fetch('https://api.frankfurter.app/latest?from=USD&to=INR');
-    if (fxRes.ok) { const fx = await fxRes.json(); usdInr = fx.rates.INR; }
-  } catch(ex) { console.warn('FX fallback to 86'); }
+  // Start animated dots loop
+  let dotTimer = setInterval(()=>{
+    ['gold24-price','gold22-price','gold18-price','silver-price'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el.textContent.startsWith('·')||el.textContent==='···'){
+        el.textContent = el.textContent==='···' ? '· ' : el.textContent==='· ' ? '·· ' : '···';
+      }
+    });
+  }, 400);
 
-  // Attempt 1: dpgold.in MCX live broadcast — accurate Indian MCX rates
-  // Response is JSON array. Each item has fields like:
-  //   { RecordID: 241, RecordName: "GOLD Andhra Pradesh - Telangana 999", Bid: 16779.8, Ask: 16779.8, High: ..., Low: ..., Unit: "/ 10 Gm" }
-  // We target RecordID 241 (AP-Telangana 999 gold) → Bid / 10 = price per gram
-  // Silver: RecordID 244 (SILVER 30 KG PAN India) → Bid / 1000 = price per gram
   try {
-    const ts = Date.now();
     const res = await fetch(
-      'https://statewisebcast.dpgold.in:7768/VOTSBroadcastStreaming/Services/xml/GetLiveRateByTemplateID/dpgold?_='+ts,
-      { headers: { 'Accept': 'application/json, text/plain, */*', 'Referer': 'https://www.dpgold.com/' } }
+      'https://statewisebcast.dpgold.in:7768/VOTSBroadcastStreaming/Services/xml/GetLiveRateByTemplateID/dpgold?_='+Date.now(),
+      { headers: { 'Accept': 'text/plain, */*', 'Referer': 'https://www.dpgold.com/' } }
     );
+    clearInterval(dotTimer);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const items = Array.isArray(data) ? data : (data.Data || data.data || data.rates || data.Result || []);
-    if (!items.length) throw new Error('Empty response');
+
+    // Response is TAB-separated text (not JSON):
+    // 241  GOLD Andhra Pradesh - Telangana 999  16668.0  16668.0  16856.9  16658.1  / 10 Gm
+    // Columns: ID 	 Name 	 Bid 	 Ask 	 High 	 Low 	 Unit
+    const text = await res.text();
+
+    // Response is space-padded rows (not strict TSV):
+    // "241  GOLD Andhra Pradesh - Telangana 999  16658.9 16658.9 16856.9 ..."
+    // Strategy per row: first token = ID (integer),
+    //   then scan remaining tokens for the first numeric value >= 100 = Bid price.
+    const lines = text.trim().split(/\r?\n/);
 
     let gold24per10g = 0, silverPerKg = 0;
 
-    items.forEach(item => {
-      // Grab all possible field name variants
-      const id = item.RecordID || item.recordID || item.Id || item.id || item.ID;
-      const bid = parseFloat(item.Bid || item.bid || item.BidRate || item.Rate || item.rate || 0);
-      const name = String(item.RecordName || item.recordName || item.Name || item.name || '').toUpperCase();
-
-      // Primary: RecordID 241 = GOLD AP-Telangana 999, price per 10g
-      if (Number(id) === 241) { gold24per10g = bid; return; }
-
-      // Fallback gold: RecordID 242 (GOLD BIS 999 MUMBAI) if 241 missing
-      if (Number(id) === 242 && !gold24per10g) { gold24per10g = bid; return; }
-
-      // Silver: RecordID 244 (SILVER 30 KG PAN India), price per KG
-      if (Number(id) === 244) { silverPerKg = bid; return; }
+    lines.forEach(line => {
+      const tokens = line.trim().split(/\s+/);
+      if (tokens.length < 3) return;
+      const id = parseInt(tokens[0], 10);
+      if (!id) return;
+      // First number >= 100 after index 0 is the Bid (skip name tokens like "999", "30")
+      let bid = 0;
+      for (let i = 1; i < tokens.length; i++) {
+        const v = parseFloat(tokens[i]);
+        if (!isNaN(v) && v >= 1000) { bid = v; break; }
+      }
+      if (!bid) return;
+      if (id === 241) gold24per10g = bid;
+      if (id === 242 && !gold24per10g) gold24per10g = bid;
+      if (id === 289) silverPerKg = bid;
     });
 
-    // If IDs didn't match (field name varies), fall back to name matching
+    // Name-based fallback (scan for GOLD/SILVER keywords)
     if (!gold24per10g) {
-      items.forEach(item => {
-        const name = String(item.RecordName || item.recordName || item.Name || item.name || '').toUpperCase();
-        const bid = parseFloat(item.Bid || item.bid || item.BidRate || item.Rate || item.rate || 0);
+      lines.forEach(line => {
+        const up = line.toUpperCase();
+        const tokens = line.trim().split(/\s+/);
+        let bid = 0;
+        for (let i = 1; i < tokens.length; i++) {
+          const v = parseFloat(tokens[i]);
+          if (!isNaN(v) && v >= 1000) { bid = v; break; }
+        }
         if (!bid) return;
-        if (name.includes('ANDHRA') || (name.includes('GOLD') && name.includes('999') && name.includes('AP'))) {
-          gold24per10g = bid;
-        } else if (!gold24per10g && name.includes('GOLD') && name.includes('999') && name.includes('MUMBAI')) {
-          gold24per10g = bid;
-        }
-        if (!silverPerKg && name.includes('SILVER') && name.includes('30')) {
-          silverPerKg = bid;
-        }
+        if (!gold24per10g && (up.includes('ANDHRA') || up.includes('TELANGANA'))) gold24per10g = bid;
+        if (!gold24per10g && up.includes('GOLD') && up.includes('999') && up.includes('MUMBAI')) gold24per10g = bid;
+        if (!silverPerKg  && up.includes('SILVER') && up.includes('30')) silverPerKg = bid;
       });
     }
 
-    if (!gold24per10g) throw new Error('RecordID 241 not found in dpgold response');
+    if (!gold24per10g) throw new Error('Could not find gold rate in response');
+    if (!gold24per10g) throw new Error('RecordID 241 not found — check console for raw response');
 
-    const gold24g   = gold24per10g / 10;          // per 10g → per 1g
-    const silverG   = silverPerKg  ? silverPerKg / 1000 : 0; // per kg → per 1g
+    applyRates(gold24per10g, silverPerKg, nowDT());
 
-    applyRates(gold24g, silverG, 'dpgold.in (MCX Live)', nowDS());
-    return;
-  } catch(e0) { console.warn('dpgold.in failed:', e0.message); }
-
-  // Attempt 2: gold-api.com — free, no key, CORS-enabled, real-time XAU/XAG in USD → convert to INR
-  try {
-    const [gRes, sRes] = await Promise.all([
-      fetch('https://api.gold-api.com/price/XAU'),
-      fetch('https://api.gold-api.com/price/XAG')
-    ]);
-    if (!gRes.ok) throw new Error('HTTP ' + gRes.status);
-    const gData = await gRes.json();
-    const sData = sRes.ok ? await sRes.json() : null;
-    const goldUSDoz = gData.price;
-    const silverUSDoz = sData ? sData.price : null;
-    if (!goldUSDoz) throw new Error('No price field');
-    const TROY = 31.1035;
-    const INDIA = 1.06 * 1.03; // 6% import duty + 3% GST
-    const gold24g = (goldUSDoz / TROY) * usdInr * INDIA;
-    const silverG = silverUSDoz ? (silverUSDoz / TROY) * usdInr * INDIA : 0;
-    applyRates(gold24g, silverG, 'gold-api.com', nowDS());
-    return;
-  } catch(e1) { console.warn('gold-api.com failed:', e1.message); }
-
-  // Attempt 3: data-asg.goldprice.org — returns xauPrice/xagPrice in INR per oz
-  try {
-    const res = await fetch('https://data-asg.goldprice.org/dbXRates/INR', {
-      headers: { 'Accept': 'application/json', 'Referer': 'https://goldprice.org/' }
+  } catch(err) {
+    clearInterval(dotTimer);
+    ['gold24-price','gold22-price','gold18-price','silver-price'].forEach(id=>{
+      document.getElementById(id).textContent='–';
     });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const item = data.items && data.items[0];
-    if (!item || !item.xauPrice) throw new Error('No data');
-    const TROY = 31.1035;
-    const INDIA = 1.06 * 1.03;
-    applyRates((item.xauPrice / TROY) * INDIA, (item.xagPrice / TROY) * INDIA, 'goldprice.org', nowDS());
-    return;
-  } catch(e2) { console.warn('goldprice.org failed:', e2.message); }
-
-  document.getElementById('metal-asof').textContent = '⚠ All rate sources unreachable. Check your connection and tap Refresh Rates.';
+    console.error('dpgold.in error:', err.message);
+    document.getElementById('metal-asof').textContent = '⚠ Could not fetch rates — ' + err.message + '. Tap Refresh Rates to retry.';
+  }
 }
 
 function calcGoldValue(){
@@ -1379,8 +1369,8 @@ function calcGoldValue(){
     const subTotal=metalVal+makingAmt;
     const gstAmt=hasGst&&hasMaking?subTotal*gstPct/100:0;
     const total=subTotal+gstAmt;
-    document.getElementById(`k${k}-rate`).textContent=`Rate: ₹${fmtDec(rate,0)}/g`;
-    document.getElementById(`k${k}-value`).textContent='₹'+fmtDec(metalVal,0);
+    document.getElementById(`k${k}-rate`).textContent=`Rate: ₹${Math.round(rate).toLocaleString('en-IN')}/g`;
+    document.getElementById(`k${k}-value`).textContent='₹'+fmtDec(metalVal,2);
     let note='Pure metal value';
     if(hasMaking&&hasGst) note=`+Making+GST Total: ₹${fmtDec(total,2)}`;
     else if(hasMaking) note=`+Making (${makingPct}%) Total: ₹${fmtDec(total,2)}`;
@@ -1392,7 +1382,7 @@ function calcSilverValue(){
   const grams=parseFloat(document.getElementById('silver-grams').value)||0;
   const makingPct=parseFloat(document.getElementById('silver-making').value)||0;
   if(!grams||!metalRates.silver) return;
-  const metalVal=metalRates.silver*grams;
+  const metalVal=(metalRates.silver/1000)*grams;
   const makingAmt=metalVal*makingPct/100;
   const total=metalVal+makingAmt;
   document.getElementById('silver-result').style.display='block';
@@ -1427,8 +1417,8 @@ async function shareGoldMore(){
 function buildSilverShareText(){
   const grams=parseFloat(document.getElementById('silver-grams').value)||0;
   const makingPct=parseFloat(document.getElementById('silver-making').value)||0;
-  const mv=metalRates.silver*grams, mc=mv*makingPct/100, total=mv+mc;
-  return `*Silver Value — Punnam Academy*\n\nWeight: ${grams}g\nRate: ₹${fmtDec(metalRates.silver,2)}/g\nMetal Value: ₹${fmtDec(mv,2)}\nMaking (${makingPct}%): ₹${fmtDec(mc,2)}\nTotal: ₹${fmtDec(total,2)}\n\nPunnam Academy`;
+  const mv=(metalRates.silver/1000)*grams, mc=mv*makingPct/100, total=mv+mc;
+  return `*Silver Value — Punnam Academy*\n\nWeight: ${grams}g\nRate: ₹${fmtDec(metalRates.silver/1000,2)}/g\nMetal Value: ₹${fmtDec(mv,2)}\nMaking (${makingPct}%): ₹${fmtDec(mc,2)}\nTotal: ₹${fmtDec(total,2)}\n\nPunnam Academy`;
 }
 function shareSilverWA(){ window.open('https://wa.me/?text='+encodeURIComponent(buildSilverShareText()),'_blank'); }
 async function shareSilverMore(){
