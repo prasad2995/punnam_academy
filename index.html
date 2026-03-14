@@ -256,10 +256,11 @@ function goHome(){ showPage('pg-home'); }
     <div class="cat-card" style="--accent:#c9933a;--accent2:#d4900e" onclick="showPage('pg-finance')">
       <div class="cat-icon">💰</div>
       <div class="cat-title">Financial Calculators</div>
-      <div class="cat-desc">EMI, SIP, FD, GST, Interest, Discount and Age — plan every financial decision with confidence.</div>
+      <div class="cat-desc">EMI, SIP, FD, GST, Income Tax, PF/EPF, HRA, Gratuity, Interest — plan every financial decision with confidence.</div>
       <div class="cat-pills">
         <span class="cat-pill">EMI</span><span class="cat-pill">SIP</span><span class="cat-pill">FD</span>
-        <span class="cat-pill">GST</span><span class="cat-pill">Interest</span><span class="cat-pill">Discount</span>
+        <span class="cat-pill">GST</span><span class="cat-pill">Income Tax</span><span class="cat-pill">PF/EPF</span>
+        <span class="cat-pill">HRA</span><span class="cat-pill">Gratuity</span>
       </div>
     </div>
 
@@ -299,7 +300,7 @@ function goHome(){ showPage('pg-home'); }
   <div class="pg-header">
     <div class="pg-header-inner">
       <button class="pg-back" onclick="goHome()">← Home</button>
-      <div><div class="pg-htitle">💰 Financial Calculators</div><div class="pg-hsub">EMI · Interest · SIP · FD · GST · Discount · Age</div></div>
+      <div><div class="pg-htitle">💰 Financial Calculators</div><div class="pg-hsub">EMI · Interest · SIP · FD · GST · Income Tax · PF · HRA · Gratuity · Discount · Age</div></div>
     </div>
   </div>
   <div class="sec-wrap">
@@ -309,6 +310,10 @@ function goHome(){ showPage('pg-home'); }
       <button class="tab-btn" onclick="showCalc('fin','sip',this)">💰 SIP</button>
       <button class="tab-btn" onclick="showCalc('fin','fd',this)">🏛️ FD</button>
       <button class="tab-btn" onclick="showCalc('fin','gst',this)">🧾 GST</button>
+      <button class="tab-btn" onclick="showCalc('fin','tax',this)">📋 Income Tax</button>
+      <button class="tab-btn" onclick="showCalc('fin','pf',this)">🏦 PF / EPF</button>
+      <button class="tab-btn" onclick="showCalc('fin','hra',this)">🏠 HRA</button>
+      <button class="tab-btn" onclick="showCalc('fin','gratuity',this)">🎖️ Gratuity</button>
       <button class="tab-btn" onclick="showCalc('fin','discount',this)">🏷️ Discount</button>
       <button class="tab-btn" onclick="showCalc('fin','age',this)">🎂 Age</button>
     </div>
@@ -528,6 +533,262 @@ function goHome(){ showPage('pg-home'); }
           <div class="result-item"><div class="result-value" id="age-hours">–</div><div class="result-label">Total Hours</div></div>
           <div class="result-item"><div class="result-value" id="age-next">–</div><div class="result-label">Next Birthday</div></div>
         </div>
+      </div>
+    </div>
+
+    <!-- INCOME TAX -->
+    <div class="calc-card" id="fin-tax">
+      <div class="card-title"><div class="icon">📋</div> Income Tax Calculator</div>
+      <div class="card-desc">FY 2024-25 &amp; FY 2025-26 · New &amp; Old Regime · Official slabs from incometax.gov.in · Includes all deductions available in each regime.</div>
+
+      <!-- Basic inputs -->
+      <div class="form-grid">
+        <div class="fg"><label>Financial Year</label><select id="tax-fy" onchange="onTaxFYChange()">
+          <option value="2526" selected>FY 2025-26 (AY 2026-27) — Current</option>
+          <option value="2425">FY 2024-25 (AY 2025-26)</option>
+        </select></div>
+        <div class="fg"><label>Annual Gross Income (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Include bonus/variable pay in total</span></label><input type="number" id="tax-income" placeholder="e.g. 1300000"></div>
+        <div class="fg"><label>Annual Bonus / Variable Pay (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Paid separately — excluded from monthly take-home</span></label><input type="number" id="tax-bonus" placeholder="e.g. 100000 (leave blank if none)" oninput="onTaxBonusInput()"></div>
+        <div class="fg"><label>Regime</label><select id="tax-regime" onchange="onTaxRegimeChange()">
+          <option value="new">New Regime (Default — lower rates)</option>
+          <option value="old">Old Regime (more deductions)</option>
+        </select></div>
+        <div class="fg"><label>Age Group</label><select id="tax-age">
+          <option value="below60">Below 60 years</option>
+          <option value="60to80">60–80 years (Senior Citizen)</option>
+          <option value="above80">Above 80 years (Super Senior)</option>
+        </select></div>
+      </div>
+
+      <!-- ── NEW REGIME DEDUCTIONS ── -->
+      <div id="tax-new-ded-section" style="margin-top:1.4rem">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:.9rem;display:flex;align-items:center;gap:8px">
+          <span style="background:#e8f4fd;border:1px solid #b3d4f0;color:#1a5fa8;padding:3px 10px;border-radius:100px">✅ Deductions allowed in New Regime</span>
+          <span style="font-weight:400;color:var(--muted);font-size:.68rem;text-transform:none;letter-spacing:0">Standard deduction ₹75,000 applied automatically</span>
+        </div>
+        <div class="form-grid">
+          <div class="fg">
+            <label>80CCD(2) — Employer's NPS Contribution (₹/year) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Max 14% of Basic+DA · ✅ Allowed in New Regime</span></label>
+            <input type="number" id="tax-nps-employer" placeholder="e.g. 58800 (14% of Basic salary)">
+          </div>
+          <div class="fg">
+            <label>Family Pension Deduction u/s 57(iia) (₹/year) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Min of ⅓ pension or ₹25,000 · ✅ Allowed in New Regime</span></label>
+            <input type="number" id="tax-family-pension" placeholder="If you receive family pension">
+          </div>
+          <div class="fg">
+            <label>24(b) Let-out Home Loan Interest (₹/year) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Rented property only · ✅ Allowed in New Regime</span></label>
+            <input type="number" id="tax-letout-interest" placeholder="Interest on rented property loan">
+          </div>
+          <div class="fg">
+            <label>80CCH — Agniveer Corpus Fund (₹/year) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">For Agniveer defence personnel · ✅ Allowed</span></label>
+            <input type="number" id="tax-agniveer" placeholder="Leave blank if not applicable">
+          </div>
+        </div>
+        <div style="margin-top:.7rem;padding:.65rem 1rem;background:#fff8e6;border:1px solid #f0d090;border-radius:8px;font-size:.72rem;color:#7a5500;line-height:1.6">
+          ⚠ <strong>Not allowed in New Regime:</strong> 80C (PPF/LIC/ELSS), 80D (health insurance), HRA, 80E (education loan), 80CCD(1B) (employee's own NPS), LTA, Professional Tax, 80TTA/TTB (savings interest). Switch to Old Regime to claim these.
+        </div>
+      </div>
+
+      <!-- ── OLD REGIME DEDUCTIONS ── -->
+      <div id="tax-old-ded-section" style="display:none;margin-top:1.4rem">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:.9rem;display:flex;align-items:center;gap:8px">
+          <span style="background:#f0faf3;border:1px solid #b8dfca;color:#1a6a40;padding:3px 10px;border-radius:100px">📋 Old Regime Deductions</span>
+          <span style="font-weight:400;color:var(--muted);font-size:.68rem;text-transform:none;letter-spacing:0">Standard deduction ₹50,000 applied automatically</span>
+        </div>
+        <div class="form-grid">
+          <div class="fg">
+            <label>80C — LIC / PPF / ELSS / PF / Tuition etc. (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Max ₹1,50,000</span></label>
+            <input type="number" id="tax-80c" placeholder="Max ₹1,50,000">
+          </div>
+          <div class="fg">
+            <label>80CCD(1B) — Employee's own NPS (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Max ₹50,000 (over &amp; above 80C)</span></label>
+            <input type="number" id="tax-nps" placeholder="Max ₹50,000">
+          </div>
+          <div class="fg">
+            <label>80CCD(2) — Employer's NPS Contribution (₹/year) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Max 14% of Basic+DA</span></label>
+            <input type="number" id="tax-nps-employer-old" placeholder="e.g. 58800">
+          </div>
+          <div class="fg">
+            <label>80D — Health Insurance Premium (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Self+Family ₹25K · Parents ₹25K (₹50K if senior)</span></label>
+            <input type="number" id="tax-80d" placeholder="Self + Spouse + Parents">
+          </div>
+          <div class="fg">
+            <label>HRA Exemption u/s 10(13A) (₹/year) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Use HRA Calculator above</span></label>
+            <input type="number" id="tax-hra-ded" placeholder="Annual HRA exemption amount">
+          </div>
+          <div class="fg">
+            <label>24(b) — Home Loan Interest, Self-Occupied (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">Max ₹2,00,000</span></label>
+            <input type="number" id="tax-homeloan" placeholder="Max ₹2,00,000">
+          </div>
+          <div class="fg">
+            <label>80E — Education Loan Interest (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">No upper limit</span></label>
+            <input type="number" id="tax-80e" placeholder="Actual interest paid">
+          </div>
+          <div class="fg">
+            <label>80TTA / 80TTB — Savings / Deposit Interest (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">₹10K (non-senior) / ₹50K (senior)</span></label>
+            <input type="number" id="tax-80tta" placeholder="Interest from savings/FD">
+          </div>
+          <div class="fg">
+            <label>Other Deductions (₹) <span style="font-weight:400;color:var(--muted);font-size:.65rem;text-transform:none;letter-spacing:0">80G, 80GG, 80U, 80DD etc.</span></label>
+            <input type="number" id="tax-other" placeholder="Sum of remaining deductions">
+          </div>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="calcTax()" style="margin-top:1.4rem">Calculate Tax</button>
+      <div class="result-box" id="tax-result">
+        <div class="result-title" id="tax-result-title">Tax Computation — FY 2025-26</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="tax-taxable">–</div><div class="result-label">Taxable Income</div></div>
+          <div class="result-item"><div class="result-value" id="tax-basic">–</div><div class="result-label">Basic Tax + Surcharge</div></div>
+          <div class="result-item"><div class="result-value" id="tax-cess">–</div><div class="result-label">+ 4% Cess</div></div>
+          <div class="result-item"><div class="result-value" id="tax-total">–</div><div class="result-label">Total Tax Payable</div></div>
+          <div class="result-item"><div class="result-value" id="tax-monthly">–</div><div class="result-label">Monthly TDS</div></div>
+          <div class="result-item"><div class="result-value" id="tax-effective">–</div><div class="result-label">Effective Rate</div></div>
+          <div class="result-item" style="border-top:1px solid rgba(255,255,255,.08);padding-top:.8rem;margin-top:.4rem"><div class="result-value" id="tax-takehome" style="color:#7ecc6e">–</div><div class="result-label">💰 Monthly Take-Home</div></div>
+          <div class="result-item" id="tax-bonus-takehome-wrap" style="display:none;border-top:1px solid rgba(255,255,255,.08);padding-top:.8rem;margin-top:.4rem"><div class="result-value" id="tax-bonus-takehome" style="color:#e8b96a">–</div><div class="result-label">📅 Monthly (excl. Bonus)</div></div>
+          <div class="result-item" style="border-top:1px solid rgba(255,255,255,.08);padding-top:.8rem;margin-top:.4rem"><div class="result-value" id="tax-annual-takehome" style="color:#7ecc6e;font-size:1.3rem">–</div><div class="result-label">Annual Take-Home</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="tax-actions">
+        <span class="act-lbl">Share / Export:</span>
+        <button class="act-btn wa" onclick="shareWA('tax')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('tax')">↗ Share</button>
+        <button class="act-btn pdf" onclick="downloadPDF('tax')">📄 PDF</button>
+      </div>
+      <div id="tax-slab-table" style="display:none;margin-top:1.4rem"></div>
+    </div>
+
+    <!-- PF / EPF -->
+    <div class="calc-card" id="fin-pf">
+      <div class="card-title"><div class="icon">🏦</div> PF / EPF Calculator</div>
+      <div class="card-desc">Employee Provident Fund maturity with interest compounding. Supports % or fixed monthly amount for contributions (e.g. companies deducting flat ₹1,800).</div>
+      <div class="form-grid">
+        <div class="fg"><label>Basic + DA Salary (₹/month)</label><input type="number" id="pf-basic" placeholder="e.g. 35000"></div>
+
+        <div class="fg">
+          <label>Employee Contribution Mode</label>
+          <select id="pf-emp-mode" onchange="onPFModeChange()">
+            <option value="pct">Percentage of Basic+DA (%)</option>
+            <option value="fixed">Fixed Amount (₹/month)</option>
+          </select>
+        </div>
+        <div class="fg" id="pf-emp-pct-wrap">
+          <label>Employee Contribution (%)</label>
+          <input type="number" id="pf-emp-pct" value="12" placeholder="12" step="0.5">
+        </div>
+        <div class="fg" id="pf-emp-fixed-wrap" style="display:none">
+          <label>Employee Fixed Amount (₹/month)</label>
+          <input type="number" id="pf-emp-fixed" placeholder="e.g. 1800">
+        </div>
+
+        <div class="fg">
+          <label>Employer Contribution Mode</label>
+          <select id="pf-er-mode" onchange="onPFModeChange()">
+            <option value="pct">Percentage of Basic+DA (%)</option>
+            <option value="fixed">Fixed Amount (₹/month)</option>
+          </select>
+        </div>
+        <div class="fg" id="pf-er-pct-wrap">
+          <label>Employer Contribution (%)</label>
+          <input type="number" id="pf-er-pct" value="12" placeholder="12" step="0.5">
+        </div>
+        <div class="fg" id="pf-er-fixed-wrap" style="display:none">
+          <label>Employer Fixed Amount (₹/month)</label>
+          <input type="number" id="pf-er-fixed" placeholder="e.g. 1800">
+        </div>
+
+        <div class="fg"><label>VPF Extra (₹/month)</label><input type="number" id="pf-vpf" placeholder="0 (optional)"></div>
+        <div class="fg"><label>Annual Interest Rate (%)</label><input type="number" id="pf-rate" value="8.25" placeholder="8.25" step="0.01"></div>
+        <div class="fg"><label>Years to Retirement</label><input type="number" id="pf-years" placeholder="e.g. 25"></div>
+        <div class="fg"><label>Current PF Balance (₹)</label><input type="number" id="pf-current" placeholder="0 (if any)"></div>
+        <div class="fg"><label>Annual Salary Increment (%)</label><input type="number" id="pf-increment" placeholder="e.g. 8 (optional)" step="0.5"></div>
+      </div>
+      <button class="calc-btn" onclick="calcPF()">Calculate PF Corpus</button>
+      <div class="result-box" id="pf-result">
+        <div class="result-title">EPF Projection</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="pf-emp-contrib">–</div><div class="result-label">Employee Total</div></div>
+          <div class="result-item"><div class="result-value" id="pf-er-contrib">–</div><div class="result-label">Employer Total</div></div>
+          <div class="result-item"><div class="result-value" id="pf-interest-total">–</div><div class="result-label">Interest Earned</div></div>
+          <div class="result-item"><div class="result-value" id="pf-maturity">–</div><div class="result-label">Maturity Corpus</div></div>
+          <div class="result-item"><div class="result-value" id="pf-monthly-total">–</div><div class="result-label">Monthly Contribution</div></div>
+          <div class="result-item"><div class="result-value" id="pf-growth">–</div><div class="result-label">Wealth Multiplier</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="pf-actions">
+        <span class="act-lbl">Share / Export:</span>
+        <button class="act-btn wa" onclick="shareWA('pf')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('pf')">↗ Share</button>
+        <button class="act-btn pdf" onclick="downloadPDF('pf')">📄 PDF</button>
+      </div>
+      <div class="data-table-wrap" id="pf-table-wrap">
+        <div class="data-scroll"><table>
+          <thead><tr>
+            <th class="th-yr">Year</th>
+            <th class="th-pr">Monthly Salary<span>Basic+DA</span></th>
+            <th class="th-in">Employee<span>Contribution</span></th>
+            <th class="th-tp">Employer<span>Contribution</span></th>
+            <th class="th-val">Interest<span>This Year</span></th>
+            <th class="th-gain">Corpus<span>End of Year</span></th>
+          </tr></thead>
+          <tbody id="pf-table-body"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- HRA -->
+    <div class="calc-card" id="fin-hra">
+      <div class="card-title"><div class="icon">🏠</div> HRA Exemption Calculator</div>
+      <div class="card-desc">Calculate HRA exemption under Section 10(13A). Useful for Old Regime tax payers.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Basic Salary (₹/month)</label><input type="number" id="hra-basic" placeholder="e.g. 40000"></div>
+        <div class="fg"><label>HRA Received (₹/month)</label><input type="number" id="hra-received" placeholder="e.g. 20000"></div>
+        <div class="fg"><label>Rent Paid (₹/month)</label><input type="number" id="hra-rent" placeholder="e.g. 15000"></div>
+        <div class="fg"><label>City Type</label><select id="hra-city"><option value="metro">Metro (Delhi/Mumbai/Kolkata/Chennai)</option><option value="nonmetro">Non-Metro</option></select></div>
+        <div class="fg"><label>DA (₹/month)</label><input type="number" id="hra-da" placeholder="0 (if not applicable)"></div>
+      </div>
+      <button class="calc-btn" onclick="calcHRA()">Calculate HRA Exemption</button>
+      <div class="result-box" id="hra-result">
+        <div class="result-title">HRA Exemption — Sec 10(13A)</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="hra-a">–</div><div class="result-label">HRA Received</div></div>
+          <div class="result-item"><div class="result-value" id="hra-b">–</div><div class="result-label">40/50% of Basic+DA</div></div>
+          <div class="result-item"><div class="result-value" id="hra-c">–</div><div class="result-label">Rent − 10% Basic+DA</div></div>
+          <div class="result-item"><div class="result-value" id="hra-exempt">–</div><div class="result-label">✅ Annual Exemption</div></div>
+          <div class="result-item"><div class="result-value" id="hra-taxable-portion">–</div><div class="result-label">Taxable HRA</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="hra-actions">
+        <span class="act-lbl">Share:</span>
+        <button class="act-btn wa" onclick="shareWA('hra')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('hra')">↗ Share</button>
+      </div>
+    </div>
+
+    <!-- GRATUITY -->
+    <div class="calc-card" id="fin-gratuity">
+      <div class="card-title"><div class="icon">🎖️</div> Gratuity Calculator</div>
+      <div class="card-desc">Gratuity as per Payment of Gratuity Act 1972. Also calculates tax-free limit and taxable portion.</div>
+      <div class="form-grid">
+        <div class="fg"><label>Last Drawn Monthly Salary (₹)</label><input type="number" id="grat-salary" placeholder="Basic + DA"></div>
+        <div class="fg"><label>Years of Service</label><input type="number" id="grat-years" placeholder="e.g. 15" step="0.5"></div>
+        <div class="fg"><label>Employee Type</label><select id="grat-type"><option value="act">Covered under Gratuity Act</option><option value="notact">Not Covered (Discretionary)</option></select></div>
+      </div>
+      <button class="calc-btn" onclick="calcGratuity()">Calculate Gratuity</button>
+      <div class="result-box" id="grat-result">
+        <div class="result-title">Gratuity Summary</div>
+        <div class="result-grid">
+          <div class="result-item"><div class="result-value" id="grat-amount">–</div><div class="result-label">Gratuity Amount</div></div>
+          <div class="result-item"><div class="result-value" id="grat-taxfree">–</div><div class="result-label">Tax-Free Limit</div></div>
+          <div class="result-item"><div class="result-value" id="grat-taxable">–</div><div class="result-label">Taxable Gratuity</div></div>
+          <div class="result-item"><div class="result-value" id="grat-formula">–</div><div class="result-label">Formula Used</div></div>
+        </div>
+      </div>
+      <div class="action-bar" id="grat-actions">
+        <span class="act-lbl">Share:</span>
+        <button class="act-btn wa" onclick="shareWA('grat')">📲 WhatsApp</button>
+        <button class="act-btn" onclick="shareMore('grat')">↗ Share</button>
       </div>
     </div>
 
@@ -1246,6 +1507,33 @@ function calcAge(){
 ══════════════════════════════════════════ */
 let metalRates={gold24:0, silver:0, asof:''};
 
+// ── Gold rate localStorage cache helpers ──
+function saveGoldCache(gold24g, silverG, dateStr){
+  try{
+    localStorage.setItem('pa_gold_cache', JSON.stringify({gold24:gold24g, silver:silverG, asof:dateStr, saved: new Date().toISOString()}));
+  }catch(e){}
+}
+function loadGoldCache(){
+  try{
+    const raw=localStorage.getItem('pa_gold_cache');
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return null;
+}
+function applyCachedRates(){
+  const c=loadGoldCache();
+  if(!c||!c.gold24) return false;
+  const g22=c.gold24*(22/24), g18=c.gold24*(18/24);
+  metalRates={gold24:c.gold24, gold22:g22, gold18:g18, silver:c.silver, asof:c.asof};
+  document.getElementById('gold24-price').textContent='₹'+Math.round(c.gold24).toLocaleString('en-IN');
+  document.getElementById('gold22-price').textContent='₹'+Math.round(g22).toLocaleString('en-IN');
+  document.getElementById('gold18-price').textContent='₹'+Math.round(g18).toLocaleString('en-IN');
+  document.getElementById('silver-price').textContent=c.silver?'₹'+Math.round(c.silver).toLocaleString('en-IN'):'–';
+  document.getElementById('metal-asof').textContent='⚠ Cached rate from '+c.asof;
+  calcGoldValue(); calcSilverValue();
+  return true;
+}
+
 async function fetchMetalRates(){
   document.getElementById('metal-asof').textContent='⏳ Fetching live rates…';
 
@@ -1262,7 +1550,8 @@ async function fetchMetalRates(){
     document.getElementById('gold22-price').textContent = '₹'+Math.round(g22).toLocaleString('en-IN');
     document.getElementById('gold18-price').textContent = '₹'+Math.round(g18).toLocaleString('en-IN');
     document.getElementById('silver-price').textContent = silverG ? '₹'+Math.round(silverG).toLocaleString('en-IN') : '–';
-    document.getElementById('metal-asof').textContent = '✅ Live rates · '+dateStr+' · dpgold.in (MCX)';
+    document.getElementById('metal-asof').textContent = '✅ Live rates · '+dateStr;
+    saveGoldCache(gold24g, silverG, dateStr);
     calcGoldValue(); calcSilverValue();
   }
 
@@ -1344,11 +1633,14 @@ async function fetchMetalRates(){
 
   } catch(err) {
     clearInterval(dotTimer);
-    ['gold24-price','gold22-price','gold18-price','silver-price'].forEach(id=>{
-      document.getElementById(id).textContent='–';
-    });
-    console.error('dpgold.in error:', err.message);
-    document.getElementById('metal-asof').textContent = '⚠ Could not fetch rates — ' + err.message + '. Tap Refresh Rates to retry.';
+    console.error('Gold error:', err.message);
+    // Try to show cached rates
+    if(!applyCachedRates()){
+      ['gold24-price','gold22-price','gold18-price','silver-price'].forEach(id=>{
+        document.getElementById(id).textContent='–';
+      });
+      document.getElementById('metal-asof').textContent = '⚠ Could not fetch rates — ' + err.message + '. Tap Refresh to retry.';
+    }
   }
 }
 
@@ -1511,7 +1803,486 @@ function fmtNum(n){
 }
 
 /* ══════════════════════════════════════════
-   SHARE
+   INCOME TAX — FY 2024-25 & FY 2025-26
+   Source: incometax.gov.in (official)
+══════════════════════════════════════════ */
+let taxData={};
+
+/*
+  TAX_SLABS structure:
+  Each FY has:
+    new: { stdDed, rebateLimit, rebateAmt (max rebate), surchargeMaxPct, slabs }
+    old: { stdDed, below60: {...}, '60to80': {...}, above80: {...} }
+      Each age group: { rebateLimit, rebateAmt, slabs }
+
+  Surcharge (both regimes): 10% (>50L), 15% (>1Cr), 25% (>2Cr)
+  Old regime additionally: 37% (>5Cr) — new regime capped at 25% always
+  Cess: 4% on (tax + surcharge)
+*/
+
+const TAX_SLABS = {
+
+  // ── FY 2025-26 (AY 2026-27) — Budget 2025, effective 1 Apr 2025 ──
+  '2526': {
+    label: 'FY 2025-26 (AY 2026-27)',
+    new: {
+      stdDed: 75000,
+      rebateLimit: 1200000,   // ₹12L taxable income → zero tax via 87A
+      rebateAmt: 60000,       // Max rebate u/s 87A
+      surchargeMaxPct: 25,    // New regime capped at 25% surcharge
+      slabs: [
+        [0,        400000,  0 ],
+        [400000,   800000,  5 ],
+        [800000,  1200000, 10 ],
+        [1200000, 1600000, 15 ],
+        [1600000, 2000000, 20 ],
+        [2000000, 2400000, 25 ],
+        [2400000, Infinity,30 ]
+      ]
+    },
+    old: {
+      stdDed: 50000,
+      below60:  { rebateLimit:500000, rebateAmt:12500,
+        slabs:[[0,250000,0],[250000,500000,5],[500000,1000000,20],[1000000,Infinity,30]] },
+      '60to80': { rebateLimit:500000, rebateAmt:12500,
+        slabs:[[0,300000,0],[300000,500000,5],[500000,1000000,20],[1000000,Infinity,30]] },
+      above80:  { rebateLimit:0, rebateAmt:0,
+        slabs:[[0,500000,0],[500000,1000000,20],[1000000,Infinity,30]] }
+    }
+  },
+
+  // ── FY 2024-25 (AY 2025-26) — Finance Act 2024 / Budget 2024 ──
+  // Source: incometax.gov.in/iec/foportal/help/individual/return-applicable-1
+  '2425': {
+    label: 'FY 2024-25 (AY 2025-26)',
+    new: {
+      stdDed: 75000,
+      rebateLimit: 700000,    // ₹7L taxable income → rebate up to ₹20,000
+      rebateAmt: 20000,       // u/s 87A — official site confirms ₹20,000 for new regime
+      surchargeMaxPct: 25,    // New regime: max surcharge 25%
+      slabs: [
+        [0,        300000,  0 ],
+        [300000,   700000,  5 ],
+        [700000,  1000000, 10 ],
+        [1000000, 1200000, 15 ],
+        [1200000, 1500000, 20 ],
+        [1500000, Infinity,30 ]
+      ]
+    },
+    old: {
+      stdDed: 50000,
+      below60:  { rebateLimit:500000, rebateAmt:12500,
+        slabs:[[0,250000,0],[250000,500000,5],[500000,1000000,20],[1000000,Infinity,30]] },
+      '60to80': { rebateLimit:500000, rebateAmt:12500,
+        slabs:[[0,300000,0],[300000,500000,5],[500000,1000000,20],[1000000,Infinity,30]] },
+      above80:  { rebateLimit:0, rebateAmt:0,
+        slabs:[[0,500000,0],[500000,1000000,20],[1000000,Infinity,30]] }
+    }
+  }
+};
+
+const FY_LABELS = {
+  '2526': 'FY 2025-26 (AY 2026-27)',
+  '2425': 'FY 2024-25 (AY 2025-26)'
+};
+
+function onTaxRegimeChange(){
+  const isOld=document.getElementById('tax-regime').value==='old';
+  document.getElementById('tax-new-ded-section').style.display=isOld?'none':'block';
+  document.getElementById('tax-old-ded-section').style.display=isOld?'block':'none';
+  // Clear only deduction inputs and results (keep panels visible)
+  clearTaxInputsAndResult();
+}
+
+function onTaxFYChange(){
+  // Clear all deduction inputs and results when FY changes
+  // (keep the regime panels in their current state — just wipe input values)
+  clearTaxInputsAndResult();
+}
+
+function clearTaxInputsAndResult(){
+  // Clear all deduction input fields
+  const fieldIds=[
+    'tax-bonus',
+    'tax-nps-employer','tax-family-pension','tax-letout-interest','tax-agniveer',
+    'tax-80c','tax-nps','tax-nps-employer-old','tax-80d','tax-hra-ded',
+    'tax-homeloan','tax-80e','tax-80tta','tax-other'
+  ];
+  fieldIds.forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  // Hide results
+  const res=document.getElementById('tax-result');
+  const act=document.getElementById('tax-actions');
+  if(res) res.classList.remove('show');
+  if(act) act.classList.remove('show');
+  const tw=document.getElementById('tax-slab-table');
+  if(tw){ tw.style.display='none'; tw.innerHTML=''; }
+  // Reset result values
+  ['tax-taxable','tax-basic','tax-cess','tax-total','tax-monthly','tax-effective','tax-takehome','tax-bonus-takehome','tax-annual-takehome']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent='–'; });
+  // Hide bonus row
+  const bw=document.getElementById('tax-bonus-takehome-wrap');
+  if(bw) bw.style.display='none';
+}
+
+// Live-update take-home when bonus field is changed after calculation
+function onTaxBonusInput(){
+  if(!taxData.gross) return; // not calculated yet
+  const bonus=parseFloat(document.getElementById('tax-bonus').value)||0;
+  const fixedIncome=taxData.gross-bonus;
+  const monthlyFixed=fixedIncome/12;
+  const monthlyTakeHome=(taxData.gross-taxData.total)/12;
+  const monthlyExcBonus=(fixedIncome-taxData.total)/12;
+  document.getElementById('tax-takehome').textContent=fmtR(monthlyTakeHome);
+  const bw=document.getElementById('tax-bonus-takehome-wrap');
+  if(bonus>0){
+    document.getElementById('tax-bonus-takehome').textContent=fmtR(monthlyExcBonus);
+    bw.style.display='';
+  } else {
+    bw.style.display='none';
+  }
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  onTaxRegimeChange();
+});
+
+function calcTax(){
+  const gross=parseFloat(document.getElementById('tax-income').value)||0;
+  const regime=document.getElementById('tax-regime').value;
+  const ageGrp=document.getElementById('tax-age').value;
+  const fy=document.getElementById('tax-fy').value;
+  if(!gross) return alert('Please enter Annual Gross Income.');
+
+  const fyDef=TAX_SLABS[fy];
+  const fyLabel=fyDef.label;
+
+  // Update result title
+  document.getElementById('tax-result-title').textContent='Tax Computation — '+fyLabel;
+
+  let slabs, rebateLimit, rebateAmt, stdDed, surchargeMaxPct;
+
+  if(regime==='new'){
+    const d=fyDef.new;
+    stdDed=d.stdDed; rebateLimit=d.rebateLimit;
+    rebateAmt=d.rebateAmt; surchargeMaxPct=d.surchargeMaxPct;
+    slabs=d.slabs;
+  } else {
+    stdDed=fyDef.old.stdDed; surchargeMaxPct=37; // Old regime allows up to 37%
+    const d=fyDef.old[ageGrp];
+    rebateLimit=d.rebateLimit; rebateAmt=d.rebateAmt; slabs=d.slabs;
+  }
+
+  let deductions=stdDed;
+  const dedBreakdown=[];  // track each deduction for the info note
+
+  if(regime==='new'){
+    // ── Allowed deductions in New Regime ──
+    const npsEmp=parseFloat(document.getElementById('tax-nps-employer').value)||0;
+    const familyPension=parseFloat(document.getElementById('tax-family-pension').value)||0;
+    const letOutInterest=parseFloat(document.getElementById('tax-letout-interest').value)||0;
+    const agniveer=parseFloat(document.getElementById('tax-agniveer').value)||0;
+    // 80CCD(2): employer NPS — no explicit cap in law, but capped at 14% of gross as guideline
+    if(npsEmp>0){ deductions+=npsEmp; dedBreakdown.push(`80CCD(2) Employer NPS: ${pa(npsEmp)}`); }
+    // Family pension: min of 1/3rd of income or ₹25,000 — user enters the final eligible amount
+    const fpDed=Math.min(familyPension, 25000);
+    if(fpDed>0){ deductions+=fpDed; dedBreakdown.push(`Family Pension 57(iia): ${pa(fpDed)}`); }
+    // 24(b) let-out home loan interest — no upper cap for rented property
+    if(letOutInterest>0){ deductions+=letOutInterest; dedBreakdown.push(`24(b) Let-out Loan Interest: ${pa(letOutInterest)}`); }
+    // Agniveer 80CCH
+    if(agniveer>0){ deductions+=agniveer; dedBreakdown.push(`80CCH Agniveer: ${pa(agniveer)}`); }
+  } else {
+    // ── Old Regime deductions ──
+    const d80c=Math.min(parseFloat(document.getElementById('tax-80c').value)||0, 150000);
+    const d80ccd1b=Math.min(parseFloat(document.getElementById('tax-nps').value)||0, 50000);
+    const npsEmpOld=parseFloat(document.getElementById('tax-nps-employer-old').value)||0;
+    const d80d=Math.min(parseFloat(document.getElementById('tax-80d').value)||0, 100000);
+    const dHRA=parseFloat(document.getElementById('tax-hra-ded').value)||0;
+    const dHomeLoan=Math.min(parseFloat(document.getElementById('tax-homeloan').value)||0, 200000);
+    const d80e=parseFloat(document.getElementById('tax-80e').value)||0;
+    const ageGrpNow=document.getElementById('tax-age').value;
+    const ttaCap=ageGrpNow==='below60'?10000:50000;
+    const d80tta=Math.min(parseFloat(document.getElementById('tax-80tta').value)||0, ttaCap);
+    const dOther=parseFloat(document.getElementById('tax-other').value)||0;
+    if(d80c>0){ deductions+=d80c; dedBreakdown.push(`80C: ${pa(d80c)}`); }
+    if(d80ccd1b>0){ deductions+=d80ccd1b; dedBreakdown.push(`80CCD(1B) NPS: ${pa(d80ccd1b)}`); }
+    if(npsEmpOld>0){ deductions+=npsEmpOld; dedBreakdown.push(`80CCD(2) Employer NPS: ${pa(npsEmpOld)}`); }
+    if(d80d>0){ deductions+=d80d; dedBreakdown.push(`80D Health Insurance: ${pa(d80d)}`); }
+    if(dHRA>0){ deductions+=dHRA; dedBreakdown.push(`HRA Exemption: ${pa(dHRA)}`); }
+    if(dHomeLoan>0){ deductions+=dHomeLoan; dedBreakdown.push(`24(b) Home Loan Interest: ${pa(dHomeLoan)}`); }
+    if(d80e>0){ deductions+=d80e; dedBreakdown.push(`80E Education Loan: ${pa(d80e)}`); }
+    if(d80tta>0){ deductions+=d80tta; dedBreakdown.push(`80TTA/TTB Savings Interest: ${pa(d80tta)}`); }
+    if(dOther>0){ deductions+=dOther; dedBreakdown.push(`Other Deductions: ${pa(dOther)}`); }
+  }
+  const taxable=Math.max(0,gross-deductions);
+
+  // Step 1: Compute basic tax from slabs
+  let basicTax=0;
+  const slabDetails=[];
+  slabs.forEach(([lo,hi,rate])=>{
+    if(taxable<=lo) return;
+    const amt=Math.min(taxable,hi)-lo;
+    const t=amt*rate/100;
+    basicTax+=t;
+    slabDetails.push({lo,hi:hi===Infinity?null:hi,rate,amt,t});
+  });
+
+  // Step 2: Apply rebate u/s 87A
+  let rebate=0;
+  if(taxable<=rebateLimit){
+    rebate=Math.min(basicTax, rebateAmt);
+    basicTax=Math.max(0,basicTax-rebate);
+  }
+  // FY 2025-26 new regime: marginal relief — if taxable is between 12L and ~12.75L,
+  // tax is capped at (taxable - 12,00,000) after rebate is exhausted
+  if(fy==='2526'&&regime==='new'&&taxable>1200000&&taxable<=1275000){
+    const taxWithoutRelief=basicTax;
+    const marginalExcess=taxable-1200000;
+    basicTax=Math.min(taxWithoutRelief, marginalExcess);
+  }
+
+  // Step 3: Surcharge (applied on basicTax; surcharge itself subject to marginal relief at thresholds)
+  let surcharge=0;
+  if(taxable>500000){ // Surcharge only above ₹50L
+    const sc50L=taxable>10000000?0.15:taxable>5000000?0.10:0; // placeholder, compute below
+  }
+  if(taxable>5000000){
+    const rawSurchargePct=
+      taxable>50000000?Math.min(surchargeMaxPct,37)/100:
+      taxable>20000000?0.25:
+      taxable>10000000?0.15:
+      taxable>5000000?0.10:0;
+    surcharge=basicTax*rawSurchargePct;
+  } else if(taxable>5000000){
+    surcharge=basicTax*0.10;
+  }
+  // Marginal relief on surcharge at each threshold
+  // (tax+surcharge at threshold X should not exceed tax at X + excess income over X)
+  const surchargeThresholds = regime==='new'
+    ? [[5000000,0],[10000000,0.10],[20000000,0.15],[50000000,0.25]]
+    : [[5000000,0],[10000000,0.10],[20000000,0.15],[50000000,0.25],[50000000,Math.min(surchargeMaxPct,37)/100]];
+
+  // Simplified correct surcharge calc
+  surcharge=0;
+  if(taxable>50000000)      surcharge=basicTax*(regime==='new'?0.25:0.37);
+  else if(taxable>20000000) surcharge=basicTax*0.25;
+  else if(taxable>10000000) surcharge=basicTax*0.15;
+  else if(taxable>5000000)  surcharge=basicTax*0.10;
+  // Cap new regime surcharge at 25%
+  if(regime==='new') surcharge=Math.min(surcharge, basicTax*0.25);
+
+  const cess=(basicTax+surcharge)*0.04;
+  const total=basicTax+surcharge+cess;
+  const annualTakeHome=gross-total;
+  const monthlyTakeHome=annualTakeHome/12;
+  const bonus=parseFloat(document.getElementById('tax-bonus').value)||0;
+  const monthlyExcBonus=bonus>0?(gross-bonus-total)/12:null;
+  taxData={gross,regime,taxable,deductions,basicTax,rebate,surcharge,cess,total,slabDetails,ageGrp,fy,fyLabel,stdDed,dedBreakdown,annualTakeHome,monthlyTakeHome,bonus,monthlyExcBonus};
+
+  document.getElementById('tax-taxable').textContent=fmtR(taxable);
+  document.getElementById('tax-basic').textContent=fmtR(basicTax+surcharge);
+  document.getElementById('tax-cess').textContent=fmtR(cess);
+  document.getElementById('tax-total').textContent=fmtR(total);
+  document.getElementById('tax-monthly').textContent=fmtR(total/12);
+  document.getElementById('tax-effective').textContent=fmtDec(gross>0?total/gross*100:0)+'%';
+  document.getElementById('tax-takehome').textContent=fmtR(monthlyTakeHome);
+  // Bonus take-home row
+  const bw=document.getElementById('tax-bonus-takehome-wrap');
+  if(bonus>0&&monthlyExcBonus!==null){
+    document.getElementById('tax-bonus-takehome').textContent=fmtR(monthlyExcBonus);
+    bw.style.display='';
+  } else {
+    bw.style.display='none';
+  }
+  document.getElementById('tax-annual-takehome').textContent=fmtR(annualTakeHome);
+  document.getElementById('tax-result').classList.add('show');
+  document.getElementById('tax-actions').classList.add('show');
+
+  // Slab breakdown table
+  let tbl=`<div class="data-table-wrap show"><div class="data-scroll"><table><thead><tr>
+    <th class="th-yr">Income Slab</th><th class="th-in">Rate</th>
+    <th class="th-tp">Amount in Slab</th><th class="th-val">Tax on Slab</th></tr></thead><tbody>`;
+  slabDetails.forEach(s=>{
+    const range=`${pa(s.lo)} – ${s.hi?pa(s.hi):'Above'}`;
+    tbl+=`<tr class="year-row"><td style="padding:9px 13px;font-size:.82rem">${range}</td>
+      <td style="text-align:right;padding:9px 13px;font-family:'JetBrains Mono',monospace">${s.rate}%</td>
+      <td style="text-align:right;padding:9px 13px;font-family:'JetBrains Mono',monospace">${pa(s.amt)}</td>
+      <td style="text-align:right;padding:9px 13px;font-family:'JetBrains Mono',monospace;color:var(--oh)">${pa(s.t)}</td></tr>`;
+  });
+  const preTaxTotal=slabDetails.reduce((a,s)=>a+s.t,0);
+  tbl+=`<tr style="background:#f7f3ee"><td colspan="3" style="padding:9px 13px;font-size:.82rem;font-weight:600">Gross Tax (before rebate/surcharge)</td>
+    <td style="text-align:right;padding:9px 13px;font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--oh)">${pa(preTaxTotal)}</td></tr>`;
+  if(rebate>0) tbl+=`<tr class="year-row"><td colspan="3" style="padding:9px 13px;font-size:.82rem">Less: Rebate u/s 87A</td>
+    <td style="text-align:right;padding:9px 13px;font-family:'JetBrains Mono',monospace;color:var(--gh)">−${pa(rebate)}</td></tr>`;
+  if(surcharge>0) tbl+=`<tr class="year-row"><td colspan="3" style="padding:9px 13px;font-size:.82rem">Surcharge (${regime==='new'?'max 25%':'max '+surchargeMaxPct+'%'})</td>
+    <td style="text-align:right;padding:9px 13px;font-family:'JetBrains Mono',monospace;color:var(--oh)">${pa(surcharge)}</td></tr>`;
+  tbl+=`<tr class="year-row"><td colspan="3" style="padding:9px 13px;font-size:.82rem">Health &amp; Education Cess (4%)</td>
+    <td style="text-align:right;padding:9px 13px;font-family:'JetBrains Mono',monospace;color:var(--oh)">${pa(cess)}</td></tr>`;
+  tbl+=`<tr style="background:var(--ink);color:#fff"><td colspan="3" style="padding:10px 13px;font-weight:700;font-size:.86rem">Total Tax Payable</td>
+    <td style="text-align:right;padding:10px 13px;font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gl)">${pa(total)}</td></tr>`;
+  tbl+=`</tbody></table></div></div>`;
+
+  // Info note
+  const rebateNote=regime==='new'
+    ?(fy==='2526'?'Zero tax up to ₹12L taxable income (₹12.75L for salaried after ₹75K std. deduction). Marginal relief applies up to ~₹12.75L.':'Zero tax up to ₹7L taxable income via 87A rebate.')
+    :'Zero tax up to ₹5L taxable income via 87A rebate (₹5.5L for salaried after std. deduction).';
+  const dedList=dedBreakdown.length>0
+    ?'<br>Other deductions: '+dedBreakdown.join(' · ')
+    :'<br>No additional deductions entered.';
+  tbl+=`<div style="margin-top:.8rem;padding:.9rem 1rem;background:#f0faf3;border-radius:9px;border:1px solid #b8dfca;font-size:.76rem;color:var(--slate);line-height:1.7">
+    <strong>✅ ${fyLabel} · ${regime==='new'?'New Regime (Default)':'Old Regime'}</strong><br>
+    Standard Deduction: ${pa(stdDed)} (auto-applied)${dedList}<br>
+    <strong>Total Deductions: ${pa(deductions)}</strong> &nbsp;·&nbsp; Taxable Income: ${pa(taxable)}<br>
+    <span style="color:#2d6a4f">${rebateNote}</span>
+  </div>`;
+
+  const tw=document.getElementById('tax-slab-table');
+  tw.style.display='block'; tw.innerHTML=tbl;
+}
+
+/* ══════════════════════════════════════════
+   PF / EPF
+══════════════════════════════════════════ */
+let pfData={};
+
+function onPFModeChange(){
+  const empMode=document.getElementById('pf-emp-mode').value;
+  document.getElementById('pf-emp-pct-wrap').style.display=empMode==='pct'?'':'none';
+  document.getElementById('pf-emp-fixed-wrap').style.display=empMode==='fixed'?'':'none';
+  const erMode=document.getElementById('pf-er-mode').value;
+  document.getElementById('pf-er-pct-wrap').style.display=erMode==='pct'?'':'none';
+  document.getElementById('pf-er-fixed-wrap').style.display=erMode==='fixed'?'':'none';
+}
+
+function calcPF(){
+  const basicDA=parseFloat(document.getElementById('pf-basic').value)||0;
+  const empMode=document.getElementById('pf-emp-mode').value;
+  const erMode=document.getElementById('pf-er-mode').value;
+  const empPct=empMode==='pct'?(parseFloat(document.getElementById('pf-emp-pct').value)||12):null;
+  const empFixed=empMode==='fixed'?(parseFloat(document.getElementById('pf-emp-fixed').value)||0):null;
+  const erPct=erMode==='pct'?(parseFloat(document.getElementById('pf-er-pct').value)||12):null;
+  const erFixed=erMode==='fixed'?(parseFloat(document.getElementById('pf-er-fixed').value)||0):null;
+  const vpf=parseFloat(document.getElementById('pf-vpf').value)||0;
+  const rate=parseFloat(document.getElementById('pf-rate').value)||8.25;
+  const years=parseInt(document.getElementById('pf-years').value)||0;
+  const current=parseFloat(document.getElementById('pf-current').value)||0;
+  const increment=parseFloat(document.getElementById('pf-increment').value)||0;
+  if(!basicDA||!years) return alert('Please fill Basic Salary and Years to Retirement.');
+  if(empMode==='fixed'&&!empFixed) return alert('Please enter Employee Fixed Amount.');
+  if(erMode==='fixed'&&!erFixed) return alert('Please enter Employer Fixed Amount.');
+  const monthlyRate=rate/100/12;
+  let corpus=current;
+  let totalEmp=0,totalEr=0;
+  const rows=[];
+  let salary=basicDA;
+  for(let y=1;y<=years;y++){
+    if(y>1&&increment>0) salary=salary*(1+increment/100);
+    // Compute monthly contributions
+    const empMoBase=empMode==='pct'?salary*empPct/100:empFixed;
+    const erMoBase=erMode==='pct'?salary*erPct/100:erFixed;
+    const empMo=empMoBase+vpf;
+    const erMo=erMoBase;
+    const moTotal=empMo+erMo;
+    let yrEmp=0,yrEr=0,yrIntEarned=0;
+    const corpusStart=corpus;
+    for(let m=1;m<=12;m++){
+      corpus+=moTotal;
+      const mInt=corpus*monthlyRate;
+      yrIntEarned+=mInt;
+      corpus+=mInt;
+    }
+    yrEmp=empMo*12; yrEr=erMo*12;
+    totalEmp+=yrEmp; totalEr+=yrEr;
+    rows.push({
+      year:y, salary:Math.round(salary),
+      empMo:Math.round(empMo), erMo:Math.round(erMo),
+      yrEmp:Math.round(yrEmp), yrEr:Math.round(yrEr),
+      yrInt:Math.round(yrIntEarned), corpus:Math.round(corpus)
+    });
+  }
+  const totalInterest=corpus-current-totalEmp-totalEr;
+  const moContrib=(empMode==='pct'?basicDA*empPct/100:empFixed)+(erMode==='pct'?basicDA*erPct/100:erFixed)+vpf;
+  const empLabel=empMode==='pct'?`${empPct}% of Basic`:`Fixed ₹${empFixed}/mo`;
+  const erLabel=erMode==='pct'?`${erPct}% of Basic`:`Fixed ₹${erFixed}/mo`;
+  pfData={basicDA,empMode,erMode,empPct,empFixed,erPct,erFixed,vpf,rate,years,current,increment,totalEmp,totalEr,totalInterest,corpus,rows,empLabel,erLabel};
+  document.getElementById('pf-emp-contrib').textContent=fmtR(totalEmp);
+  document.getElementById('pf-er-contrib').textContent=fmtR(totalEr);
+  document.getElementById('pf-interest-total').textContent=fmtR(totalInterest);
+  document.getElementById('pf-maturity').textContent=fmtR(corpus);
+  document.getElementById('pf-monthly-total').textContent=fmtR(moContrib);
+  document.getElementById('pf-growth').textContent=fmtDec(corpus/(totalEmp+totalEr+(current||1)),2)+'x';
+  document.getElementById('pf-result').classList.add('show');
+  document.getElementById('pf-actions').classList.add('show');
+  const tbody=document.getElementById('pf-table-body'); tbody.innerHTML='';
+  rows.forEach(r=>{
+    const tr=document.createElement('tr'); tr.className='year-row';
+    tr.innerHTML=`<td style="padding:9px 13px">${new Date().getFullYear()+r.year-1}</td>
+      <td class="yr-pr">${fmtR(r.salary)}</td>
+      <td class="yr-in">${fmtR(r.yrEmp)}</td>
+      <td class="yr-tp">${fmtR(r.yrEr)}</td>
+      <td class="yr-pr">${fmtR(r.yrInt)}</td>
+      <td class="yr-bl" style="color:var(--gl)">${fmtR(r.corpus)}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('pf-table-wrap').classList.add('show');
+}
+
+/* ══════════════════════════════════════════
+   HRA
+══════════════════════════════════════════ */
+let hraData={};
+function calcHRA(){
+  const basic=parseFloat(document.getElementById('hra-basic').value)||0;
+  const da=parseFloat(document.getElementById('hra-da').value)||0;
+  const hraRec=parseFloat(document.getElementById('hra-received').value)||0;
+  const rent=parseFloat(document.getElementById('hra-rent').value)||0;
+  const city=document.getElementById('hra-city').value;
+  if(!basic||!hraRec||!rent) return alert('Please fill Basic Salary, HRA Received and Rent Paid.');
+  const basicDA=basic+da;
+  const a=hraRec*12;
+  const b=basicDA*(city==='metro'?0.50:0.40)*12;
+  const c=Math.max(0,(rent-basicDA*0.10))*12;
+  const exempt=Math.min(a,b,c);
+  const taxable=a-exempt;
+  hraData={basic,da,hraRec,rent,city,a,b,c,exempt,taxable};
+  document.getElementById('hra-a').textContent=fmtR(a);
+  document.getElementById('hra-b').textContent=fmtR(b);
+  document.getElementById('hra-c').textContent=fmtR(c);
+  document.getElementById('hra-exempt').textContent=fmtR(exempt);
+  document.getElementById('hra-taxable-portion').textContent=fmtR(taxable);
+  document.getElementById('hra-result').classList.add('show');
+  document.getElementById('hra-actions').classList.add('show');
+}
+
+/* ══════════════════════════════════════════
+   GRATUITY
+══════════════════════════════════════════ */
+let gratData={};
+function calcGratuity(){
+  const salary=parseFloat(document.getElementById('grat-salary').value)||0;
+  const years=parseFloat(document.getElementById('grat-years').value)||0;
+  const type=document.getElementById('grat-type').value;
+  if(!salary||!years) return alert('Please fill salary and years of service.');
+  let gratuity,formula;
+  if(type==='act'){
+    gratuity=(salary/26)*15*Math.floor(years);
+    formula='(Salary ÷ 26) × 15 × Years';
+  } else {
+    gratuity=(salary/30)*15*Math.floor(years);
+    formula='(Salary ÷ 30) × 15 × Years';
+  }
+  const taxFreeLimit=2000000; // 20 Lakh
+  const taxable=Math.max(0,gratuity-taxFreeLimit);
+  gratData={salary,years,gratuity,taxFreeLimit,taxable,formula};
+  document.getElementById('grat-amount').textContent=fmtR(gratuity);
+  document.getElementById('grat-taxfree').textContent=fmtR(Math.min(gratuity,taxFreeLimit));
+  document.getElementById('grat-taxable').textContent=fmtR(taxable);
+  document.getElementById('grat-formula').textContent=formula;
+  document.getElementById('grat-result').classList.add('show');
+  document.getElementById('grat-actions').classList.add('show');
+}
+
+/* ══════════════════════════════════════════
+   SHARE — extended for new calcs
 ══════════════════════════════════════════ */
 function buildShareText(id){
   const S='Punnam Academy';
@@ -1521,6 +2292,14 @@ function buildShareText(id){
   if(id==='fd'&&fdData.P) return `*FD — ${S}*\n\nPrincipal: ${fmtIN(fdData.P)} @ ${fdData.R}% for ${fdData.tenure} ${fdData.unit}\nInterest: ${fmtIN(fdData.interest)}\nMaturity: ${fmtIN(fdData.maturity)}\n\n${S}`;
   if(id==='gst'&&gstData.base) return `*GST — ${S}*\n\nBase: ${fmtIN(gstData.base)}\nGST@${gstData.rate}%: ${fmtIN(gstData.gstAmt)}\nCGST: ${fmtIN(gstData.gstAmt/2)} | SGST: ${fmtIN(gstData.gstAmt/2)}\nTotal: ${fmtIN(gstData.total)}\n\n${S}`;
   if(id==='curr'&&currData.rate) return `*Currency — ${S}*\n\n${currData.amount} ${currData.from} = ${currData.converted.toLocaleString('en-IN',{maximumFractionDigits:2})} ${currData.to}\nRate: 1 ${currData.from} = ${fmtDec(currData.rate,4)} ${currData.to}\nAs of: ${currData.date}\n\n${S}`;
+  if(id==='tax'&&taxData.gross){
+    const dedNote=taxData.dedBreakdown&&taxData.dedBreakdown.length?'\nDeductions: '+taxData.dedBreakdown.join(', '):'';
+    const bonusNote=taxData.bonus>0?`\nBonus/Variable Pay: ${fmtIN(taxData.bonus)}\nMonthly Take-Home (excl. bonus): ${fmtIN(taxData.monthlyExcBonus)}`:'';
+    return `*Income Tax ${taxData.fyLabel||'FY 2025-26'} — ${S}*\n\nGross Income: ${fmtIN(taxData.gross)}\nRegime: ${taxData.regime==='new'?'New (Default)':'Old'}\nStd. Deduction: ${fmtIN(taxData.stdDed)}${dedNote}\nTaxable Income: ${fmtIN(taxData.taxable)}\nBasic Tax+Surcharge: ${fmtIN(taxData.basicTax+taxData.surcharge)}\nCess (4%): ${fmtIN(taxData.cess)}\nTotal Tax: ${fmtIN(taxData.total)}\nMonthly TDS: ${fmtIN(taxData.total/12)}\nEffective Rate: ${fmtDec(taxData.total/taxData.gross*100)}%\n\n💰 Monthly Take-Home: ${fmtIN(taxData.monthlyTakeHome)}${bonusNote}\n📅 Annual Take-Home: ${fmtIN(taxData.annualTakeHome)}\n\n${S}`;
+  }
+  if(id==='pf'&&pfData.corpus) return `*PF / EPF — ${S}*\n\nBasic+DA: ${fmtIN(pfData.basicDA)}/month\nEmployee: ${pfData.empLabel} · Employer: ${pfData.erLabel}\nRate: ${pfData.rate}% for ${pfData.years} years\nEmployee Contrib: ${fmtIN(pfData.totalEmp)}\nEmployer Contrib: ${fmtIN(pfData.totalEr)}\nInterest: ${fmtIN(pfData.totalInterest)}\nMaturity Corpus: ${fmtIN(pfData.corpus)}\n\n${S}`;
+  if(id==='hra'&&hraData.exempt!==undefined) return `*HRA Exemption — ${S}*\n\nBasic: ${fmtIN(hraData.basic)}/month | Rent: ${fmtIN(hraData.rent)}/month\nHRA Received (Annual): ${fmtIN(hraData.a)}\n40/50% of Basic (Annual): ${fmtIN(hraData.b)}\nRent−10% Basic (Annual): ${fmtIN(hraData.c)}\nHRA Exemption: ${fmtIN(hraData.exempt)}\nTaxable HRA: ${fmtIN(hraData.taxable)}\n\n${S}`;
+  if(id==='grat'&&gratData.gratuity) return `*Gratuity — ${S}*\n\nLast Salary: ${fmtIN(gratData.salary)}/month\nYears: ${gratData.years}\nGratuity: ${fmtIN(gratData.gratuity)}\nTax-Free: ${fmtIN(Math.min(gratData.gratuity,gratData.taxFreeLimit))}\nTaxable: ${fmtIN(gratData.taxable)}\nFormula: ${gratData.formula}\n\n${S}`;
   return S;
 }
 function shareWA(id){ window.open('https://wa.me/?text='+encodeURIComponent(buildShareText(id)),'_blank'); }
@@ -1563,12 +2342,12 @@ function downloadXL(id){
    PDF
 ══════════════════════════════════════════ */
 function downloadPDF(id){
-  const checks={emi:()=>emiData.months.length,int:()=>intData.P,sip:()=>sipData.months&&sipData.months.length,fd:()=>fdData.P,gst:()=>gstData.base};
+  const checks={emi:()=>emiData.months.length,int:()=>intData.P,sip:()=>sipData.months&&sipData.months.length,fd:()=>fdData.P,gst:()=>gstData.base,tax:()=>taxData.gross,pf:()=>pfData.corpus};
   if(checks[id]&&!checks[id]()) return alert('Please calculate first.');
   const{jsPDF}=window.jspdf;
-  const isLand=(id==='emi'||id==='sip'||id==='int');
-  const doc=new jsPDF({orientation:isLand?'landscape':'portrait',unit:'mm',format:'a4'});
-  const PW=isLand?297:210;
+  const isLand=false;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const PW=210;
   const gold=[201,147,58],dark=[13,17,23],white=[255,255,255],grey=[245,242,238],lgrey=[248,246,242];
   function drawHeader(){
     doc.setFillColor(...dark);doc.rect(0,0,PW,28,'F');
@@ -1651,14 +2430,75 @@ function downloadPDF(id){
     dataRow('Base Amount',pa(gstData.base),false);dataRow('GST Rate',gstData.rate+'%',true);
     dataRow('CGST',pa(gstData.gstAmt/2),false);dataRow('SGST',pa(gstData.gstAmt/2),true);
     dataRow('Total Amount',pa(gstData.total),false);
+  } else if(id==='tax'){
+    section('Income Tax Computation — '+(taxData.fyLabel||'FY 2025-26'));
+    dataRow('Annual Gross Income',pa(taxData.gross),false);
+    dataRow('Regime',taxData.regime==='new'?'New Regime (Default)':'Old Regime',true);
+    dataRow('Standard Deduction',pa(taxData.stdDed),false);
+    if(taxData.dedBreakdown&&taxData.dedBreakdown.length){
+      taxData.dedBreakdown.forEach((d,i)=>{
+        const parts=d.split(':');
+        dataRow(parts[0],(parts[1]||'').trim(),i%2===1);
+      });
+    }
+    dataRow('Total Deductions',pa(taxData.deductions),true);
+    dataRow('Taxable Income',pa(taxData.taxable),false);
+    y+=4;
+    section('Tax Slab Breakdown');
+    const slabBody=taxData.slabDetails.map(s=>{
+      const range=pa(s.lo)+' – '+(s.hi?pa(s.hi):'Above');
+      return[range,s.rate+'%',pa(s.amt),pa(s.t)];
+    });
+    if(taxData.rebate>0) slabBody.push(['Less: Rebate u/s 87A','–','–','−'+pa(taxData.rebate)]);
+    if(taxData.surcharge>0) slabBody.push(['Surcharge','–','–',pa(taxData.surcharge)]);
+    slabBody.push(['Health & Education Cess','4%','–',pa(taxData.cess)]);
+    doc.autoTable({head:[['Income Slab','Rate','Amount in Slab','Tax']],body:slabBody,
+      startY:y,styles:{fontSize:8,cellPadding:2.5,halign:'right'},columnStyles:{0:{halign:'left',cellWidth:70}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},alternateRowStyles:{fillColor:lgrey},margin:{left:10,right:10},
+      didDrawPage:()=>drawHeader()});
+    y=doc.lastAutoTable.finalY+8;
+    dataRow('Total Tax Payable',pa(taxData.total),false);
+    dataRow('Monthly TDS',pa(taxData.total/12),true);
+    dataRow('Effective Tax Rate',fmtDec(taxData.total/taxData.gross*100)+'%',false);
+    y+=4;
+    if(taxData.bonus>0){
+      dataRow('Annual Bonus / Variable Pay',pa(taxData.bonus),false);
+      dataRow('Monthly Fixed Income (excl. bonus)',pa((taxData.gross-taxData.bonus)/12),true);
+      dataRow('💰 Monthly Take-Home (incl. bonus ÷ 12)',pa(taxData.monthlyTakeHome),false);
+      dataRow('📅 Monthly Take-Home (excl. bonus)',pa(taxData.monthlyExcBonus),true);
+    } else {
+      dataRow('💰 Monthly Take-Home Salary',pa(taxData.monthlyTakeHome),true);
+    }
+    dataRow('Annual Take-Home Salary',pa(taxData.annualTakeHome),false);
+  } else if(id==='pf'){
+    section('PF / EPF Projection');
+    dataRow('Basic + DA Salary',pa(pfData.basicDA)+'/month',false);
+    dataRow('Employee Contribution',pfData.empPct+'%',true);
+    dataRow('Employer Contribution',pfData.erPct+'%',false);
+    dataRow('PF Interest Rate',pfData.rate+'% p.a.',true);
+    dataRow('Period',pfData.years+' Years',false);
+    if(pfData.vpf>0) dataRow('VPF',pa(pfData.vpf)+'/month',true);
+    y+=4;
+    section('Year-wise PF Growth');
+    doc.autoTable({head:[['Year','Basic+DA','Emp. Contrib','Employer Contrib','Interest','Corpus']],
+      body:pfData.rows.map(r=>[new Date().getFullYear()+r.year-1,pa(r.salary),pa(r.yrEmp),pa(r.yrEr),pa(r.yrInt),pa(r.corpus)]),
+      startY:y,styles:{fontSize:7.5,cellPadding:2,halign:'right'},columnStyles:{0:{halign:'left'}},
+      headStyles:{fillColor:dark,textColor:white,fontStyle:'bold'},alternateRowStyles:{fillColor:lgrey},margin:{left:10,right:10},
+      didDrawPage:()=>drawHeader()});
+    y=doc.lastAutoTable.finalY+8;
+    dataRow('Total Employee Contributed',pa(pfData.totalEmp),false);
+    dataRow('Total Employer Contributed',pa(pfData.totalEr),true);
+    dataRow('Total Interest Earned',pa(pfData.totalInterest),false);
+    dataRow('Employee: '+pfData.empLabel+' · Employer: '+pfData.erLabel,'',true);
+    dataRow('Maturity Corpus',pa(pfData.corpus),false);
   }
   const pc=doc.internal.getNumberOfPages();
   for(let i=1;i<=pc;i++){
-    doc.setPage(i);doc.setFillColor(...dark);doc.rect(0,isLand?200:285,PW,12,'F');
+    doc.setPage(i);doc.setFillColor(...dark);doc.rect(0,285,PW,12,'F');
     doc.setTextColor(...gold);doc.setFont('helvetica','bold');doc.setFontSize(7.5);
-    doc.text('Punnam Academy · Financial & Educational Hub · Developed by Prasad Punnam',14,isLand?208:293);
+    doc.text('Punnam Academy · Financial & Educational Hub · Developed by Prasad Punnam',14,293);
     doc.setTextColor(150,150,150);doc.setFont('helvetica','normal');
-    doc.text('Page '+i+' of '+pc,PW-14,isLand?208:293,{align:'right'});
+    doc.text('Page '+i+' of '+pc,PW-14,293,{align:'right'});
   }
   doc.save('Punnam_Academy_'+id.toUpperCase()+'.pdf');
 }
